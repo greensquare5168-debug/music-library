@@ -105,6 +105,6 @@ footer{padding:20px 0 40px}
 .unit:first-child{margin-top:0}
 .album-card .unit + .entries{margin-top:0}
 .role{margin-right:8px}
-.entries li{border-bottom:1px solid #d7dee8}
+.entries li{border-bottom:1px solid #c3cedb}
 .entries li:last-child{border-bottom:none}
-.albumlist a.row{border-bottom:1px solid #d7dee8;padding:13px 6px}
+.albumlist a.row{border-bottom:1px solid #c3cedb;padding:13px 6px}
