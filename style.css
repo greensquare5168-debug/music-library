@@ -88,3 +88,9 @@ footer{padding:20px 0 40px}
 .entries li:last-child{border-bottom:none}
 .winlink{display:inline-block;background:#f0faf3;border:1px solid #cfe9d8;border-radius:8px;padding:2px 10px;font-size:13.5px;color:var(--link)}
 .winlink:hover{background:#e3f5e9;text-decoration:none}
+.albumlist a.row{display:flex;justify-content:space-between;align-items:center;gap:12px;width:100%;padding:12px 4px;border-bottom:1px solid var(--line);color:var(--fg);text-decoration:none}
+.albumlist li:last-child a.row{border-bottom:none}
+.albumlist a.row:hover{background:var(--card2);text-decoration:none}
+.albumlist a.row .rn{font-weight:600}
+.albumlist a.row .go{color:var(--muted);font-size:20px}
+.album-card h2{font-size:18px;margin:0 0 8px}
