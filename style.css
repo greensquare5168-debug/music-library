@@ -108,7 +108,7 @@ footer{padding:20px 0 40px}
 .bigbtn:hover{background:#f0faf3;border-color:#cfe9d8;text-decoration:none}
 .entries{margin:0 0 18px}
 .entries+.entries{margin-top:22px}
-.album-card>p.muted{margin-top:14px}
+.album-card>p.muted{margin-top:26px}
 .entries:last-child{margin-bottom:0}
 .unit{margin-top:22px}
 .unit:first-child{margin-top:0}
