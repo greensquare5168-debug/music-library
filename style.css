@@ -97,6 +97,7 @@ footer{padding:20px 0 40px}
 .albumlist li:last-child a.row{border-bottom:none}
 .albumlist a.row:hover{background:var(--card2);text-decoration:none}
 .albumlist a.row .rn{font-weight:600;color:var(--link)}
+.albumlist a.row .muted{flex:1;text-align:right}
 .albumlist a.row .rn .muted{font-weight:400;margin-left:6px;color:var(--muted)}
 .albumlist a.row .go{color:var(--muted);font-size:20px}
 .album-card h2{font-size:18px;margin:0 0 8px}
