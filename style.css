@@ -119,3 +119,15 @@ footer{padding:20px 0 40px}
 .albumlist a.row{border-bottom:1px solid #c3cedb;padding:13px 6px}
 .ytbadge{display:inline-flex;align-items:center;justify-content:center;background:#e62117;color:#fff;font-size:9px;border-radius:4px;padding:2px 5px;margin-left:8px;margin-right:8px;line-height:1.1;min-width:14px;box-sizing:content-box}
 .ytbadge.ytempty{visibility:hidden}
+
+/* 左側檔案總管式列表（孝瓏 2026-10-08） */
+.layout{display:flex;gap:22px;align-items:flex-start}
+.content{flex:1;min-width:0}
+.treebox{flex:0 0 236px;border:1px solid var(--line);border-radius:12px;padding:8px 10px;background:var(--card);max-height:82vh;overflow:auto;position:sticky;top:12px}
+.tree-h{font-size:12.5px;font-weight:700;color:var(--muted);margin:8px 2px 4px}
+.tree{list-style:none;margin:0 0 8px;padding:0}
+.tree li{padding:3px 7px;border-radius:7px;line-height:1.55}
+.tree li:hover{background:var(--card2)}
+.tree li.cur{background:var(--card2);font-weight:700}
+.tree a{color:var(--link);text-decoration:none}
+@media(max-width:860px){.layout{flex-direction:column}.treebox{position:static;flex:none;width:100%;max-height:none}}
