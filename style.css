@@ -141,3 +141,12 @@ body.nav-collapsed .navtoggle{left:0}
 @media(max-width:860px){body.nav-collapsed .navtoggle{left:0}}
 .tree-h-toggle{cursor:pointer}
 .tree-h-toggle .arw{display:inline-block;width:12px;color:var(--muted);font-size:10px}
+
+/* 樹狀節點（每個父節點都可展開） */
+.tnode{list-style:none;padding:2px 4px;border-radius:7px;line-height:1.5}
+.tnode:hover{background:var(--card2)}
+.tnode .arw{display:inline-block;width:13px;color:var(--muted);font-size:10px;cursor:pointer;user-select:none}
+.tnode a{color:var(--link);text-decoration:none}
+.tnode a.curlink{font-weight:700;color:var(--fg)}
+.tnode .dh{color:var(--muted)}
+.tnode ul.tree{margin:0;padding-left:14px}

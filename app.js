@@ -49,6 +49,55 @@ function openWin(u){
     try{ localStorage.setItem('kmtNav', c?'1':'0'); }catch(e){}
     apply(c);
   });
+  // ── 由 tree.json 畫「每一層父節點都可展開」的樹（孝瓏 2026-10-08）──
+  var segs=location.pathname.split('/').filter(Boolean);
+  if(segs.length && segs[segs.length-1]==='index.html') segs.pop();
+  var ROOTS=['罐頭音樂研究所','使用公司','知識補給站','語言學習區'], idx=-1;
+  for(var i=0;i<segs.length;i++){ if(ROOTS.indexOf(segs[i])>=0){ idx=i; break; } }
+  if(idx>=0){
+    var base='/'+segs.slice(0,idx).join('/')+(idx?'/':'');
+    var cur=segs.slice(idx).join('/')+'/';
+    var pathIsLib=/圖書館音樂\//.test(cur);
+    fetch(base+'tree.json').then(function(r){return r.json();}).then(function(t){
+      var root=null;
+      for(var j=0;j<t.length;j++){ if(t[j].h===segs[idx]+'/'){ root=t[j]; break; } }
+      if(!root) return;
+      if(pathIsLib && root.c){
+        for(var k=0;k<root.c.length;k++){ if(root.c[k].h && cur.indexOf(root.c[k].h)===0){ root=root.c[k]; break; } }
+      }
+      function render(node,ul,isPath){
+        var li=document.createElement('li'); li.className='tnode';
+        var hasC=!!(node.c&&node.c.length);
+        var arw=document.createElement('span'); arw.className='arw';
+        arw.textContent=hasC?'▸':'\u00a0'; li.appendChild(arw);
+        if(node.h){
+          var a=document.createElement('a'); a.href=base+node.h; a.textContent=node.n;
+          if(node.h===cur) a.className='curlink';
+          li.appendChild(a);
+        }else{
+          var sp=document.createElement('span'); sp.className='dh'; sp.textContent=node.n; li.appendChild(sp);
+        }
+        ul.appendChild(li);
+        var kids=null;
+        function toggle(open){
+          if(!hasC) return;
+          if(!kids){
+            kids=document.createElement('ul'); kids.className='tree'; kids.style.display='none'; li.appendChild(kids);
+            for(var q=0;q<node.c.length;q++) render(node.c[q],kids,cur.indexOf(node.c[q].h||'')===0);
+          }
+          var show=(open===undefined)?(kids.style.display==='none'):open;
+          kids.style.display=show?'':'none';
+          arw.textContent=show?'▾':'▸';
+          if(show) li.classList.add('open'); else li.classList.remove('open');
+        }
+        arw.addEventListener('click',function(e){ e.preventDefault(); e.stopPropagation(); toggle(); });
+        if(hasC && isPath) toggle(true);
+      }
+      var ul0=document.createElement('ul'); ul0.className='tree';
+      box.innerHTML=''; box.appendChild(ul0);
+      render(root,ul0,true);
+    }).catch(function(){});
+  }
   Array.prototype.forEach.call(box.querySelectorAll('.tree-h'), function(h){
     var ul=h.nextElementSibling;
     if(!ul||!ul.classList||ul.className.indexOf('tree')<0) return;
