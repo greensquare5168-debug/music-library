@@ -123,17 +123,17 @@ footer{padding:20px 0 40px}
 /* 左側檔案總管式列表（孝瓏 2026-10-08；浮動式，不壓縮中間內容） */
 .layout{display:block}
 .content{width:100%}
-.treebox{position:fixed;left:0;top:50%;transform:translateY(-50%);width:236px;max-height:78vh;overflow:auto;border:1px solid var(--line);border-left:none;border-radius:0 12px 12px 0;padding:10px 12px;background:var(--card);box-shadow:0 6px 22px rgba(0,0,0,.18);z-index:55}
+.treebox{position:fixed;left:0;top:76px;width:236px;max-height:calc(100vh - 104px);overflow:auto;border:1px solid var(--line);border-left:none;border-radius:0 12px 12px 0;padding:10px 12px;background:var(--card);box-shadow:0 6px 22px rgba(0,0,0,.18);z-index:55}
 .tree-h{font-size:12.5px;font-weight:700;color:var(--muted);margin:8px 2px 4px}
 .tree{list-style:none;margin:0 0 8px;padding:0}
 .tree li{padding:3px 7px;border-radius:7px;line-height:1.55}
 .tree li:hover{background:var(--card2)}
 .tree li.cur{background:var(--card2);font-weight:700}
 .tree a{color:var(--link);text-decoration:none}
-@media(max-width:860px){.treebox{width:74%;max-height:70vh}}
+@media(max-width:860px){.treebox{width:74%;top:70px;max-height:calc(100vh - 92px)}}
 
 /* 側欄收合鈕（貼在清單右緣） */
-.navtoggle{position:fixed;left:236px;top:50%;transform:translateY(-50%);transition:left .15s ease;z-index:60;width:22px;height:46px;border:1px solid var(--line);border-left:none;border-radius:0 9px 9px 0;background:var(--card);color:var(--link);cursor:pointer;font-size:11px;line-height:1;padding:0;box-shadow:0 3px 10px rgba(0,0,0,.12)}
+.navtoggle{position:fixed;left:236px;top:88px;transition:left .15s ease;z-index:60;width:22px;height:46px;border:1px solid var(--line);border-left:none;border-radius:0 9px 9px 0;background:var(--card);color:var(--link);cursor:pointer;font-size:11px;line-height:1;padding:0;box-shadow:0 3px 10px rgba(0,0,0,.12)}
 .navtoggle:hover{background:var(--card2)}
 @media(max-width:860px){.navtoggle{left:74%}}
 body.nav-collapsed .treebox{display:none}
