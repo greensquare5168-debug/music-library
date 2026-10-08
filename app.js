@@ -96,6 +96,11 @@ function openWin(u){
       var ul0=document.createElement('ul'); ul0.className='tree';
       box.innerHTML=''; box.appendChild(ul0);
       render(root,ul0,true);
+      // 不要把頁面/清單捲到最下面：只把「當前那頁」在清單內置中（不動網頁捲軸）
+      try{
+        var ce=box.querySelector('a.curlink');
+        box.scrollTop = ce ? Math.max(0, ce.offsetTop - box.clientHeight/2) : 0;
+      }catch(e){ box.scrollTop=0; }
     }).catch(function(){});
   }
   Array.prototype.forEach.call(box.querySelectorAll('.tree-h'), function(h){
