@@ -60,7 +60,7 @@ function openWin(u){
     var base='/'+rawseg.slice(0,idx).join('/')+(idx?'/':'');   // 抓 tree.json 用原始（已編碼）路徑
     var cur=segs.slice(idx).join('/')+'/';
     var pathIsLib=/圖書館音樂\//.test(cur);
-    fetch(base+'tree.json').then(function(r){return r.json();}).then(function(t){
+    fetch(base+'tree.json?v=20261008c').then(function(r){return r.json();}).then(function(t){
       var root=null;
       for(var j=0;j<t.length;j++){ if((t[j].h&&t[j].h===segs[idx]+'/')||t[j].n===segs[idx]){ root=t[j]; break; } }
       if(!root) return;
