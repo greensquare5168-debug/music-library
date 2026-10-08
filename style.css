@@ -120,21 +120,24 @@ footer{padding:20px 0 40px}
 .ytbadge{display:inline-flex;align-items:center;justify-content:center;background:#e62117;color:#fff;font-size:9px;border-radius:4px;padding:2px 5px;margin-left:8px;margin-right:8px;line-height:1.1;min-width:14px;box-sizing:content-box}
 .ytbadge.ytempty{visibility:hidden}
 
-/* 左側檔案總管式列表（孝瓏 2026-10-08） */
-.layout{display:flex;gap:22px;align-items:flex-start}
-.content{flex:1;min-width:0}
-.treebox{flex:0 0 236px;border:1px solid var(--line);border-radius:12px;padding:8px 10px;background:var(--card);max-height:82vh;overflow:auto;position:sticky;top:12px}
+/* 左側檔案總管式列表（孝瓏 2026-10-08；浮動式，不壓縮中間內容） */
+.layout{display:block}
+.content{width:100%}
+.treebox{position:fixed;left:0;top:50%;transform:translateY(-50%);width:236px;max-height:78vh;overflow:auto;border:1px solid var(--line);border-left:none;border-radius:0 12px 12px 0;padding:10px 12px;background:var(--card);box-shadow:0 6px 22px rgba(0,0,0,.18);z-index:55}
 .tree-h{font-size:12.5px;font-weight:700;color:var(--muted);margin:8px 2px 4px}
 .tree{list-style:none;margin:0 0 8px;padding:0}
 .tree li{padding:3px 7px;border-radius:7px;line-height:1.55}
 .tree li:hover{background:var(--card2)}
 .tree li.cur{background:var(--card2);font-weight:700}
 .tree a{color:var(--link);text-decoration:none}
-@media(max-width:860px){.layout{flex-direction:column}.treebox{position:static;flex:none;width:100%;max-height:none}}
+@media(max-width:860px){.treebox{width:74%;max-height:70vh}}
 
-/* 左側清單：收合箭頭 + 分組箭頭（孝瓏 2026-10-08） */
-.navtoggle{position:fixed;left:0;top:50%;transform:translateY(-50%);z-index:60;width:22px;height:46px;border:1px solid var(--line);border-left:none;border-radius:0 9px 9px 0;background:var(--card);color:var(--link);cursor:pointer;font-size:11px;line-height:1;padding:0}
+/* 側欄收合鈕（貼在清單右緣） */
+.navtoggle{position:fixed;left:236px;top:50%;transform:translateY(-50%);transition:left .15s ease;z-index:60;width:22px;height:46px;border:1px solid var(--line);border-left:none;border-radius:0 9px 9px 0;background:var(--card);color:var(--link);cursor:pointer;font-size:11px;line-height:1;padding:0;box-shadow:0 3px 10px rgba(0,0,0,.12)}
 .navtoggle:hover{background:var(--card2)}
+@media(max-width:860px){.navtoggle{left:74%}}
 body.nav-collapsed .treebox{display:none}
+body.nav-collapsed .navtoggle{left:0}
+@media(max-width:860px){body.nav-collapsed .navtoggle{left:0}}
 .tree-h-toggle{cursor:pointer}
 .tree-h-toggle .arw{display:inline-block;width:12px;color:var(--muted);font-size:10px}
