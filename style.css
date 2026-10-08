@@ -131,3 +131,10 @@ footer{padding:20px 0 40px}
 .tree li.cur{background:var(--card2);font-weight:700}
 .tree a{color:var(--link);text-decoration:none}
 @media(max-width:860px){.layout{flex-direction:column}.treebox{position:static;flex:none;width:100%;max-height:none}}
+
+/* 左側清單：收合箭頭 + 分組箭頭（孝瓏 2026-10-08） */
+.navtoggle{position:fixed;left:0;top:50%;transform:translateY(-50%);z-index:60;width:22px;height:46px;border:1px solid var(--line);border-left:none;border-radius:0 9px 9px 0;background:var(--card);color:var(--link);cursor:pointer;font-size:11px;line-height:1;padding:0}
+.navtoggle:hover{background:var(--card2)}
+body.nav-collapsed .treebox{display:none}
+.tree-h-toggle{cursor:pointer}
+.tree-h-toggle .arw{display:inline-block;width:12px;color:var(--muted);font-size:10px}

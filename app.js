@@ -29,3 +29,38 @@ function openWin(u){
     });
   });
 })();
+
+// 左側清單：收合箭頭 + 分組收合（孝瓏 2026-10-08）
+(function(){
+  var box=document.querySelector('.treebox');
+  if(!box) return;
+  var btn=document.createElement('button');
+  btn.type='button'; btn.className='navtoggle';
+  box.parentNode.insertBefore(btn, box);
+  function apply(c){
+    document.body.classList.toggle('nav-collapsed', c);
+    btn.textContent = c ? '▶' : '◀';
+    btn.title = c ? '展開左側清單' : '收合左側清單';
+  }
+  var st=false; try{ st=localStorage.getItem('kmtNav')==='1'; }catch(e){}
+  apply(st);
+  btn.addEventListener('click', function(){
+    var c=!document.body.classList.contains('nav-collapsed');
+    try{ localStorage.setItem('kmtNav', c?'1':'0'); }catch(e){}
+    apply(c);
+  });
+  Array.prototype.forEach.call(box.querySelectorAll('.tree-h'), function(h){
+    var ul=h.nextElementSibling;
+    if(!ul||!ul.classList||ul.className.indexOf('tree')<0) return;
+    h.classList.add('tree-h-toggle');
+    var arw=document.createElement('span');
+    arw.className='arw'; arw.textContent='▾';
+    h.insertBefore(arw, h.firstChild);
+    arw.addEventListener('click', function(ev){
+      ev.preventDefault(); ev.stopPropagation();
+      var closed=h.classList.toggle('closed');
+      arw.textContent = closed ? '▸' : '▾';
+      ul.style.display = closed ? 'none' : '';
+    });
+  });
+})();
