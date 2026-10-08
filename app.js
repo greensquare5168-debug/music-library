@@ -48,6 +48,7 @@ function openWin(u){
     var c=!document.body.classList.contains('nav-collapsed');
     try{ localStorage.setItem('kmtNav', c?'1':'0'); }catch(e){}
     apply(c);
+    if(!c && window.kmtCenterCur) setTimeout(window.kmtCenterCur, 30);
   });
   // ── 由 tree.json 畫「每一層父節點都可展開」的樹（孝瓏 2026-10-08）──
   var segs=location.pathname.split('/').filter(Boolean);
@@ -96,11 +97,19 @@ function openWin(u){
       var ul0=document.createElement('ul'); ul0.className='tree';
       box.innerHTML=''; box.appendChild(ul0);
       render(root,ul0,true);
-      // 不要把頁面/清單捲到最下面：只把「當前那頁」在清單內置中（不動網頁捲軸）
-      try{
-        var ce=box.querySelector('a.curlink');
-        box.scrollTop = ce ? Math.max(0, ce.offsetTop - box.clientHeight/2) : 0;
-      }catch(e){ box.scrollTop=0; }
+      // 只在清單「可見」時把當前那頁置中（收合狀態不動作，避免展開時跑到最下面）
+      function centerCur(){
+        try{
+          if(!box.clientHeight){ return; }          // 清單收合中 → 不要動
+          var ce=box.querySelector('a.curlink');
+          if(!ce){ box.scrollTop=0; return; }
+          var t=ce.offsetTop-box.clientHeight/2, mx=box.scrollHeight-box.clientHeight;
+          if(t<0)t=0; if(t>mx)t=mx;
+          box.scrollTop=t;
+        }catch(e){}
+      }
+      centerCur();
+      window.kmtCenterCur=centerCur;
     }).catch(function(){});
   }
   Array.prototype.forEach.call(box.querySelectorAll('.tree-h'), function(h){
