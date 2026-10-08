@@ -117,4 +117,4 @@ footer{padding:20px 0 40px}
 .entries li{border-bottom:1px solid #c3cedb}
 .entries li:last-child{border-bottom:none}
 .albumlist a.row{border-bottom:1px solid #c3cedb;padding:13px 6px}
-.ytbadge{display:inline-flex;align-items:center;justify-content:center;background:#e62117;color:#fff;font-size:10px;font-weight:700;border-radius:4px;padding:1px 5px;margin-left:8px;letter-spacing:.3px;line-height:1.5}
+.ytbadge{display:inline-flex;align-items:center;justify-content:center;background:#e62117;color:#fff;font-size:9px;border-radius:4px;padding:2px 6px 2px 5px;margin-left:8px;line-height:1.1}
