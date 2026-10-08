@@ -51,17 +51,18 @@ function openWin(u){
     if(!c && window.kmtCenterCur) setTimeout(window.kmtCenterCur, 30);
   });
   // ── 由 tree.json 畫「每一層父節點都可展開」的樹（孝瓏 2026-10-08）──
-  var segs=location.pathname.split('/').filter(Boolean);
-  if(segs.length && segs[segs.length-1]==='index.html') segs.pop();
+  var rawseg=location.pathname.split('/').filter(Boolean);
+  if(rawseg.length && rawseg[rawseg.length-1]==='index.html') rawseg.pop();
+  var segs=rawseg.map(function(x){ try{ return decodeURIComponent(x); }catch(e){ return x; } });
   var ROOTS=['罐頭音樂研究所','使用公司','知識補給站','語言學習區'], idx=-1;
   for(var i=0;i<segs.length;i++){ if(ROOTS.indexOf(segs[i])>=0){ idx=i; break; } }
   if(idx>=0){
-    var base='/'+segs.slice(0,idx).join('/')+(idx?'/':'');
+    var base='/'+rawseg.slice(0,idx).join('/')+(idx?'/':'');   // 抓 tree.json 用原始（已編碼）路徑
     var cur=segs.slice(idx).join('/')+'/';
     var pathIsLib=/圖書館音樂\//.test(cur);
     fetch(base+'tree.json').then(function(r){return r.json();}).then(function(t){
       var root=null;
-      for(var j=0;j<t.length;j++){ if(t[j].h===segs[idx]+'/'){ root=t[j]; break; } }
+      for(var j=0;j<t.length;j++){ if((t[j].h&&t[j].h===segs[idx]+'/')||t[j].n===segs[idx]){ root=t[j]; break; } }
       if(!root) return;
       if(pathIsLib && root.c){
         for(var k=0;k<root.c.length;k++){ if(root.c[k].h && cur.indexOf(root.c[k].h)===0){ root=root.c[k]; break; } }
