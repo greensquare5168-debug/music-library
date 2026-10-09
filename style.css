@@ -110,11 +110,10 @@ footer{padding:20px 0 40px}
 .entries+.entries{margin-top:22px}
 .album-card>p.muted{margin-top:26px}
 .entries:last-child{margin-bottom:0}
-.unit{margin-top:30px;padding-top:16px;border-top:1px dashed var(--line)}
-.entries+.unit{margin-top:30px}
-.unit:first-child{border-top:none;padding-top:0}
-.album-card .unit:first-child{border-top:none;padding-top:0}
-.unit.ad{margin-top:40px;padding:12px 0 8px;border-top:3px double var(--line);border-bottom:none;color:var(--muted);font-size:13px;letter-spacing:.1em}
+.unit{margin-top:20px}
+.entries+.unit{margin-top:20px}
+.entries:has(+ .unit){padding-bottom:16px;border-bottom:1px dashed var(--line)}
+.unit.ad{margin-top:26px;padding:12px 0 8px;border-top:3px double var(--line);border-bottom:none;color:var(--muted);font-size:13px;letter-spacing:.1em}
 .entries+.unit.ad{margin-top:44px}
 .unit:first-child{margin-top:0}
 .album-card .unit + .entries{margin-top:0}
