@@ -110,9 +110,10 @@ footer{padding:20px 0 40px}
 .entries+.entries{margin-top:22px}
 .album-card>p.muted{margin-top:26px}
 .entries:last-child{margin-bottom:0}
-.unit{margin-top:22px}
+.unit{margin-top:34px}
+.entries+.unit{margin-top:34px}
 .unit:first-child{margin-top:0}
-.album-card .unit + .entries{margin-top:14px}
+.album-card .unit + .entries{margin-top:0}
 .role{margin-right:8px}
 .entries li{border-bottom:1px solid #c3cedb}
 .entries li:last-child{border-bottom:none}
