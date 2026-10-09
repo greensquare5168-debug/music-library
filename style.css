@@ -112,7 +112,7 @@ footer{padding:20px 0 40px}
 .entries:last-child{margin-bottom:0}
 .unit{margin-top:22px}
 .unit:first-child{margin-top:0}
-.album-card .unit + .entries{margin-top:0}
+.album-card .unit + .entries{margin-top:14px}
 .role{margin-right:8px}
 .entries li{border-bottom:1px solid #c3cedb}
 .entries li:last-child{border-bottom:none}
