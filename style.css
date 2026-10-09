@@ -112,6 +112,7 @@ footer{padding:20px 0 40px}
 .entries:last-child{margin-bottom:0}
 .unit{margin-top:26px}
 .entries+.unit{margin-top:22px}
+.unit:not(.ad)+.entries>li:not(:first-child){padding-top:24px}
 .entries:has(+ .unit){padding-bottom:40px}
 .unit:not(.ad)+.entries>li:first-child,
 .ytframe+.entries>li:first-child{border-bottom:2px solid var(--line);padding-bottom:12px}
