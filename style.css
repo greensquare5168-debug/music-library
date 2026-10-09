@@ -110,9 +110,9 @@ footer{padding:20px 0 40px}
 .entries+.entries{margin-top:22px}
 .album-card>p.muted{margin-top:26px}
 .entries:last-child{margin-bottom:0}
-.unit{margin-top:20px}
-.entries+.unit{margin-top:20px}
-.entries:has(+ .unit){padding-bottom:16px;border-bottom:1px dashed var(--line)}
+.unit{margin-top:26px}
+.entries+.unit{margin-top:26px}
+.entries>li:first-child{border-bottom:2px solid var(--line);padding-bottom:12px}
 .unit.ad{margin-top:26px;padding:12px 0 8px;border-top:3px double var(--line);border-bottom:none;color:var(--muted);font-size:13px;letter-spacing:.1em}
 .entries+.unit.ad{margin-top:44px}
 .unit:first-child{margin-top:0}
