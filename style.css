@@ -155,3 +155,8 @@ body.nav-collapsed .navtoggle{left:0}
 .treebox{white-space:nowrap;overflow-x:auto}
 .tnode,.tree-h,.tree-h a,.tnode a,.tnode .dh{white-space:nowrap}
 .tnode{padding-right:10px}
+
+/* 孝瓏 2026-10-09：全站每行都不要分隔線 */
+.albumlist li, .albumlist li:last-child,
+.albumlist a.row, .albumlist li:last-child a.row,
+.entries li, .entries li:last-child{border-bottom:none}
