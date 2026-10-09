@@ -114,7 +114,7 @@ footer{padding:20px 0 40px}
 .entries+.unit{margin-top:26px}
 .unit:not(.ad)+.entries>li:first-child,
 .ytframe+.entries>li:first-child{border-bottom:2px solid var(--line);padding-bottom:12px}
-.adsec{margin-top:26px;padding:0 0 12px;border:1px solid var(--line);border-radius:10px;background:none}
+.adsec{margin-top:26px;padding:0 0 12px;border:3px solid #8fa3bd;border-radius:10px;background:none}
 .adsec>.unit{margin-top:12px}
 .adsec.pre{margin-top:22px}
 .unit:first-child{margin-top:0}
