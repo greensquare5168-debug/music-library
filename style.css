@@ -113,8 +113,6 @@ footer{padding:20px 0 40px}
 .unit{margin-top:26px}
 .entries+.unit{margin-top:26px}
 .entries>li:first-child{border-bottom:2px solid var(--line);padding-bottom:12px}
-.unit.ad{margin-top:26px;padding:12px 0 8px;border-top:3px double var(--line);border-bottom:none;color:var(--muted);font-size:13px;letter-spacing:.1em}
-.entries+.unit.ad{margin-top:44px}
 .unit:first-child{margin-top:0}
 .album-card .unit + .entries{margin-top:0}
 .role{margin-right:8px}
