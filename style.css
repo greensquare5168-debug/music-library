@@ -111,7 +111,7 @@ footer{padding:20px 0 40px}
 .album-card>p.muted{margin-top:26px}
 .entries:last-child{margin-bottom:0}
 .unit{margin-top:26px}
-.unit:not(.ad){margin-top:30px;padding-top:16px;border-top:3px solid #8fa3bd}
+.unit:not(.ad){margin-top:30px;padding-top:16px;border-top:3px solid #8fa3bd;border-bottom:none}
 .unit:not(.ad)+.entries{padding-bottom:16px;border-bottom:3px solid #8fa3bd}
 .unit:not(.ad)+.entries>li:not(:first-child){padding-top:24px}
 .entries+.unit{margin-top:6px}
