@@ -114,7 +114,7 @@ footer{padding:20px 0 40px}
 .unit{margin-top:26px}
 .unit:not(.ad){margin-top:30px;padding-top:20px;border-top:3px solid #8fa3bd;border-bottom:none}
 /* 2026-10-10 孝瓏：節目字卡風（藍底＋白字黑框）只給「大頭小狀元」這個節目（每個節目不一樣，勿全站套） */
-body[data-show="大頭小狀元"] .unit:not(.ad){padding:8px 14px;border-top:none;border-radius:9px;color:#fff;font-size:22px;paint-order:stroke fill;-webkit-text-stroke:4px #111;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
+body[data-show="大頭小狀元"] .unit:not(.ad){padding:8px 14px;border-top:none;border-radius:9px;color:#69d280;font-size:22px;paint-order:stroke fill;-webkit-text-stroke:4px #ffffff;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
 /* 同一節目裡每個標題各自的主題色（取自節目畫面） */
 body[data-show="大頭小狀元"] .unit[data-label^="香蕉哥哥"]{background-color:#f4c215;background-image:linear-gradient(135deg,#f4c215 0 33.4%,#f8d94f 33.4% 66.7%,#fdeea9 66.7% 100%)}
 /* 粗線＝分組界線；線上、線下各留一個「空行」的空白（20px） */
