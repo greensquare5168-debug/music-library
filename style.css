@@ -106,8 +106,9 @@ footer{padding:20px 0 40px}
 .enter{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:18px}
 .bigbtn{flex:1 1 220px;display:flex;align-items:center;justify-content:center;background:#fff;border:1px solid var(--line);border-radius:14px;padding:26px 18px;font-size:20px;font-weight:700;color:var(--fg);text-decoration:none;box-shadow:0 1px 2px rgba(16,24,40,.04)}
 .bigbtn:hover{background:#f0faf3;border-color:#cfe9d8;text-decoration:none}
-.entries{margin:0 0 18px}
-.entries+.entries{margin-top:22px}
+/* 2026-10-10 孝瓏：每行間距過大 → 全站統一 16px（靠 8px+8px padding），不再有區塊間大小不一 */
+.entries{margin:0}
+.entries+.entries{margin-top:0}
 .album-card>p.muted{margin-top:26px}
 .entries:last-child{margin-bottom:0}
 .unit{margin-top:26px}
@@ -116,7 +117,6 @@ footer{padding:20px 0 40px}
 .unit:not(.ad)+.entries>li:first-child{border-bottom:3px solid #8fa3bd;padding-bottom:12px}
 /* 單首音樂的組又緊接下一個標題 → 由標題上方那條線代表，不重複畫（免得雙線） */
 .unit:not(.ad)+.entries:has(+.unit:not(.ad))>li:only-child{border-bottom:none}
-.unit:not(.ad)+.entries>li:not(:first-child){padding-top:24px}
 .entries+.unit{margin-top:6px}
 .adsec{margin-top:26px;padding:0 0 12px;border:3px solid #8fa3bd;border-radius:10px;background:none}
 .adsec>.unit{margin-top:12px}
