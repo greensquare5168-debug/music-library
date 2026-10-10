@@ -198,3 +198,5 @@ body[data-show="大頭小狀元"] .unit[data-label^="園藝達人"]{padding:8px 
 
 body[data-show="大頭小狀元"] .unit[data-label="站長 竺明豪"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#111111;-webkit-text-stroke:4px #ffffff;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
 body[data-show="大頭小狀元"] .unit[data-label^="肥皂達人"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#ffffff;-webkit-text-stroke:4px #22346b;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
+
+body[data-show="大頭小狀元"] .unit[data-label="木頭玩具達人 江明偉"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#ffffff;-webkit-text-stroke:4px #22346b;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
