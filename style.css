@@ -112,14 +112,14 @@ footer{padding:20px 0 40px}
 .album-card>p.muted{margin-top:26px}
 .entries:last-child{margin-bottom:0}
 .unit{margin-top:26px}
-.unit:not(.ad){margin-top:30px;padding-top:16px;border-top:3px solid #8fa3bd;border-bottom:none}
-/* 粗線放在「標題下第一首」與「第二首」之間（各組第一個音樂下方）；線上下各留 16px */
-.unit:not(.ad)+.entries>li:first-child{border-bottom:3px solid #8fa3bd;padding-bottom:16px}
-.unit:not(.ad)+.entries>li:nth-child(2){padding-top:16px}
-.entries+.entries>li:first-child{padding-top:16px}
+.unit:not(.ad){margin-top:30px;padding-top:20px;border-top:3px solid #8fa3bd;border-bottom:none}
+/* 粗線＝分組界線；線上、線下各留一個「空行」的空白（20px） */
+.unit:not(.ad)+.entries>li:first-child{border-bottom:3px solid #8fa3bd;padding-bottom:20px}
+.unit:not(.ad)+.entries>li:nth-child(2){padding-top:20px}
+.entries+.entries>li:first-child{padding-top:20px}
 /* 單首音樂的組又緊接下一個標題 → 由標題上方那條線代表，不重複畫（免得雙線） */
 .unit:not(.ad)+.entries:has(+.unit:not(.ad))>li:only-child{border-bottom:none}
-.entries+.unit{margin-top:6px}
+.entries+.unit{margin-top:12px}
 .adsec{margin-top:26px;padding:0 0 12px;border:3px solid #8fa3bd;border-radius:10px;background:none}
 .adsec>.unit{margin-top:12px}
 .adsec.pre{margin-top:22px}
