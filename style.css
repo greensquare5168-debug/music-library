@@ -112,8 +112,9 @@ footer{padding:20px 0 40px}
 .album-card>p.muted{margin-top:26px}
 .entries:last-child{margin-bottom:0}
 .unit{margin-top:26px}
-/* 2026-10-10 孝瓏：標題改成「節目字卡」風＝藍底＋白字＋黑框（白字需底色才看得見） */
-.unit:not(.ad){margin-top:30px;padding:8px 14px;border-top:none;border-bottom:none;border-radius:9px;color:#fff;-webkit-text-stroke:1.3px #111;font-size:22px;background-color:#aad8ff;background-image:linear-gradient(135deg,rgba(110,191,255,.55) 0 26%,rgba(170,216,255,0) 26% 55%,rgba(216,236,255,.7) 55% 78%,rgba(110,191,255,.42) 78% 100%)}
+.unit:not(.ad){margin-top:30px;padding-top:20px;border-top:3px solid #8fa3bd;border-bottom:none}
+/* 2026-10-10 孝瓏：節目字卡風（藍底＋白字黑框）只給「大頭小狀元」這個節目（每個節目不一樣，勿全站套） */
+body[data-show="大頭小狀元"] .unit:not(.ad){padding:8px 14px;border-top:none;border-radius:9px;color:#fff;-webkit-text-stroke:1.3px #111;font-size:22px;background-color:#aad8ff;background-image:linear-gradient(135deg,rgba(110,191,255,.55) 0 26%,rgba(170,216,255,0) 26% 55%,rgba(216,236,255,.7) 55% 78%,rgba(110,191,255,.42) 78% 100%)}
 /* 粗線＝分組界線；線上、線下各留一個「空行」的空白（20px） */
 .unit:not(.ad)+.entries>li:first-child{border-bottom:3px solid #8fa3bd;padding-bottom:20px}
 .unit:not(.ad)+.entries>li:nth-child(2){padding-top:20px}
