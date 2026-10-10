@@ -120,6 +120,8 @@ body[data-show="大頭小狀元"] .unit[data-label^="香蕉哥哥"]{background-c
 /* 大頭、香蕉哥哥的文字維持白字黑框（綠色白框給其他人物標題） */
 body[data-show="大頭小狀元"] .unit[data-label^="大頭"]{color:#fff;-webkit-text-stroke:4px #111}
 body[data-show="大頭小狀元"] .unit[data-label^="香蕉哥哥"]{color:#fff;-webkit-text-stroke:4px #111}
+/* 人物標題各自底色（取節目畫面）；養蠶狀元＝青綠色三格斜向 */
+body[data-show="大頭小狀元"] .unit[data-label^="養蠶狀元"]{background-color:#c2d069;background-image:linear-gradient(135deg,#bfce62 0 33.4%,#d6e36b 33.4% 66.7%,#eff9a6 66.7% 100%)}
 /* 粗線＝分組界線；線上、線下各留一個「空行」的空白（20px） */
 .unit:not(.ad)+.entries>li:first-child{border-bottom:3px solid #8fa3bd;padding-bottom:20px}
 .unit:not(.ad)+.entries>li:nth-child(2){padding-top:20px}
