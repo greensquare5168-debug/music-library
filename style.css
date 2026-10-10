@@ -128,12 +128,12 @@ body[data-show="大頭小狀元"][data-season] .unit[data-label^="老闆 蕭文�
 body[data-show="大頭小狀元"][data-season] .unit[data-label^="台大山地農場"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#111111;-webkit-text-stroke:4px #111111;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
 body[data-show="大頭小狀元"][data-season] .unit[data-label^="手工花燈達人"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#f4fcd0;-webkit-text-stroke:4px #2c5c2c;background-color:#b8d94e;background-image:linear-gradient(135deg,#a6c93c 0 33.4%,#c2e05a 33.4% 66.7%,#e6f79a 66.7% 100%)}
 /* 粗線＝分組界線；線上、線下各留一個「空行」的空白（20px） */
-.unit:not(.ad)+.entries>li:first-child{border-bottom:3px solid #8fa3bd;padding-bottom:20px}
-.unit:not(.ad)+.entries>li:nth-child(2){padding-top:20px}
-.entries+.entries>li:first-child{padding-top:20px}
+body[data-show="大頭小狀元"][data-season] .unit:not(.ad)+.entries>li:first-child{border-bottom:3px solid #8fa3bd;padding-bottom:20px}
+body[data-show="大頭小狀元"][data-season] .unit:not(.ad)+.entries>li:nth-child(2){padding-top:20px}
+body[data-show="大頭小狀元"][data-season] .entries+.entries>li:first-child{padding-top:20px}
 /* 單首音樂的組又緊接下一個標題 → 由標題上方那條線代表，不重複畫（免得雙線） */
-.unit:not(.ad)+.entries:has(+.unit:not(.ad))>li:only-child{border-bottom:none}
-.entries+.unit{margin-top:12px}
+body[data-show="大頭小狀元"][data-season] .unit:not(.ad)+.entries:has(+.unit:not(.ad))>li:only-child{border-bottom:none}
+body[data-show="大頭小狀元"][data-season] .entries+.unit{margin-top:12px}
 .adsec{margin-top:26px;padding:0 0 12px;border:3px solid #8fa3bd;border-radius:10px;background:none}
 .adsec>.unit{margin-top:12px}
 .adsec.pre{margin-top:22px}
