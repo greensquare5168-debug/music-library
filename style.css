@@ -113,7 +113,7 @@ footer{padding:20px 0 40px}
 .entries:last-child{margin-bottom:0}
 .unit{margin-top:26px}
 /* 2026-10-10 孝瓏：標題改「黑邊白字」 */
-.unit:not(.ad){margin-top:30px;padding-top:20px;border-top:3px solid #8fa3bd;border-bottom:none;color:#fff;-webkit-text-stroke:1px #111;font-size:16.5px}
+.unit:not(.ad){margin-top:30px;padding-top:20px;border-top:3px solid #8fa3bd;border-bottom:none;color:#fff;-webkit-text-stroke:1.2px #111;font-size:22px}
 /* 粗線＝分組界線；線上、線下各留一個「空行」的空白（20px） */
 .unit:not(.ad)+.entries>li:first-child{border-bottom:3px solid #8fa3bd;padding-bottom:20px}
 .unit:not(.ad)+.entries>li:nth-child(2){padding-top:20px}
