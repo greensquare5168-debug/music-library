@@ -113,8 +113,6 @@ footer{padding:20px 0 40px}
 .unit{margin-top:26px}
 .unit:not(.ad){margin-top:30px;padding-top:16px;border-top:3px solid #8fa3bd;border-bottom:none}
 .unit:not(.ad)+.entries{padding-bottom:16px;border-bottom:3px solid #8fa3bd}
-/* 下一組標題已自帶上線 → 這一組底部不重複畫（避免兩條並排） */
-.unit:not(.ad)+.entries:has(+.unit:not(.ad)){border-bottom:none}
 .unit:not(.ad)+.entries>li:not(:first-child){padding-top:24px}
 .entries+.unit{margin-top:6px}
 .adsec{margin-top:26px;padding:0 0 12px;border:3px solid #8fa3bd;border-radius:10px;background:none}
