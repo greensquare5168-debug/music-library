@@ -113,8 +113,10 @@ footer{padding:20px 0 40px}
 .entries:last-child{margin-bottom:0}
 .unit{margin-top:26px}
 .unit:not(.ad){margin-top:30px;padding-top:16px;border-top:3px solid #8fa3bd;border-bottom:none}
-/* 粗線放在「標題下第一首」與「第二首」之間（各組第一個音樂下方） */
-.unit:not(.ad)+.entries>li:first-child{border-bottom:3px solid #8fa3bd;padding-bottom:12px}
+/* 粗線放在「標題下第一首」與「第二首」之間（各組第一個音樂下方）；線上下各留 16px */
+.unit:not(.ad)+.entries>li:first-child{border-bottom:3px solid #8fa3bd;padding-bottom:16px}
+.unit:not(.ad)+.entries>li:nth-child(2){padding-top:16px}
+.entries+.entries>li:first-child{padding-top:16px}
 /* 單首音樂的組又緊接下一個標題 → 由標題上方那條線代表，不重複畫（免得雙線） */
 .unit:not(.ad)+.entries:has(+.unit:not(.ad))>li:only-child{border-bottom:none}
 .entries+.unit{margin-top:6px}
