@@ -111,8 +111,6 @@ footer{padding:20px 0 40px}
 /* 2026-10-10 孝瓏：每行間距過大 → 全站統一 16px（靠 8px+8px padding），不再有區塊間大小不一 */
 .entries{margin:0}
 .entries+.entries{margin-top:0}
-/* 孝瓏 2026-10-11：YOYO童話世界的「片頭曲/哥哥姐姐片段」與「故事片段」等區塊要看得出來分隔（其他節目不受影響） */
-body[data-show="yoyo童話世界"] .entries+.entries{margin-top:22px}
 .album-card>p.muted{margin-top:26px}
 .entries:last-child{margin-bottom:0}
 .unit{margin-top:26px}
