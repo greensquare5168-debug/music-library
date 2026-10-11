@@ -96,8 +96,8 @@ footer{padding:20px 0 40px}
 .albumlist a.row{display:flex;justify-content:space-between;align-items:center;gap:12px;width:100%;padding:12px 4px;border-bottom:1px solid var(--line);color:var(--link);text-decoration:none}
 .albumlist li:last-child a.row{border-bottom:none}
 .albumlist a.row:hover{background:var(--card2);text-decoration:none}
-.albumlist a.row .rn{font-weight:600;color:var(--link)}
-.albumlist a.row .muted{flex:1;text-align:right}
+.albumlist a.row .rn{font-weight:600;color:var(--link);flex:1 1 auto;min-width:0}
+.albumlist a.row .muted{flex:0 0 auto;text-align:right;white-space:nowrap;margin-left:12px}
 .albumlist a.row .rn .muted{font-weight:400;margin-left:6px;color:var(--muted)}
 .albumlist a.row .go{color:var(--muted);font-size:20px}
 .album-card h2{font-size:18px;margin:0 0 8px}
@@ -149,7 +149,7 @@ body[data-show="大頭小狀元"][data-season] .entries+.unit{margin-top:12px}
 /* 左側檔案總管式列表（孝瓏 2026-10-08；浮動式，不壓縮中間內容） */
 .layout{display:block}
 .content{width:100%}
-.treebox{white-space:nowrap;overflow-anchor:none;position:fixed;left:0;top:76px;width:236px;max-height:calc(100vh - 104px);overflow:auto;border:1px solid var(--line);border-left:none;border-radius:0 12px 12px 0;padding:10px 12px;background:var(--card);box-shadow:0 6px 22px rgba(0,0,0,.18);z-index:55}
+.treebox{white-space:nowrap;overflow-anchor:none;position:fixed;left:0;top:76px;width:236px;max-height:calc(100vh - 104px);overflow:auto;overflow-x:auto;overflow-y:auto;scrollbar-gutter:stable;border:1px solid var(--line);border-left:none;border-radius:0 12px 12px 0;padding:10px 12px;background:var(--card);box-shadow:0 6px 22px rgba(0,0,0,.18);z-index:55}
 .tree-h{font-size:12.5px;font-weight:700;color:var(--muted);margin:8px 2px 4px}
 .tree{list-style:none;margin:0 0 8px;padding:0}
 .tree li{padding:3px 7px;border-radius:7px;line-height:1.55}
