@@ -1,4 +1,22 @@
 
+function fitSrc(){
+  var fr=document.querySelectorAll('.srcframe');
+  for(var i=0;i<fr.length;i++){
+    var f=fr[i], ifr=f.getElementsByTagName('iframe')[0];
+    if(!ifr) continue;
+    var H=parseFloat(ifr.getAttribute('data-h')||'0');
+    if(!H) continue;
+    var fw=f.clientWidth, fh=f.clientHeight;
+    if(!fw||!fh) continue;
+    var W=Math.round(fw*H/fh);           // 依窗框比例選邏輯寬度（整頁等比縮小）
+    ifr.style.width=W+'px'; ifr.style.height=H+'px';
+    var s=Math.min(fw/W, fh/H)*0.995;
+    ifr.style.transform='scale('+s+')'; ifr.style.transformOrigin='top left';
+  }
+}
+document.addEventListener('DOMContentLoaded',fitSrc);
+window.addEventListener('load',fitSrc);
+window.addEventListener('resize',fitSrc);
 function openWin(u){
   try{
     var w=Math.min(1200,Math.round(screen.availWidth*0.8));
