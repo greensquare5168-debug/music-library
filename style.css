@@ -144,10 +144,8 @@ body[data-show="大頭小狀元"][data-season] .unit:not(.ad)+.entries>li:nth-ch
 body[data-show="大頭小狀元"][data-season] .entries+.entries>li:first-child{padding-top:20px}
 /* 孝瓏 2026-10-11：YOYO童話世界「哥哥姐姐片段」與「故事片段」之間要看得出來分隔（片頭曲那條 UL 之後的哥哥姐姐 UL，下緣留 26px；不是每首之間都留） */
 body[data-show="yoyo童話世界"] ul.entries:has(span.role) + ul.entries{margin-bottom:64px}
-/* 孝瓏 2026-10-12：每個故事（標題）區塊「最下面那一首」之後 → 與下一個區塊加大間距（每個故事標題都要） */
-body[data-show="yoyo童話世界"] ul.entries:has(+ div.unit){margin-bottom:64px}
-/* 同上：故事區塊最後一首之後若接的是「片尾曲」那條 UL（:has 不可巢狀，改由片尾曲 UL 加上緣間距） */
-body[data-show="yoyo童話世界"] ul.entries + ul.entries:has(span.role){margin-top:64px}
+/* 孝瓏 2026-10-12：故事區塊「最下面那一首」（尾段組）要跟上面隔開（build 時 fix_tonghua_tail.py 加 .tail） */
+body[data-show="yoyo童話世界"] ul.entries.tail{margin-top:64px;margin-bottom:64px}
 /* 單首音樂的組又緊接下一個標題 → 由標題上方那條線代表，不重複畫（免得雙線） */
 body[data-show="大頭小狀元"][data-season] .unit:not(.ad)+.entries:has(+.unit:not(.ad))>li:only-child{border-bottom:none}
 body[data-show="大頭小狀元"][data-season] .entries+.unit{margin-top:12px}
