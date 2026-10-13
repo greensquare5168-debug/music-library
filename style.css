@@ -231,4 +231,4 @@ body[data-show="大頭小狀元"][data-season] .unit[data-label^="狀元小常�
 body[data-show="大頭小狀元"][data-season] .unit[data-label="狀元小常識 蠶是完全變態的昆蟲"]{color:#111111;-webkit-text-stroke:4px #ffffff}
 
 /* 孝瓏 2026-10-13：另類獸醫 邱小果（大頭小狀元 S1E03）取節目畫面＝上綠/中粉/下藍 三橫帶 */
-body[data-show="大頭小狀元"][data-season] .unit[data-label^="另類獸醫"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#eb6b9b;-webkit-text-stroke:4px #e6f1fc;background-color:#d3ef5f;background-image:linear-gradient(180deg,#d3ef5f 0 33.4%,#ffa4a3 33.4% 66.7%,#cfe2f7 66.7% 100%)}
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="另類獸醫"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#eb6b9b;-webkit-text-stroke:4px #ffffff;background-color:#d3ef5f;background-image:linear-gradient(180deg,#d3ef5f 0 33.4%,#ffa4a3 33.4% 66.7%,#cfe2f7 66.7% 100%)}
