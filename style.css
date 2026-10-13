@@ -244,3 +244,7 @@ body[data-show="大頭小狀元"][data-season] .unit[data-label="狀元小常識
 body[data-show="大頭小狀元"][data-season] .album-card{border:none}
 body[data-show="大頭小狀元"][data-season] .adsec{border:none}
 body[data-show="大頭小狀元"][data-season] .entries li{border-bottom:none}
+
+/* 孝瓏 2026-10-13：全站「廣告後片段」這五個字置中 */
+.unit.ad{text-align:center}
+.unit[data-label="廣告後片段"]{text-align:center}
