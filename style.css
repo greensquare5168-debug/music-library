@@ -236,3 +236,6 @@ body[data-show="大頭小狀元"][data-season] .unit[data-label^="另類獸醫"]
 /* 孝瓏 2026-10-13：大頭小狀元全系列不要灰色的分隔線（保留上下留白） */
 body[data-show="大頭小狀元"][data-season] .unit:not(.ad){border-top:none}
 body[data-show="大頭小狀元"][data-season] .unit:not(.ad)+.entries>li:first-child{border-bottom:none}
+
+/* 孝瓏 2026-10-13（14:41 再加回）：S1E03 狀元小常識「寵物是不是生病了？」→ 黑字＋白邊 */
+body[data-show="大頭小狀元"][data-season] .unit[data-label="狀元小常識 寵物是不是生病了？"]{color:#111111;-webkit-text-stroke:4px #ffffff}
