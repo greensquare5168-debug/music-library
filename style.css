@@ -239,3 +239,8 @@ body[data-show="大頭小狀元"][data-season] .unit:not(.ad)+.entries>li:first-
 
 /* 孝瓏 2026-10-13（14:41 再加回）：S1E03 狀元小常識「寵物是不是生病了？」→ 黑字＋白邊 */
 body[data-show="大頭小狀元"][data-season] .unit[data-label="狀元小常識 寵物是不是生病了？"]{color:#111111;-webkit-text-stroke:4px #ffffff}
+
+/* 孝瓏 2026-10-13（14:44）：大頭小狀元全系列「全部灰線」都去掉（含卡片兩側直線、每列下緣、廣告後片段框） */
+body[data-show="大頭小狀元"][data-season] .album-card{border:none}
+body[data-show="大頭小狀元"][data-season] .adsec{border:none}
+body[data-show="大頭小狀元"][data-season] .entries li{border-bottom:none}
