@@ -248,3 +248,7 @@ body[data-show="大頭小狀元"][data-season] .entries li{border-bottom:none}
 /* 孝瓏 2026-10-13：全站「廣告後片段」這五個字置中 */
 .unit.ad{text-align:center}
 .unit[data-label="廣告後片段"]{text-align:center}
+
+/* 孝瓏 2026-10-13：YOYO點點名 魔法ABC →「單字」那首（Cat & Mouse）要跟下面的音樂分開（留一個空行） */
+body[data-show="yoyo點點名"][data-season="yoyo點點名-魔法abc"] .unit[data-label*=" "] + .entries > li:first-child{padding-bottom:22px}
+body[data-show="yoyo點點名"][data-season="yoyo點點名-魔法abc"] .unit[data-label*=" "] + .entries + .entries{margin-top:22px}
