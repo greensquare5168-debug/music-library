@@ -391,3 +391,5 @@ body[data-show="黑蕉fun輕鬆"] .unit[data-label^="YOYO FUN一下"] .f4{color:
 body[data-show="黑蕉fun輕鬆"] .unit[data-label^="YOYO FUN一下"] .f5{color:#5bb4e8}
 /* 孝瓏 2026-10-14：大頭小廚房＝黑字白邊＋藍白環繞（放射條紋） */
 body[data-show="大頭小狀元"][data-season] .unit[data-label^="大頭小廚房"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#111111;-webkit-text-stroke:4px #ffffff;background-color:#ffffff;background-image:repeating-conic-gradient(from 0deg,#c9e8ff 0deg 12deg,#ffffff 12deg 24deg)}
+/* 孝瓏 2026-10-14：洋芋片的由來＝紅字無框＋格線底（上下 5 行、多列） */
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="洋芋片的由來"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#e84045;-webkit-text-stroke-width:0;background-color:#ffffff;background-image:repeating-linear-gradient(to bottom,#cfd8dc 0 1px,transparent 1px 20%),repeating-linear-gradient(to right,#cfd8dc 0 1px,transparent 1px 26px)}
