@@ -392,4 +392,398 @@ body[data-show="黑蕉fun輕鬆"] .unit[data-label^="YOYO FUN一下"] .f5{color:
 /* 孝瓏 2026-10-14：大頭小廚房＝黑字白邊＋藍白環繞（放射條紋） */
 body[data-show="大頭小狀元"][data-season] .unit[data-label^="大頭小廚房"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#111111;-webkit-text-stroke:4px #ffffff;background-color:#ffffff;background-image:repeating-conic-gradient(from 0deg,#c9e8ff 0deg 12deg,#ffffff 12deg 24deg)}
 /* 孝瓏 2026-10-14：洋芋片的由來＝紅字無框＋格線底（上下 5 行、多列） */
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="洋芋片的由來"]{padding:8px 14px;border-top:none;border-bottom:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#e84045;-webkit-text-stroke-width:0;box-sizing:border-box;min-height:54px;display:flex;align-items:center;background-color:#ffffff;background-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2778%27%20height%3D%2727%27%3E%3Crect%20x%3D%270%27%20y%3D%270%27%20width%3D%2726%27%20height%3D%279%27%20fill%3D%27%23ffd1d1%27%2F%3E%3Crect%20x%3D%2726%27%20y%3D%270%27%20width%3D%2726%27%20height%3D%279%27%20fill%3D%27%23ffe0b2%27%2F%3E%3Crect%20x%3D%2752%27%20y%3D%270%27%20width%3D%2726%27%20height%3D%279%27%20fill%3D%27%23fff9c4%27%2F%3E%3Crect%20x%3D%270%27%20y%3D%279%27%20width%3D%2726%27%20height%3D%279%27%20fill%3D%27%23dcedc8%27%2F%3E%3Crect%20x%3D%2726%27%20y%3D%279%27%20width%3D%2726%27%20height%3D%279%27%20fill%3D%27%23b2ebf2%27%2F%3E%3Crect%20x%3D%2752%27%20y%3D%279%27%20width%3D%2726%27%20height%3D%279%27%20fill%3D%27%23d1c4e9%27%2F%3E%3Crect%20x%3D%270%27%20y%3D%2718%27%20width%3D%2726%27%20height%3D%279%27%20fill%3D%27%23ffccbc%27%2F%3E%3Crect%20x%3D%2726%27%20y%3D%2718%27%20width%3D%2726%27%20height%3D%279%27%20fill%3D%27%23c8e6c9%27%2F%3E%3Crect%20x%3D%2752%27%20y%3D%2718%27%20width%3D%2726%27%20height%3D%279%27%20fill%3D%27%23bbdefb%27%2F%3E%3Crect%20x%3D%270%27%20y%3D%270%27%20width%3D%271%27%20height%3D%2727%27%20fill%3D%27%23ffffff%27%2F%3E%3Crect%20x%3D%2726%27%20y%3D%270%27%20width%3D%271%27%20height%3D%2727%27%20fill%3D%27%23ffffff%27%2F%3E%3Crect%20x%3D%2752%27%20y%3D%270%27%20width%3D%271%27%20height%3D%2727%27%20fill%3D%27%23ffffff%27%2F%3E%3Crect%20x%3D%270%27%20y%3D%270%27%20width%3D%2778%27%20height%3D%271%27%20fill%3D%27%23ffffff%27%2F%3E%3Crect%20x%3D%270%27%20y%3D%279%27%20width%3D%2778%27%20height%3D%271%27%20fill%3D%27%23ffffff%27%2F%3E%3Crect%20x%3D%270%27%20y%3D%2718%27%20width%3D%2778%27%20height%3D%271%27%20fill%3D%27%23ffffff%27%2F%3E%3C%2Fsvg%3E");background-size:78px 27px}:root{
+  --bg:#f6f8fa; --card:#ffffff; --card2:#f1f5f9; --line:#e3e8ee;
+  --fg:#1f2733; --muted:#5c6675; --link:#1a7f37; --link2:#146c2e;
+  --warn:#b45309; --ok:#15803d;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);
+  font:16px/1.6 -apple-system,"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif}
+.wrap{max-width:960px;margin:0 auto;padding:0 20px}
+.site-head{background:#fff;border-bottom:1px solid var(--line);padding:20px 0}
+.brand{font-size:22px;font-weight:700;letter-spacing:.5px}
+.head-row{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+.topnav{display:flex;gap:8px}
+.topnav button{background:#fff;border:1px solid var(--line);color:var(--fg);border-radius:10px;padding:9px 16px;font-size:14px;cursor:pointer}
+.topnav button.on{background:var(--link);color:#fff;border-color:var(--link);font-weight:700}
+.tag{font-size:12px;background:#e8f5ec;color:var(--link);border-radius:6px;padding:2px 8px;vertical-align:middle;margin-left:6px;border:1px solid #cfe9d8}
+.sub{color:var(--muted);font-size:13px;margin-top:4px}
+main{padding:24px 0 60px}
+.album-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin-bottom:18px;box-shadow:0 1px 2px rgba(16,24,40,.04)}
+.album-card h1{margin:0 0 6px;font-size:24px}
+.album-meta{color:var(--muted);font-size:14px;display:flex;flex-wrap:wrap;gap:6px 14px}
+.album-desc{margin-top:10px;color:var(--muted);font-size:14px}
+.pill{display:inline-block;background:var(--card2);border:1px solid var(--line);border-radius:999px;padding:2px 10px;font-size:12px;color:var(--muted)}
+.linkpill{text-decoration:none;color:var(--link);border-color:#cfe9d8;background:#f0faf3}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:6px 0 10px}
+#q{flex:1 1 260px;background:#fff;border:1px solid var(--line);border-radius:10px;color:var(--fg);padding:11px 14px;font-size:15px;outline:none}
+#q:focus{border-color:var(--link)}
+.filters button{background:#fff;border:1px solid var(--line);color:var(--muted);border-radius:999px;padding:8px 14px;font-size:13px;cursor:pointer}
+.filters button.on{background:var(--link);color:#fff;border-color:var(--link);font-weight:600}
+.stats{color:var(--muted);font-size:13px;margin:4px 0 12px}
+.tracks{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.tracks li{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.tr-head{display:flex;gap:10px;align-items:baseline;padding:12px 14px;cursor:pointer}
+.tr-no{color:var(--muted);font-variant-numeric:tabular-nums;font-size:13px;min-width:34px}
+.tr-title{font-weight:600;flex:1}
+.tr-comp{color:var(--muted);font-size:13.5px;text-align:right}
+.badge{font-size:11px;border-radius:6px;padding:1px 7px;margin-left:8px;vertical-align:middle}
+.badge.warn{background:#fff7ed;color:var(--warn);border:1px solid #fcd9a8}
+.badge.ok{background:#f0faf3;color:var(--ok);border:1px solid #cfe9d8}
+.tr-body{display:none;border-top:1px solid var(--line);padding:12px 14px;background:var(--card2)}
+.tracks li.open .tr-body{display:block}
+a{color:var(--link);text-decoration:none}
+a:hover{text-decoration:underline;color:var(--link2)}
+.tr-body h4{margin:2px 0 8px;font-size:13px;color:var(--muted);font-weight:600}
+.tr-body ul{margin:0;padding-left:18px}
+.tr-body li{background:none;border:none;border-radius:0;padding:1px 0;color:#3b4657;font-size:14px}
+.tr-body a{color:var(--link)}
+.change{background:#fffaf0;border:1px solid #f6e0b5;border-radius:8px;padding:8px 10px;font-size:13.5px;margin-bottom:10px;color:#7c5312}
+.excluded{margin-top:30px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px}
+.excluded h2{font-size:16px;margin:0 0 6px}
+.excluded ul{columns:2;margin:8px 0 0;padding-left:18px;color:var(--muted);font-size:13.5px}
+@media(max-width:640px){.excluded ul{columns:1}.tr-comp{text-align:left}}
+.muted{color:var(--muted);font-size:13px}
+footer{padding:20px 0 40px}
+.co{display:inline-block;background:#f0faf3;color:var(--link);border:1px solid #cfe9d8;border-radius:6px;font-size:11px;padding:0 6px;margin-right:6px}
+.crumb{color:var(--muted);font-size:13.5px;margin:2px 0 10px}
+.crumb a{cursor:pointer;color:var(--link)}
+.brandlist,.albumlist{list-style:none;margin:0;padding:0}
+.brandlist li,.albumlist li{display:flex;align-items:center;gap:12px;padding:13px 4px;border-bottom:1px solid var(--line);cursor:pointer}
+.brandlist li:last-child,.albumlist li:last-child{border-bottom:none}
+.brandlist li:hover,.albumlist li:hover{background:var(--card2)}
+.bname,.aname{font-weight:600;flex:0 0 auto}
+.brandlist .muted,.albumlist .muted{flex:1}
+.go{color:var(--muted);font-size:20px}
+.brandlist li.zero{opacity:.45}
+.brandlist li.zero .go{visibility:hidden}
+.unit{font-weight:700;color:#2b3648;font-size:14.5px;padding:2px 0 8px;border-bottom:2px solid var(--line);margin-bottom:2px}
+.unit.tk{color:var(--link)}
+.unit.tk .cp{color:var(--link)}
+.proglist{list-style:none;margin:0;padding:0}
+.proglist li{padding:9px 0;border-bottom:1px dashed var(--line);font-size:14.5px;line-height:1.7}
+.proglist li:last-child{border-bottom:none}
+.proglist .tk{margin-right:10px}
+.proglist .role{color:#5b6b80;font-size:12.5px;border:1px dashed #c8d3e0;border-radius:6px;padding:0 6px;margin-right:8px;white-space:nowrap}
+.proglist .cp{color:var(--muted);font-size:13.5px}
+.proglist .src{margin-left:10px;font-size:12px;color:var(--link);border:1px solid #cfe9d8;background:#f0faf3;border-radius:6px;padding:1px 7px;white-space:nowrap;text-decoration:none}
+.proglist .src:hover{background:#e3f5e9}
+.ytframe{position:relative;width:100%;aspect-ratio:16/9;background:#000;border-radius:10px;overflow:hidden;margin:0 0 26px}
+.ytcap{font-size:13.5px;color:var(--muted);margin:2px 0 6px}
+.entries li .ytframe{margin:6px 0 26px}
+.entries li .ytframe:first-child{margin-top:6px}
+.ytframe iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.ytlinks{margin-top:8px;font-size:13.5px}
+/* 來源網站內嵌視窗（像 YT 一樣一進頁就看到；2026-10-12 孝瓏） */
+.srccap{font-size:13px;color:var(--muted);margin:2px 0 6px}
+.srcframe{position:relative;width:100%;height:clamp(420px,64vh,700px);background:#fff;border:1px solid #e3ecf3;border-radius:10px;overflow:hidden;margin:0 0 26px}
+.entries li .srcframe{margin:6px 0 26px}
+.entries li .srcframe:first-child{margin-top:6px}
+.srcframe iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:0;background:#fff;transform-origin:top left}
+.srcframe.srcfit iframe{width:auto;height:auto}
+/* 站台鏡像用 */
+.searchbox{flex:1 1 220px;max-width:380px}
+.searchbox input{width:100%;padding:9px 12px;border:1px solid var(--line);border-radius:10px;font-size:14px}
+.sresults{position:absolute;background:#fff;border:1px solid var(--line);border-radius:10px;box-shadow:0 6px 18px rgba(16,24,40,.12);margin-top:4px;max-height:320px;overflow:auto;min-width:260px;z-index:9}
+.sresults a{display:block;padding:8px 12px;border-bottom:1px solid var(--line);font-size:14px}
+.sresults a:last-child{border-bottom:none}
+.sresults a:hover{background:var(--card2)}
+.entries{list-style:none;margin:0;padding:0}
+.entries li{padding:8px 2px;border-bottom:1px dashed var(--line);line-height:1.7}
+.entries li:last-child{border-bottom:none}
+.winlink{display:inline-block;background:#f0faf3;border:1px solid #cfe9d8;border-radius:8px;padding:2px 10px;font-size:13.5px;color:var(--link)}
+.winlink:hover{background:#e3f5e9;text-decoration:none}
+.albumlist a.row{display:flex;justify-content:space-between;align-items:center;gap:12px;width:100%;padding:12px 4px;border-bottom:1px solid var(--line);color:var(--link);text-decoration:none}
+.albumlist li:last-child a.row{border-bottom:none}
+.albumlist a.row:hover{background:var(--card2);text-decoration:none}
+.albumlist a.row .rn{font-weight:600;color:var(--link);flex:1 1 auto;min-width:0}
+.albumlist a.row .muted{flex:0 0 auto;text-align:right;white-space:nowrap;margin-left:12px}
+/* 孝瓏 2026-10-11：空的註記 span 不佔位 → (重複發行) 與（尚未發現使用作品）右緣對齊 */
+.albumlist a.row .muted:empty{display:none}
+.albumlist a.row .rn .muted{font-weight:400;margin-left:6px;color:var(--muted)}
+.albumlist a.row .go{color:var(--muted);font-size:20px}
+.album-card h2{font-size:18px;margin:0 0 8px}
+.navbtn{display:inline-block;background:#fff;border:1px solid var(--line);border-radius:10px;padding:9px 16px;font-size:14px;color:var(--fg);text-decoration:none}
+.navbtn:hover{background:var(--card2);text-decoration:none}
+.enter{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:18px}
+.bigbtn{flex:1 1 220px;display:flex;align-items:center;justify-content:center;background:#fff;border:1px solid var(--line);border-radius:14px;padding:26px 18px;font-size:20px;font-weight:700;color:var(--fg);text-decoration:none;box-shadow:0 1px 2px rgba(16,24,40,.04)}
+.bigbtn:hover{background:#f0faf3;border-color:#cfe9d8;text-decoration:none}
+/* 2026-10-10 孝瓏：每行間距過大 → 全站統一 16px（靠 8px+8px padding），不再有區塊間大小不一 */
+.entries{margin:0}
+.entries+.entries{margin-top:0}
+.album-card>p.muted{margin-top:26px}
+.entries:last-child{margin-bottom:0}
+.unit{margin-top:26px}
+body[data-show="大頭小狀元"][data-season] .unit:not(.ad){margin-top:30px;padding-top:20px;border-top:3px solid #8fa3bd;border-bottom:none}
+/* 2026-10-10 孝瓏：節目字卡風（藍底＋白字黑框）只給「大頭小狀元」這個節目（每個節目不一樣，勿全站套） */
+body[data-show="大頭小狀元"][data-season$="-第1季"] .unit:not(.ad){padding:8px 14px;border-top:none;border-radius:9px;color:#69d280;font-size:22px;paint-order:stroke fill;-webkit-text-stroke:4px #ffffff;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
+/* 同一節目裡每個標題各自的主題色（取自節目畫面） */
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="香蕉哥哥"]{background-color:#f4c215;background-image:linear-gradient(135deg,#f4c215 0 33.4%,#f8d94f 33.4% 66.7%,#fdeea9 66.7% 100%)}
+/* 大頭、香蕉哥哥的文字維持白字黑框（綠色白框給其他人物標題） */
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="大頭"]{color:#fff;-webkit-text-stroke:4px #111}
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="香蕉哥哥"]{color:#fff;-webkit-text-stroke:4px #111}
+/* 人物標題各自底色（取節目畫面）；養蠶狀元＝青綠色三格斜向 */
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="養蠶狀元"]{background-color:#b8d94e;background-image:linear-gradient(135deg,#a6c93c 0 33.4%,#c2e05a 33.4% 66.7%,#e6f79a 66.7% 100%)}
+/* 孝瓏 2026-10-11：香蕉狀元 李成地（參考節目字卡圖：黃綠底＋淺黃綠字＋亮綠外框） */
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="香蕉狀元"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#ffffff;-webkit-text-stroke:4px #2f6b12;background-color:#c2e05a;background-image:linear-gradient(135deg,#a6c93c 0 33.4%,#c2e05a 33.4% 66.7%,#e6f79a 66.7% 100%)}
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="劍道老師"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#eaffd0;-webkit-text-stroke:4px #2e4f0e;background-color:#b8d94e;background-image:linear-gradient(135deg,#a6c93c 0 33.4%,#c2e05a 33.4% 66.7%,#e6f79a 66.7% 100%)}
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="公車司機"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#ffffff;-webkit-text-stroke:4px #64a078;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="老闆 蕭文福"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#e8f4ff;-webkit-text-stroke:4px #2c38a8;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="台大山地農場"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#111111;-webkit-text-stroke-width:0;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="手工花燈達人"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#f4fcd0;-webkit-text-stroke:4px #2c5c2c;background-color:#b8d94e;background-image:linear-gradient(135deg,#a6c93c 0 33.4%,#c2e05a 33.4% 66.7%,#e6f79a 66.7% 100%)}
+/* 粗線＝分組界線；線上、線下各留一個「空行」的空白（20px） */
+body[data-show="大頭小狀元"][data-season] .unit:not(.ad)+.entries>li:first-child{border-bottom:3px solid #8fa3bd;padding-bottom:20px}
+body[data-show="大頭小狀元"][data-season] .unit:not(.ad)+.entries>li:nth-child(2){padding-top:20px}
+body[data-show="大頭小狀元"][data-season] .entries+.entries>li:first-child{padding-top:20px}
+/* 孝瓏 2026-10-11：YOYO童話世界「哥哥姐姐片段」與「故事片段」之間要看得出來分隔（片頭曲那條 UL 之後的哥哥姐姐 UL，下緣留 26px；不是每首之間都留） */
+body[data-show="yoyo童話世界"] ul.entries:has(span.role) + ul.entries{margin-bottom:64px}
+/* 孝瓏 2026-10-12：故事區塊「最下面那一首」（尾段組）要跟上面隔開（build 時 fix_tonghua_tail.py 加 .tail） */
+body[data-show="yoyo童話世界"] ul.entries.tail{margin-top:26px}
+/* 單首音樂的組又緊接下一個標題 → 由標題上方那條線代表，不重複畫（免得雙線） */
+body[data-show="大頭小狀元"][data-season] .unit:not(.ad)+.entries:has(+.unit:not(.ad))>li:only-child{border-bottom:none}
+body[data-show="大頭小狀元"][data-season] .entries+.unit{margin-top:12px}
+.adsec{margin-top:26px;padding:0 0 12px;border:3px solid #8fa3bd;border-radius:10px;background:none}
+.adsec>.unit{margin-top:12px}
+.adsec.pre{margin-top:22px}
+.unit:first-child{margin-top:0}
+.album-card .unit + .entries{margin-top:0}
+.role{margin-right:8px}
+.entries li{border-bottom:1px solid #c3cedb}
+.entries li:last-child{border-bottom:none}
+.albumlist a.row{border-bottom:1px solid #c3cedb;padding:13px 6px}
+.ytbadge{display:inline-flex;align-items:center;justify-content:center;background:#e62117;color:#fff;font-size:9px;border-radius:4px;padding:2px 5px;margin-left:8px;margin-right:8px;line-height:1.1;min-width:14px;box-sizing:content-box}
+.ytbadge.ytempty{visibility:hidden}
+
+/* 左側檔案總管式列表（孝瓏 2026-10-08；浮動式，不壓縮中間內容） */
+.layout{display:block}
+.content{width:100%}
+.treebox{white-space:nowrap;overflow-anchor:none;position:fixed;left:0;top:76px;width:236px;max-height:calc(100vh - 104px);overflow:auto;overflow-x:auto;overflow-y:auto;scrollbar-gutter:stable;border:1px solid var(--line);border-left:none;border-radius:0 12px 12px 0;padding:10px 12px;background:var(--card);box-shadow:0 6px 22px rgba(0,0,0,.18);z-index:55}
+.tree-h{font-size:12.5px;font-weight:700;color:var(--muted);margin:8px 2px 4px}
+.tree{list-style:none;margin:0 0 8px;padding:0}
+.tree li{padding:3px 7px;border-radius:7px;line-height:1.55}
+.tree li:hover{background:var(--card2)}
+.tree li.cur{background:var(--card2);font-weight:700}
+.tree a{color:var(--link);text-decoration:none}
+@media(max-width:860px){.treebox{width:74%;top:70px;max-height:calc(100vh - 92px)}}
+
+/* 側欄收合鈕（貼在清單右緣） */
+.navtoggle{position:fixed;left:236px;top:88px;transition:left .15s ease;z-index:60;width:22px;height:46px;border:1px solid var(--line);border-left:none;border-radius:0 9px 9px 0;background:var(--card);color:var(--link);cursor:pointer;font-size:11px;line-height:1;padding:0;box-shadow:0 3px 10px rgba(0,0,0,.12)}
+.navtoggle:hover{background:var(--card2)}
+@media(max-width:860px){.navtoggle{left:74%}}
+body.nav-collapsed .treebox{display:none}
+body.nav-collapsed .navtoggle{left:0}
+@media(max-width:860px){body.nav-collapsed .navtoggle{left:0}}
+.tree-h-toggle{cursor:pointer}
+.tree-h-toggle .arw{display:inline-block;width:12px;color:var(--muted);font-size:10px}
+
+/* 樹狀節點（每個父節點都可展開） */
+.tnode{list-style:none;padding:2px 4px;border-radius:7px;line-height:1.5}
+.tnode:hover{background:var(--card2)}
+.tnode .arw{display:inline-block;width:13px;color:var(--muted);font-size:10px;cursor:pointer;user-select:none}
+.tnode a{color:var(--link);text-decoration:none}
+.tnode a.curlink{font-weight:700;color:var(--fg)}
+.tnode .dh{color:var(--muted)}
+.tnode ul.tree{margin:0;padding-left:14px}
+
+/* 樹節點：一行顯示不換行（太長就左右捲） */
+.treebox{white-space:nowrap;overflow-x:auto}
+.tnode,.tree-h,.tree-h a,.tnode a,.tnode .dh{white-space:nowrap}
+.tnode{padding-right:10px}
+
+/* 孝瓏 2026-10-09：全站每行都不要分隔線 */
+.albumlist li, .albumlist li:last-child,
+.albumlist a.row, .albumlist li:last-child a.row,
+.entries li, .entries li:last-child{border-bottom:none}
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="接待達人"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#111111;-webkit-text-stroke:4px #ffffff;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="房務達人"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#111111;-webkit-text-stroke:4px #ffffff;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="餐飲服務達人"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#111111;-webkit-text-stroke:4px #ffffff;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="拔河教練"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#ffffff;-webkit-text-stroke:4px #4e2c7d;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="肉燕達人"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#111111;-webkit-text-stroke:4px #ffffff;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="達人 蔡桂輝"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#f4fcd0;-webkit-text-stroke:4px #2c5c2c;background-color:#b8d94e;background-image:linear-gradient(135deg,#a6c93c 0 33.4%,#c2e05a 33.4% 66.7%,#e6f79a 66.7% 100%)}
+body[data-show="大頭小狀元"][data-season] .unit[data-label="廠長 李振銘"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#111111;-webkit-text-stroke:4px #ffffff;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="菱角達人"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#ffffff;-webkit-text-stroke:4px #22346b;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
+/* 孝瓏 2026-10-14：第3季第04集 購物好幫手 四張達人卡 ＝藍底＋黑字＋白框 */
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="生鮮達人"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#111111;-webkit-text-stroke:4px #ffffff;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="帳管達人"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#111111;-webkit-text-stroke:4px #ffffff;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="服務達人"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#111111;-webkit-text-stroke:4px #ffffff;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="安管達人"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#111111;-webkit-text-stroke:4px #ffffff;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
+/* 孝瓏 2026-10-14：兒童美髮師 江謝寀（第1季第05集）＝綠字＋白框（字幕實測綠 #2d8535） */
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="兒童美髮師"]{color:#2d8535;-webkit-text-stroke:4px #ffffff}
+/* 孝瓏 2026-10-14：全台第一間玩具診所（yoyo小狀元第1季第10集 玩具醫生）＝白字＋黑色方框 */
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="全台第一間玩具診所"]{padding:8px 14px;border-top:none;border-radius:0;font-size:22px;paint-order:stroke fill;color:#ffffff;-webkit-text-stroke:0;background-color:#111111;background-image:none}
+/* 孝瓏 2026-10-14：古古食 所有標題＝黑字＋米色底（擷取自畫面 #e6e0d0） */
+body[data-show^="古古食"] .unit{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#111111;-webkit-text-stroke-width:0;background-color:#e6e0d0;background-image:none}
+/* 孝瓏 2026-10-14：爬蟲解說員 葉岳龍＝藍紫字＋白框（藍底） */
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="爬蟲解說員"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#2c38a8;-webkit-text-stroke:4px #ffffff;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="園藝達人"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#f4fcd0;-webkit-text-stroke:4px #2c5c2c;background-color:#b8d94e;background-image:linear-gradient(135deg,#a6c93c 0 33.4%,#c2e05a 33.4% 66.7%,#e6f79a 66.7% 100%)}
+
+body[data-show="大頭小狀元"][data-season] .unit[data-label="站長 竺明豪"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#111111;-webkit-text-stroke:4px #ffffff;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="肥皂達人"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#111111;-webkit-text-stroke-width:0;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
+/* 孝瓏 2026-10-14：肥皂達人系列 局部白字——span.w 內的字＝白（久惠→「久惠」白；林家弘/林裕勝→「肥皂」白） */
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="肥皂達人"] .w{color:#ffffff;-webkit-text-stroke-width:0}
+
+body[data-show="大頭小狀元"][data-season] .unit[data-label="木頭玩具達人 江明偉"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#ffffff;-webkit-text-stroke:4px #64a078;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="狗狗訓練師"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#22346b;-webkit-text-stroke:4px #ffffff;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
+
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="搬家達人"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#22346b;-webkit-text-stroke:4px #ffffff;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="總經理 蕭銘棋"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#22346b;-webkit-text-stroke:4px #ffffff;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="花農 王進財"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#20502a;-webkit-text-stroke:4px #ffffff;background-color:#b8d94e;background-image:linear-gradient(135deg,#a6c93c 0 33.4%,#c2e05a 33.4% 66.7%,#e6f79a 66.7% 100%)}
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="廣播達人"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#ffffff;-webkit-text-stroke:4px #2c38a8;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="老闆 柳丁爸爸"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#22346b;-webkit-text-stroke:4px #ffffff;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="創意農夫 謝銘鍵"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#dbeafb;-webkit-text-stroke:4px #ffffff;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="紙箱王"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#20502a;-webkit-text-stroke:4px #ffffff;background-color:#b8d94e;background-image:linear-gradient(135deg,#a6c93c 0 33.4%,#c2e05a 33.4% 66.7%,#e6f79a 66.7% 100%)}
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="製麵達人"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#22346b;-webkit-text-stroke:4px #ffffff;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
+/* 孝瓏 2026-10-14：第3季第08集 洋芋片 三張（課長/主任/經理）＝綠底＋黑字＋無框 */
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="張志榮 課長"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#111111;-webkit-text-stroke-width:0;background-color:#90e078;background-image:linear-gradient(135deg,#90e078 0 33.4%,#98e088 33.4% 66.7%,#c8f0c0 66.7% 100%)}
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="周港復 主任"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#111111;-webkit-text-stroke-width:0;background-color:#80e0b0;background-image:linear-gradient(135deg,#80e0b0 0 33.4%,#a8e8c8 33.4% 66.7%,#c0f0d8 66.7% 100%)}
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="蔡昭明 經理"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#111111;-webkit-text-stroke-width:0;background-color:#80e0b0;background-image:linear-gradient(135deg,#80e0b0 0 33.4%,#a8e8c8 33.4% 66.7%,#c0f0d8 66.7% 100%)}
+/* 孝瓏 2026-10-14：造紙達人 黃煥彰＝綠字＋白框（藍底） */
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="造紙達人"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#2d8535;-webkit-text-stroke:4px #ffffff;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
+/* 孝瓏 2026-10-14：雜技天王 盧元章＝橘字＋白框 */
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="雜技天王"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#e07b1a;-webkit-text-stroke:4px #ffffff;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
+/* 孝瓏 2026-10-14：台北縣消防局 第一大隊 中和分隊＝白字＋黑色方框 */
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="台北縣消防局"]{padding:8px 14px;border-top:none;border-radius:0;font-size:22px;paint-order:stroke fill;color:#ffffff;-webkit-text-stroke:0;background-color:#111111;background-image:none}
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="狀元小常識"]{position:relative;isolation:isolate;padding:8px 14px;border:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#111111;-webkit-text-stroke-width:0;background-color:#58e8f8;background-image:none}
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="狀元小常識"]::before{content:"";position:absolute;inset:10px;z-index:-1;background-color:#00d8fc;border-radius:4px}
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="狀元小常識"]::after{content:"";position:absolute;inset:5px;z-index:-1;border:2px dashed #ffffff;border-radius:4px}
+.unit[data-label^="狀元小常識"]{padding-left:14px;padding-right:14px;text-align:left}
+.unit[data-label^="狀元小常識"] .zy{color:#e84045;-webkit-text-stroke:4px #ffffff}
+/* 例外：養蠶專家那集的狀元小常識後段＝黑字白框 */
+body[data-show="大頭小狀元"][data-season] .unit[data-label="狀元小常識 蠶是完全變態的昆蟲"]{color:#111111;-webkit-text-stroke:4px #ffffff}
+
+/* 孝瓏 2026-10-13：另類獸醫 邱小果（大頭小狀元 S1E03）取節目畫面＝上綠/中粉/下藍 三橫帶 */
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="另類獸醫"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#eb6b9b;-webkit-text-stroke:4px #ffffff;background-color:#d3ef5f;background-image:linear-gradient(180deg,#d3ef5f 0 33.4%,#ffa4a3 33.4% 66.7%,#6bbbfb 66.7% 100%)}
+
+/* 孝瓏 2026-10-13：大頭小狀元全系列不要灰色的分隔線（保留上下留白） */
+body[data-show="大頭小狀元"][data-season] .unit:not(.ad){border-top:none}
+body[data-show="大頭小狀元"][data-season] .unit:not(.ad)+.entries>li:first-child{border-bottom:none}
+
+/* 孝瓏 2026-10-13（14:41 再加回）：S1E03 狀元小常識「寵物是不是生病了？」→ 黑字＋白邊 */
+body[data-show="大頭小狀元"][data-season] .unit[data-label="狀元小常識 寵物是不是生病了？"]{color:#111111;-webkit-text-stroke:4px #ffffff}
+/* 孝瓏 2026-10-14：S1E08 清潔隊員 的兩則狀元小常識後段＝黑字白框（「狀元小常識」五字不動） */
+body[data-show="大頭小狀元"][data-season] .unit[data-label="狀元小常識 台灣垃圾車的主題曲？"]{color:#111111;-webkit-text-stroke:4px #ffffff}
+body[data-show="大頭小狀元"][data-season] .unit[data-label="狀元小常識 保護地球 你也可以做到"]{color:#111111;-webkit-text-stroke:4px #ffffff}
+/* 孝瓏 2026-10-14：S1E06 棒球教練 的「台灣的少棒英雄」＝黑字白框（「狀元小常識」五字不動） */
+body[data-show="大頭小狀元"][data-season] .unit[data-label="狀元小常識 台灣的少棒英雄"]{color:#111111;-webkit-text-stroke:4px #ffffff}
+/* 孝瓏 2026-10-14：S1E10 山上的郵差「郵差制服為什麼是綠色？」＝黑字白框 */
+body[data-show="大頭小狀元"][data-season] .unit[data-label="狀元小常識 郵差制服為什麼是綠色？"]{color:#111111;-webkit-text-stroke:4px #ffffff}
+/* 孝瓏 2026-10-14：S1E02 香蕉大王「香蕉不能放冰箱」＝黑字白框 */
+body[data-show="大頭小狀元"][data-season] .unit[data-label="狀元小常識 香蕉不能放冰箱"]{color:#111111;-webkit-text-stroke:4px #ffffff}
+/* 孝瓏 2026-10-14：S1E05 兒童美髮師「頭髮一天長多少呢？」＝黑字白框 */
+body[data-show="大頭小狀元"][data-season] .unit[data-label="狀元小常識 頭髮一天長多少呢？"]{color:#111111;-webkit-text-stroke:4px #ffffff}
+/* 孝瓏 2026-10-14：S1E12 鴨蛋大王「鴨與鵝的不同？」＝黑字白框 */
+body[data-show="大頭小狀元"][data-season] .unit[data-label="狀元小常識 鴨與鵝的不同？"]{color:#111111;-webkit-text-stroke:4px #ffffff}
+/* 孝瓏 2026-10-14：S1E13 繪本插畫家「什麼是繪本？」＝黑字白框 */
+body[data-show="大頭小狀元"][data-season] .unit[data-label="狀元小常識 什麼是繪本？"]{color:#111111;-webkit-text-stroke:4px #ffffff}
+/* 孝瓏 2026-10-14：S1E14 爬蟲解說員 兩則＝黑字白框 */
+body[data-show="大頭小狀元"][data-season] .unit[data-label="狀元小常識 爬蟲種類有哪些？"]{color:#111111;-webkit-text-stroke:4px #ffffff}
+body[data-show="大頭小狀元"][data-season] .unit[data-label="狀元小常識 史上最大的爬蟲？"]{color:#111111;-webkit-text-stroke:4px #ffffff}
+/* 孝瓏 2026-10-14：兒童插畫家＝橘字＋白框（粉底） */
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="兒童插畫家"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#e07b1a;-webkit-text-stroke:4px #ffffff;background-color:#f8b0a8;background-image:linear-gradient(135deg,#f8b0a8 0 33.4%,#f8d0d0 33.4% 66.7%,#f8e8e8 66.7% 100%)}
+/* 孝瓏 2026-10-14：鴨蛋大王＝橘字＋白框（藍底） */
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="鴨蛋大王"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#e07b1a;-webkit-text-stroke:4px #ffffff;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
+/* 孝瓏 2026-10-14：動物管理員＝藍紫字＋白框（藍底） */
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="動物管理員"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#2c38a8;-webkit-text-stroke:4px #ffffff;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
+/* 孝瓏 2026-10-14：匯川劇場（無原底色）＝紅底白字 */
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="匯川劇場"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#ffffff;-webkit-text-stroke-width:0;background-color:#e01820;background-image:linear-gradient(135deg,#e01820 0 33.4%,#ec4a50 33.4% 66.7%,#f9c9cc 66.7% 100%)}
+/* 孝瓏 2026-10-14：以下 9 張卡＝白字＋藍紫框（一次設定） */
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="老闆 蕭文福"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#ffffff;-webkit-text-stroke:4px #2c38a8;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="肉燕達人"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#ffffff;-webkit-text-stroke:4px #2c38a8;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="達人 蔡桂"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#ffffff;-webkit-text-stroke:4px #2c38a8;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="廠長 李振銘"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#ffffff;-webkit-text-stroke:4px #2c38a8;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="站長 竺明豪"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#ffffff;-webkit-text-stroke:4px #2c38a8;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="搬家達人"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#ffffff;-webkit-text-stroke:4px #2c38a8;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="總經理 蕭銘棋"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#ffffff;-webkit-text-stroke:4px #2c38a8;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="創意農夫"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#ffffff;-webkit-text-stroke:4px #2c38a8;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="製麵達人"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#ffffff;-webkit-text-stroke:4px #2c38a8;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
+/* 孝瓏 2026-10-14：以下 8 張卡＝白字＋藍紫框 */
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="鄉長 花村祥"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#ffffff;-webkit-text-stroke:4px #2c38a8;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="教練 童雅琳"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#ffffff;-webkit-text-stroke:4px #2c38a8;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="燈飾老師 呂秉承"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#ffffff;-webkit-text-stroke:4px #2c38a8;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="解說員 陳志偉"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#ffffff;-webkit-text-stroke:4px #2c38a8;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="教練 楊沁漪"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#ffffff;-webkit-text-stroke:4px #2c38a8;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="魔術師 張慶州"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#ffffff;-webkit-text-stroke:4px #2c38a8;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="幼稚園老師 顏怡眉"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#ffffff;-webkit-text-stroke:4px #2c38a8;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="家管員 潘宜湄"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#ffffff;-webkit-text-stroke:4px #2c38a8;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
+/* 孝瓏 2026-10-14：達人 蔡桂輝 底＝常用綠（字白＋藍紫框不變） */
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="達人 蔡桂"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#ffffff;-webkit-text-stroke:4px #2c38a8;background-color:#b8d94e;background-image:linear-gradient(135deg,#a6c93c 0 33.4%,#c2e05a 33.4% 66.7%,#e6f79a 66.7% 100%)}
+/* 孝瓏 2026-10-14：幼稚園老師 顏怡眉 底＝常用粉紅（字白＋藍紫框不變） */
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="幼稚園老師"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#ffffff;-webkit-text-stroke:4px #2c38a8;background-color:#f8b0a8;background-image:linear-gradient(135deg,#f8b0a8 0 33.4%,#f8d0d0 33.4% 66.7%,#f8e8e8 66.7% 100%)}
+/* 孝瓏 2026-10-14：創意蛋糕師傅／舞蹈老師＝深粉紅字＋白框（粉底） */
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="創意蛋糕師傅"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#7848a0;-webkit-text-stroke:4px #ffffff;background-color:#d8a0f8;background-image:linear-gradient(135deg,#d8a0f8 0 33.4%,#e8c8f8 33.4% 66.7%,#f0d8f8 66.7% 100%)}
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="舞蹈老師"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#7848a0;-webkit-text-stroke:4px #ffffff;background-color:#f8a8f8;background-image:linear-gradient(135deg,#f8a8f8 0 33.4%,#f8d0f8 33.4% 66.7%,#f8e8f8 66.7% 100%)}
+/* 孝瓏 2026-10-14：以下＝白字＋綠框 */
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="騎警隊長"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#ffffff;-webkit-text-stroke:4px #64a078;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="牛乳大王"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#ffffff;-webkit-text-stroke:4px #64a078;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="猴子訓練師"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#ffffff;-webkit-text-stroke:4px #64a078;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="氣球達人"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#ffffff;-webkit-text-stroke:4px #64a078;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="直排輪教練"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#ffffff;-webkit-text-stroke:4px #64a078;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="快樂茶農"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#ffffff;-webkit-text-stroke:4px #64a078;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="公車司機"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#ffffff;-webkit-text-stroke:4px #64a078;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="紙箱王"]{color:#ffffff;-webkit-text-stroke:4px #64a078}
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="園藝達人 羅冠林"]{color:#ffffff;-webkit-text-stroke:4px #64a078}
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="手工花燈達人"]{color:#ffffff;-webkit-text-stroke:4px #64a078}
+/* 孝瓏 2026-10-14：裁縫師 林高美雲＝白字＋藍紫框（藍底） */
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="裁縫師"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#ffffff;-webkit-text-stroke:4px #2c38a8;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
+/* 孝瓏 2026-10-14：S1E10 郵差 巫坤煜＝藍紫字＋白框 */
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="郵差 巫坤"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#2c38a8;-webkit-text-stroke:4px #ffffff;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
+/* 孝瓏 2026-10-14：李靜芳 老師＝粉底＋黑字＋無框（第3季第06集 戲中明珠） */
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="李靜芳"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#111111;-webkit-text-stroke-width:0;background-color:#f8b0a8;background-image:linear-gradient(135deg,#f8b0a8 0 33.4%,#f8d0d0 33.4% 66.7%,#f8e8e8 66.7% 100%)}
+/* 孝瓏 2026-10-14：李靜兒 老師（大頭小狀元第3季 戲中明珠）＝綠底＋黑字＋無外框 */
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="李靜兒"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#111111;-webkit-text-stroke-width:0;background-color:#b8d94e;background-image:linear-gradient(135deg,#a6c93c 0 33.4%,#c2e05a 33.4% 66.7%,#e6f79a 66.7% 100%)}
+/* 孝瓏 2026-10-14：團長 許素珠（大頭小狀元第3季 戲中明珠）＝藍底＋白字＋藍紫框 */
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="團長 許素珠"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#ffffff;-webkit-text-stroke:4px #2c38a8;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
+/* 孝瓏 2026-10-14：台北市環保局 內湖區清潔隊 西湖分隊夜間班＝大頭藍三格底＋文字黑實心框 */
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="台北市環保局"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#ffffff;-webkit-text-stroke:0;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="台北市環保局"] .blk{display:inline-block;background-color:#111111;color:#ffffff;padding:4px 12px 4px 10px;margin-left:-10px}
+
+/* 孝瓏 2026-10-13（14:44）：大頭小狀元全系列「全部灰線」都去掉（含卡片兩側直線、每列下緣、廣告後片段框） */
+body[data-show="大頭小狀元"][data-season] .album-card{border:none}
+body[data-show="大頭小狀元"][data-season] .adsec{border:none}
+body[data-show="大頭小狀元"][data-season] .entries li{border-bottom:none}
+
+/* 孝瓏 2026-10-13：全站「廣告後片段」這五個字置中 */
+.unit.ad{text-align:center}
+.unit[data-label="廣告後片段"]{text-align:center}
+
+/* 孝瓏 2026-10-13：YOYO點點名 魔法ABC →「單字」那首（Cat & Mouse）要跟下面的音樂分開（留一個空行） */
+body[data-show="yoyo點點名"][data-season="yoyo點點名-魔法abc"] .unit[data-label*=" "] + .entries > li:first-child{padding-bottom:22px}
+body[data-show="yoyo點點名"][data-season="yoyo點點名-魔法abc"] .unit[data-label*=" "] + .entries + .entries{margin-top:22px}
+
+/* 孝瓏 2026-10-14：全站所有標題統一左緣（文字一律距容器左緣 14px，與大頭小狀元字卡一致） */
+.unit{padding-left:14px;padding-right:14px}
+
+/* 大頭小狀元 S1E09 海產店達人：家族字卡（孝瓏 2026-10-14）店長/名字=白字綠框、老闆/名字=白字藍紫框、老闆娘/名字=白字紅框、柳丁X=黃字棕框 */
+body[data-show="大頭小狀元"][data-season] .unit[data-label="店長"],body[data-show="大頭小狀元"][data-season] .unit[data-label="甘志展"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#ffffff;-webkit-text-stroke:4px #3f9e3f;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
+body[data-show="大頭小狀元"][data-season] .unit[data-label="老闆"],body[data-show="大頭小狀元"][data-season] .unit[data-label="甘坤龍"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#ffffff;-webkit-text-stroke:4px #2c38a8;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
+body[data-show="大頭小狀元"][data-season] .unit[data-label="老闆娘"],body[data-show="大頭小狀元"][data-season] .unit[data-label="段美娥"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#ffffff;-webkit-text-stroke:4px #d23b3b;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="柳丁"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#f2c433;-webkit-text-stroke:4px #7a4f28;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
+/* 孝瓏 2026-10-14：以下＝藍紫字＋白框 */
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="彩妝大師"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#2c38a8;-webkit-text-stroke:4px #ffffff;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="蔬菜達人"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#2c38a8;-webkit-text-stroke:4px #ffffff;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="小白鯨訓練師"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#2c38a8;-webkit-text-stroke:4px #ffffff;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="冰淇淋達人"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#2c38a8;-webkit-text-stroke:4px #ffffff;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
+/* 孝瓏 2026-10-14：花農 王進財／劍道老師 蔡厚傑＝白字＋深綠框 */
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="花農 王進財"]{color:#ffffff;-webkit-text-stroke:4px #20502a}
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="劍道老師"]{color:#ffffff;-webkit-text-stroke:4px #20502a}
+/* 孝瓏 2026-10-14：辦桌狀元 林町城＝白字＋藍框 */
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="辦桌狀元"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#ffffff;-webkit-text-stroke:4px #22346b;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
+/* 孝瓏 2026-10-14：狗狗訓練師 黃德光＝白字＋藍框 */
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="狗狗訓練師"]{color:#ffffff;-webkit-text-stroke:4px #22346b}
+/* 孝瓏 2026-10-14：兩張藍框各自照畫面取色（辦桌狀元較亮、狗狗訓練師較灰暗） */
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="辦桌狀元"]{color:#ffffff;-webkit-text-stroke:4px #406890}
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="狗狗訓練師"]{color:#ffffff;-webkit-text-stroke:4px #385878}
+/* 孝瓏 2026-10-14：YOYO FUN一下 段落標題＝上下五段紅白條紋 */
+body[data-show="黑蕉fun輕鬆"] .unit[data-label^="YOYO FUN一下"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#111111;-webkit-text-stroke-width:0;background-color:#e63c2e;background-image:linear-gradient(180deg,#e63c2e 0 20%,#ffffff 20% 40%,#e63c2e 40% 60%,#ffffff 60% 80%,#e63c2e 80% 100%)}
+/* 孝瓏 2026-10-14：YOYO FUN一下 每個字顏色（Y紅/O深藍/Y橘/O綠/FUN一下淺藍）＋白框 */
+body[data-show="黑蕉fun輕鬆"] .unit[data-label^="YOYO FUN一下"] span{-webkit-text-stroke:3px #ffffff}
+body[data-show="黑蕉fun輕鬆"] .unit[data-label^="YOYO FUN一下"] .f1{color:#e63c2e}
+body[data-show="黑蕉fun輕鬆"] .unit[data-label^="YOYO FUN一下"] .f2{color:#123a8a}
+body[data-show="黑蕉fun輕鬆"] .unit[data-label^="YOYO FUN一下"] .f3{color:#f07f1a}
+body[data-show="黑蕉fun輕鬆"] .unit[data-label^="YOYO FUN一下"] .f4{color:#5cc25c}
+body[data-show="黑蕉fun輕鬆"] .unit[data-label^="YOYO FUN一下"] .f5{color:#5bb4e8}
+/* 孝瓏 2026-10-14：大頭小廚房＝黑字白邊＋藍白環繞（放射條紋） */
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="大頭小廚房"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#111111;-webkit-text-stroke:4px #ffffff;background-color:#ffffff;background-image:repeating-conic-gradient(from 0deg,#c9e8ff 0deg 12deg,#ffffff 12deg 24deg)}
+/* 孝瓏 2026-10-14：洋芋片的由來＝紅字無框＋格線底（上下 5 行、多列） */
 body[data-show="大頭小狀元"][data-season] .unit[data-label^="洋芋片的由來"]{padding:8px 14px;border-top:none;border-bottom:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#e84045;-webkit-text-stroke-width:0;box-sizing:border-box;min-height:54px;display:flex;align-items:center;background-color:#ffffff;background-image:linear-gradient(to right,#ffffff 1px,transparent 1px),linear-gradient(to bottom,#ffffff 1px,transparent 1px),linear-gradient(#ffd1d1,#ffd1d1),linear-gradient(#ffe0b2,#ffe0b2),linear-gradient(#fff9c4,#fff9c4),linear-gradient(#dcedc8,#dcedc8),linear-gradient(#b2ebf2,#b2ebf2),linear-gradient(#d1c4e9,#d1c4e9),linear-gradient(#ffccbc,#ffccbc),linear-gradient(#c8e6c9,#c8e6c9),linear-gradient(#bbdefb,#bbdefb);background-size:26px 9px,26px 9px,78px 27px,78px 27px,78px 27px,78px 27px,78px 27px,78px 27px,78px 27px,78px 27px,78px 27px;background-position:left top,left top,0px 0px,26px 0px,52px 0px,0px 9px,26px 9px,52px 9px,0px 18px,26px 18px,52px 18px
