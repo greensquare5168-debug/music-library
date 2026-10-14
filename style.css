@@ -380,7 +380,7 @@ body[data-show="大頭小狀元"][data-season] .unit[data-label^="狗狗訓練�
 /* 孝瓏 2026-10-14：兩張藍框各自照畫面取色（辦桌狀元較亮、狗狗訓練師較灰暗） */
 body[data-show="大頭小狀元"][data-season] .unit[data-label^="辦桌狀元"]{color:#ffffff;-webkit-text-stroke:4px #406890}
 body[data-show="大頭小狀元"][data-season] .unit[data-label^="狗狗訓練師"]{color:#ffffff;-webkit-text-stroke:4px #385878}
-body[data-show="黑蕉fun輕鬆"] .unit[data-label^="YOYO FUN一下"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#111111;-webkit-text-stroke-width:0;background-color:#ffffff;background-image:none;box-shadow:inset 0 4px 7px rgba(0,0,0,.18),inset 0 -4px 7px rgba(0,0,0,.18)}
+body[data-show="黑蕉fun輕鬆"] .unit[data-label^="YOYO FUN一下"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#111111;-webkit-text-stroke-width:0;background-color:#ffffff;background-image:none;box-shadow:inset 0 5px 5px -3px rgba(0,0,0,.22),inset 0 -5px 5px -3px rgba(0,0,0,.22)}
 /* 孝瓏 2026-10-14：YOYO FUN一下 每個字顏色（Y紅/O深藍/Y橘/O綠/FUN一下淺藍）＋白框 */
 body[data-show="黑蕉fun輕鬆"] .unit[data-label^="YOYO FUN一下"] span{-webkit-text-stroke:3px #ffffff}
 body[data-show="黑蕉fun輕鬆"] .unit[data-label^="YOYO FUN一下"] .f1{color:#e63c2e}
@@ -796,4 +796,4 @@ body[data-show="大頭小狀元"][data-season] .unit[data-label^="實戰"]{margi
 /* 孝瓏 2026-10-14：FUN一下 後方（前往校園 九份國小）＝灰色 */
 body[data-show="黑蕉fun輕鬆"] .unit[data-label^="YOYO FUN一下"] .g{color:#9aa3ad;-webkit-text-stroke-width:0}
 /* 孝瓏 2026-10-14：實戰 文字的方框＝半透明白底方框（非字框） */
-body[data-show="大頭小狀元"][data-season] .unit[data-label^="實戰"] .box{display:inline-block;background-color:rgba(255,255,255,.32);border-top:3px solid rgba(255,255,255,.8);border-bottom:3px solid rgba(255,255,255,.8);border-left:none;border-right:none;padding:2px 8px;border-radius:4px}
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="實戰"] .box{display:inline-block;background-color:rgba(255,255,255,.32);border:3px solid rgba(255,255,255,.8);padding:2px 8px;border-radius:4px}
