@@ -789,7 +789,8 @@ body[data-show="大頭小狀元"][data-season] .unit[data-label^="實戰"]{paddi
 body[data-show="大頭小狀元"][data-season] .unit[data-label^="實戰"] .s1{color:#111111;-webkit-text-stroke:3px rgba(255,255,255,.72)}
 body[data-show="大頭小狀元"][data-season] .unit[data-label^="實戰"] .s2{color:#e84045;-webkit-text-stroke:3px rgba(255,255,255,.72)}
 /* 孝瓏 2026-10-14：實戰➊/➋ 段落 中間不空行（取消該組的額外間距） */
-body[data-show="大頭小狀元"][data-season] .unit[data-label^="實戰"]+ .entries > li:nth-child(n){padding-top:0;padding-bottom:0;border-bottom:none}
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="實戰"]+ .entries > li:nth-child(n){padding:0 2px !important;margin:0 !important;border-bottom:none !important;line-height:1.45}
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="實戰"]+ .entries{padding:0 !important;margin:0 !important}
 body[data-show="大頭小狀元"][data-season] .unit[data-label^="實戰"]+ .entries + .unit{margin-top:8px;padding-top:0}
 body[data-show="大頭小狀元"][data-season] .unit[data-label^="實戰"]{margin-top:8px}
 /* 孝瓏 2026-10-14：FUN一下 後方（前往校園 九份國小）＝灰色 */
