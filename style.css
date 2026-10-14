@@ -284,7 +284,7 @@ body[data-show="大頭小狀元"][data-season] .unit[data-label="狀元小常識
 /* 孝瓏 2026-10-14：S1E14 爬蟲解說員 兩則＝黑字白框 */
 body[data-show="大頭小狀元"][data-season] .unit[data-label="狀元小常識 爬蟲種類有哪些？"]{color:#111111;-webkit-text-stroke:4px #ffffff}
 body[data-show="大頭小狀元"][data-season] .unit[data-label="狀元小常識 史上最大的爬蟲？"]{color:#111111;-webkit-text-stroke:4px #ffffff}
-/* 孝瓏 2026-10-14：兒童插畫家＝橘字＋白框（藍底） */
+/* 孝瓏 2026-10-14：兒童插畫家＝橘字＋白框（粉底） */
 body[data-show="大頭小狀元"][data-season] .unit[data-label^="兒童插畫家"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#e07b1a;-webkit-text-stroke:4px #ffffff;background-color:#f8b0a8;background-image:linear-gradient(135deg,#f8b0a8 0 33.4%,#f8d0d0 33.4% 66.7%,#f8e8e8 66.7% 100%)}
 /* 孝瓏 2026-10-14：裁縫師 林高美雲＝白字＋藍紫框（藍底） */
 body[data-show="大頭小狀元"][data-season] .unit[data-label^="裁縫師"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#ffffff;-webkit-text-stroke:4px #2c38a8;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
