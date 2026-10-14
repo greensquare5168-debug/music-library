@@ -219,7 +219,7 @@ body[data-show="大頭小狀元"][data-season] .unit[data-label^="兒童美髮�
 /* 孝瓏 2026-10-14：全台第一間玩具診所（yoyo小狀元第1季第10集 玩具醫生）＝白字＋黑色方框 */
 body[data-show="大頭小狀元"][data-season] .unit[data-label^="全台第一間玩具診所"]{padding:8px 14px;border-top:none;border-radius:0;font-size:22px;paint-order:stroke fill;color:#ffffff;-webkit-text-stroke:0;background-color:#111111;background-image:none}
 /* 孝瓏 2026-10-14：古古食 所有標題＝黑字＋米色底（擷取自畫面 #e6e0d0） */
-body[data-show^="古古食"] .unit{color:#111111;-webkit-text-stroke:0;background-color:#e6e0d0}
+body[data-show^="古古食"] .unit{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#111111;-webkit-text-stroke-width:0;background-color:#e6e0d0;background-image:none}
 /* 孝瓏 2026-10-14：爬蟲解說員 葉岳龍＝藍紫字＋白框（藍底） */
 body[data-show="大頭小狀元"][data-season] .unit[data-label^="爬蟲解說員"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#2c38a8;-webkit-text-stroke:4px #ffffff;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
 body[data-show="大頭小狀元"][data-season] .unit[data-label^="園藝達人"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#f4fcd0;-webkit-text-stroke:4px #2c5c2c;background-color:#b8d94e;background-image:linear-gradient(135deg,#a6c93c 0 33.4%,#c2e05a 33.4% 66.7%,#e6f79a 66.7% 100%)}
