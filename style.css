@@ -359,3 +359,9 @@ body[data-show="yoyo點點名"][data-season="yoyo點點名-魔法abc"] .unit[dat
 
 /* 孝瓏 2026-10-14：全站所有標題統一左緣（文字一律距容器左緣 14px，與大頭小狀元字卡一致） */
 .unit{padding-left:14px;padding-right:14px}
+
+/* 大頭小狀元 S1E09 海產店達人：家族字卡（孝瓏 2026-10-14）店長/名字=白字綠框、老闆/名字=白字藍紫框、老闆娘/名字=白字紅框、柳丁X=黃字棕框 */
+body[data-show="大頭小狀元"][data-season] .unit[data-label="店長"],body[data-show="大頭小狀元"][data-season] .unit[data-label="甘志展"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#ffffff;-webkit-text-stroke:4px #3f9e3f;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
+body[data-show="大頭小狀元"][data-season] .unit[data-label="老闆"],body[data-show="大頭小狀元"][data-season] .unit[data-label="甘坤龍"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#ffffff;-webkit-text-stroke:4px #2c38a8;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
+body[data-show="大頭小狀元"][data-season] .unit[data-label="老闆娘"],body[data-show="大頭小狀元"][data-season] .unit[data-label="段美娥"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#ffffff;-webkit-text-stroke:4px #d23b3b;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="柳丁"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#f2c433;-webkit-text-stroke:4px #7a4f28;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
