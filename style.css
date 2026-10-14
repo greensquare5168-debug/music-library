@@ -796,4 +796,4 @@ body[data-show="大頭小狀元"][data-season] .unit[data-label^="實戰"]{margi
 /* 孝瓏 2026-10-14：FUN一下 後方（前往校園 九份國小）＝灰色 */
 body[data-show="黑蕉fun輕鬆"] .unit[data-label^="YOYO FUN一下"] .g{color:#9aa3ad;-webkit-text-stroke-width:0}
 /* 孝瓏 2026-10-14：實戰 文字的方框＝半透明白底方框（非字框） */
-body[data-show="大頭小狀元"][data-season] .unit[data-label^="實戰"] .box{display:inline-block;background-color:rgba(255,255,255,.32);border:3px solid rgba(255,255,255,.8);padding:2px 8px;border-radius:4px}
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="實戰"] .box{display:inline-block;background-color:rgba(255,255,255,.32);border-top:3px solid rgba(255,255,255,.8);border-bottom:3px solid rgba(255,255,255,.8);border-left:none;border-right:none;padding:2px 8px;border-radius:4px}
