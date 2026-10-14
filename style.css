@@ -375,3 +375,5 @@ body[data-show="大頭小狀元"][data-season] .unit[data-label^="花農 王進�
 body[data-show="大頭小狀元"][data-season] .unit[data-label^="劍道老師"]{color:#ffffff;-webkit-text-stroke:4px #20502a}
 /* 孝瓏 2026-10-14：辦桌狀元 林町城＝白字＋藍框 */
 body[data-show="大頭小狀元"][data-season] .unit[data-label^="辦桌狀元"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#ffffff;-webkit-text-stroke:4px #22346b;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
+/* 孝瓏 2026-10-14：狗狗訓練師 黃德光＝白字＋藍框 */
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="狗狗訓練師"]{color:#ffffff;-webkit-text-stroke:4px #22346b}
