@@ -315,6 +315,9 @@ body[data-show="大頭小狀元"][data-season] .unit[data-label^="家管員 潘�
 body[data-show="大頭小狀元"][data-season] .unit[data-label^="達人 蔡桂"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#ffffff;-webkit-text-stroke:4px #2c38a8;background-color:#b8d94e;background-image:linear-gradient(135deg,#a6c93c 0 33.4%,#c2e05a 33.4% 66.7%,#e6f79a 66.7% 100%)}
 /* 孝瓏 2026-10-14：幼稚園老師 顏怡眉 底＝常用粉紅（字白＋藍紫框不變） */
 body[data-show="大頭小狀元"][data-season] .unit[data-label^="幼稚園老師"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#ffffff;-webkit-text-stroke:4px #2c38a8;background-color:#f8b0a8;background-image:linear-gradient(135deg,#f8b0a8 0 33.4%,#f8d0d0 33.4% 66.7%,#f8e8e8 66.7% 100%)}
+/* 孝瓏 2026-10-14：創意蛋糕師傅／舞蹈老師＝深粉紅字＋白框（粉底） */
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="創意蛋糕師傅"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#c2185b;-webkit-text-stroke:4px #ffffff;background-color:#f8b0a8;background-image:linear-gradient(135deg,#f8b0a8 0 33.4%,#f8d0d0 33.4% 66.7%,#f8e8e8 66.7% 100%)}
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="舞蹈老師"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#c2185b;-webkit-text-stroke:4px #ffffff;background-color:#f8b0a8;background-image:linear-gradient(135deg,#f8b0a8 0 33.4%,#f8d0d0 33.4% 66.7%,#f8e8e8 66.7% 100%)}
 /* 孝瓏 2026-10-14：裁縫師 林高美雲＝白字＋藍紫框（藍底） */
 body[data-show="大頭小狀元"][data-season] .unit[data-label^="裁縫師"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#ffffff;-webkit-text-stroke:4px #2c38a8;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
 /* 孝瓏 2026-10-14：S1E10 郵差 巫坤煜＝藍紫字＋白框 */
