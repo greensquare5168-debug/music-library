@@ -355,3 +355,6 @@ body[data-show="大頭小狀元"][data-season] .entries li{border-bottom:none}
 /* 孝瓏 2026-10-13：YOYO點點名 魔法ABC →「單字」那首（Cat & Mouse）要跟下面的音樂分開（留一個空行） */
 body[data-show="yoyo點點名"][data-season="yoyo點點名-魔法abc"] .unit[data-label*=" "] + .entries > li:first-child{padding-bottom:22px}
 body[data-show="yoyo點點名"][data-season="yoyo點點名-魔法abc"] .unit[data-label*=" "] + .entries + .entries{margin-top:22px}
+
+/* 孝瓏 2026-10-14：全站所有標題統一左緣（文字一律距容器左緣 14px，與大頭小狀元字卡一致） */
+.unit{padding-left:14px;padding-right:14px}
