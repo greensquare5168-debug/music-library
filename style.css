@@ -380,3 +380,5 @@ body[data-show="大頭小狀元"][data-season] .unit[data-label^="狗狗訓練�
 /* 孝瓏 2026-10-14：兩張藍框各自照畫面取色（辦桌狀元較亮、狗狗訓練師較灰暗） */
 body[data-show="大頭小狀元"][data-season] .unit[data-label^="辦桌狀元"]{color:#ffffff;-webkit-text-stroke:4px #406890}
 body[data-show="大頭小狀元"][data-season] .unit[data-label^="狗狗訓練師"]{color:#ffffff;-webkit-text-stroke:4px #385878}
+/* 孝瓏 2026-10-14：YOYO FUN一下 段落標題＝上下五段紅白條紋 */
+body[data-show="黑蕉fun輕鬆"] .unit[data-label^="YOYO FUN一下"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#111111;-webkit-text-stroke-width:0;background-color:#e63c2e;background-image:linear-gradient(180deg,#e63c2e 0 20%,#ffffff 20% 40%,#e63c2e 40% 60%,#ffffff 60% 80%,#e63c2e 80% 100%)}
