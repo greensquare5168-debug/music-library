@@ -277,6 +277,8 @@ body[data-show="大頭小狀元"][data-season] .unit[data-label="狀元小常識
 body[data-show="大頭小狀元"][data-season] .unit[data-label="狀元小常識 香蕉不能放冰箱"]{color:#111111;-webkit-text-stroke:4px #ffffff}
 /* 孝瓏 2026-10-14：S1E05 兒童美髮師「頭髮一天長多少呢？」＝黑字白框 */
 body[data-show="大頭小狀元"][data-season] .unit[data-label="狀元小常識 頭髮一天長多少呢？"]{color:#111111;-webkit-text-stroke:4px #ffffff}
+/* 孝瓏 2026-10-14：S1E12 鴨蛋大王「鴨與鵝的不同？」＝黑字白框 */
+body[data-show="大頭小狀元"][data-season] .unit[data-label="狀元小常識 鴨與鵝的不同？"]{color:#111111;-webkit-text-stroke:4px #ffffff}
 /* 孝瓏 2026-10-14：裁縫師 林高美雲＝白字＋藍紫框（藍底） */
 body[data-show="大頭小狀元"][data-season] .unit[data-label^="裁縫師"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#ffffff;-webkit-text-stroke:4px #2c38a8;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
 /* 孝瓏 2026-10-14：S1E10 郵差 巫坤煜＝藍紫字＋白框 */
