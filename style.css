@@ -250,7 +250,8 @@ body[data-show="大頭小狀元"][data-season] .unit[data-label^="造紙達人"]
 body[data-show="大頭小狀元"][data-season] .unit[data-label^="雜技天王"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#e07b1a;-webkit-text-stroke:4px #ffffff;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
 /* 孝瓏 2026-10-14：台北縣消防局 第一大隊 中和分隊＝白字＋黑色方框 */
 body[data-show="大頭小狀元"][data-season] .unit[data-label^="台北縣消防局"]{padding:8px 14px;border-top:none;border-radius:0;font-size:22px;paint-order:stroke fill;color:#ffffff;-webkit-text-stroke:0;background-color:#111111;background-image:none}
-body[data-show="大頭小狀元"][data-season] .unit[data-label^="狀元小常識"]{padding:8px 14px;border:8px solid #58e8f8;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#111111;-webkit-text-stroke-width:0;background-color:#00d8fc;background-image:none;outline:2px dashed #ffffff;outline-offset:-8px}
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="狀元小常識"]{position:relative;padding:8px 14px;border:8px solid #58e8f8;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#111111;-webkit-text-stroke-width:0;background-color:#00d8fc;background-image:none}
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="狀元小常識"]::after{content:"";position:absolute;inset:0;border:2px dashed #ffffff;border-radius:2px;pointer-events:none}
 .unit[data-label^="狀元小常識"] .zy{color:#e84045;-webkit-text-stroke:4px #ffffff}
 /* 例外：養蠶專家那集的狀元小常識後段＝黑字白框 */
 body[data-show="大頭小狀元"][data-season] .unit[data-label="狀元小常識 蠶是完全變態的昆蟲"]{color:#111111;-webkit-text-stroke:4px #ffffff}
