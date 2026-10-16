@@ -10,7 +10,7 @@ function fitSrc(){
     if(!fw||!fh) continue;
     var W=Math.round(fw*H/fh);           // 依窗框比例選邏輯寬度（整頁等比縮小）
     ifr.style.width=W+'px'; ifr.style.height=H+'px';
-    var s=Math.min(fw/W, fh/H)*0.995;
+    var s=Math.min(fw/W, fh/H);
     ifr.style.transform='scale('+s+')'; ifr.style.transformOrigin='top left';
   }
 }
