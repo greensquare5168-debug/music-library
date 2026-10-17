@@ -29,7 +29,7 @@
  var rows=[].slice.call(ul.querySelectorAll('li'));
  function used(r){var m=r.querySelector('.muted');return !(m&&m.textContent.indexOf('尚未發現使用作品')>=0);}
  var n=rows.filter(used).length, stat=bar.querySelector('.afstat');
- stat.textContent='已使用 '+n+' / '+rows.length+' 首';
+ if(stat){stat.textContent='已使用 '+n+' / '+rows.length+' 首';}
  var key='af:'+location.pathname;
  function apply(f){
   rows.forEach(function(r){r.style.display=(f==='used'&&!used(r))?'none':'';});
