@@ -779,7 +779,7 @@ body[data-show="大頭小狀元"][data-season] .unit[data-label^="狗狗訓練�
 body[data-show="大頭小狀元"][data-season] .unit[data-label^="辦桌狀元"]{color:#ffffff;-webkit-text-stroke:4px #406890}
 body[data-show="大頭小狀元"][data-season] .unit[data-label^="狗狗訓練師"]{color:#ffffff;-webkit-text-stroke:4px #385878}
 /* 孝瓏 2026-10-14：YOYO FUN一下 每個字顏色（Y紅/O深藍/Y橘/O綠/FUN一下淺藍）＋白框 */
-body[data-show="黑蕉fun輕鬆"] .unit[data-label^="YOYO FUN一下"] span{-webkit-text-stroke:3px #ffffff}
+body[data-show="黑蕉fun輕鬆"] .unit[data-label^="YOYO FUN一下"] span{-webkit-text-stroke:4px #ffffff}
 body[data-show="黑蕉fun輕鬆"] .unit[data-label^="YOYO FUN一下"] .f1{color:#e63c2e}
 body[data-show="黑蕉fun輕鬆"] .unit[data-label^="YOYO FUN一下"] .f2{color:#123a8a}
 body[data-show="黑蕉fun輕鬆"] .unit[data-label^="YOYO FUN一下"] .f3{color:#f07f1a}
