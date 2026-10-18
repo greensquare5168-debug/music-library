@@ -803,4 +803,4 @@ body[data-show="黑蕉fun輕鬆"] .unit[data-label^="YOYO FUN一下"] .g{color:#
 /* 孝瓏 2026-10-14：實戰 文字的方框＝半透明白底方框（非字框） */
 body[data-show="大頭小狀元"][data-season] .unit[data-label^="實戰"] .box{display:inline-block;background-color:rgba(255,255,255,.32);border:3px solid rgba(255,255,255,.8);padding:2px 8px;border-radius:4px}
 /* 孝瓏 2026-10-14：FUN輕鬆 小籠包VS漢堡包＝同 FUN一下 白卡底＋橘字黑邊 */
-body[data-show="黑蕉fun輕鬆"] .unit[data-label^="小籠包VS漢堡包"]{padding:8px 14px;border-top:none;border-bottom:none;border-radius:9px;font-size:22px;paint-order:normal;color:transparent;-webkit-text-stroke-width:0;background:#ffffff;box-shadow:none;border:none}
+body[data-show="黑蕉fun輕鬆"] .unit[data-label^="小籠包VS漢堡包"]{padding:8px 14px;border-top:none;border-bottom:none;border-radius:9px;font-size:22px;paint-order:normal;color:transparent;-webkit-text-stroke-width:0;background:#ffffff;box-shadow:none;border:2px solid #c3cedb}
