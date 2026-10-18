@@ -8,6 +8,15 @@ function fitSrc(){
     if(!H) continue;
     var fw=f.clientWidth, fh=f.clientHeight;
     if(!fw||!fh) continue;
+    var src=(ifr.getAttribute('src')||'');
+    if(src.indexOf('groove-musicsearch')>=0){
+      // Groovers：滿版對齊左右（孝瓏 2026-10-18）
+      var W=1280, sc=fw/W;
+      ifr.style.width=W+'px'; ifr.style.height=H+'px';
+      ifr.style.transform='scale('+sc+')'; ifr.style.transformOrigin='top left';
+      f.style.height=Math.round(H*sc)+'px';
+      continue;
+    }
     var W=Math.round(fw*H/fh);           // 依窗框比例選邏輯寬度（整頁等比縮小）
     ifr.style.width=W+'px'; ifr.style.height=H+'px';
     var s=Math.min(fw/W, fh/H);
