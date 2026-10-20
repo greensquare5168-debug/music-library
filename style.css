@@ -813,3 +813,8 @@ body[data-show="黑蕉fun輕鬆"] .unit[data-label^="小籠包VS漢堡包"]{padd
 
 /* 孝瓏 2026-10-19：全站小標題＝四角圓角、文字垂直置中（不改高度設定） */
 .unit{border-radius:8px;display:flex;align-items:center;padding:5px 0;box-sizing:border-box}
+/* 孝瓏 2026-10-20：已點過的連結（:visited）不要變紫色，統一用站上綠色 */
+a:visited{color:var(--link)}
+a:visited:hover{color:var(--link2)}
+.crumb a:visited{color:var(--link)}
+
