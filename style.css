@@ -817,4 +817,7 @@ body[data-show="黑蕉fun輕鬆"] .unit[data-label^="小籠包VS漢堡包"]{padd
 a:visited{color:var(--link)}
 a:visited:hover{color:var(--link2)}
 .crumb a:visited{color:var(--link)}
+/* 孝瓏 2026-10-20：片頭曲與下面、片尾曲與上面各留一個空行（26px＝站上一個空行） */
+.entries li.r-intro{margin-bottom:26px}
+.entries li.r-outro{margin-top:26px}
 
