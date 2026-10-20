@@ -811,6 +811,5 @@ body[data-show="黑蕉fun輕鬆"] .unit[data-label^="小籠包VS漢堡包"]{padd
 .unit[data-label$="啦啦隊"] svg text.laA{animation:laA 1.6s steps(1,end) infinite}
 .unit[data-label$="啦啦隊"] svg text.laB{animation:laB 1.6s steps(1,end) infinite}
 
-
 /* 孝瓏 2026-10-19：全站小標題＝四角圓角、文字垂直置中（不改高度設定） */
 .unit{border-radius:8px;display:flex;align-items:center;padding:5px 0;box-sizing:border-box}
