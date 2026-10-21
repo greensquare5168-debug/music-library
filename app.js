@@ -87,7 +87,7 @@ function openWin(u){
     var base='/'+rawseg.slice(0,idx).join('/')+(idx?'/':'');   // 抓 tree.json 用原始（已編碼）路徑
     var cur=segs.slice(idx).join('/')+'/';
     var pathIsLib=/圖書館音樂\//.test(cur);
-    fetch(base+'tree.json?v=20261008c').then(function(r){return r.json();}).then(function(t){
+    fetch(base+'tree.json?v=20261021b').then(function(r){return r.json();}).then(function(t){
       var root=null;
       for(var j=0;j<t.length;j++){ if((t[j].h&&t[j].h===segs[idx]+'/')||t[j].n===segs[idx]){ root=t[j]; break; } }
       if(!root) return;
@@ -112,7 +112,7 @@ function openWin(u){
           if(!hasC) return;
           if(!kids){
             kids=document.createElement('ul'); kids.className='tree'; kids.style.display='none'; li.appendChild(kids);
-            for(var q=0;q<node.c.length;q++) render(node.c[q],kids,cur.indexOf(node.c[q].h||'')===0);
+            for(var q=0;q<node.c.length;q++){ var _k=node.c[q]; if(!pathIsLib && _k && _k.n==='音樂圖書館') continue; render(_k,kids,cur.indexOf(_k.h||'')===0); }
           }
           var show=(open===undefined)?(kids.style.display==='none'):open;
           kids.style.display=show?'':'none';
