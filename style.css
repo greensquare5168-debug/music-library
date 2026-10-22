@@ -832,3 +832,4 @@ body[data-show="大頭小狀元"] .unit[data-label^="狀元小常識"]{display:f
 .unit .zysub .zylead{font-size:1.15em}
 body[data-show="大頭小狀元"] .unit[data-label^="狀元小常識"] .zy,body[data-show="大頭小狀元"] .unit[data-label^="狀元小常識"] .zysub{line-height:1}
 body[data-show="大頭小狀元"] .unit[data-label^="狀元小常識"] .zylead{line-height:1}
+body[data-show="大頭小狀元"] .unit[data-label^="狀元小常識"]{min-height:35.2px;box-sizing:content-box}
