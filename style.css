@@ -826,4 +826,9 @@ a:visited:hover{color:var(--link2)}
 .unit .zysub{font-size:.77em}
 
 /* 狀元小常識：小字與大字底部對齊（S1E01 確認後套用） */
-body[data-show="大頭小狀元"] .unit[data-label^="狀元小常識"]{display:flex;align-items:flex-end;flex-wrap:wrap}
+body[data-show="大頭小狀元"] .unit[data-label^="狀元小常識"]{display:flex;align-items:baseline;flex-wrap:wrap}
+
+/* 狀元小常識：主題首字略大（介於大字與小字之間） */
+.unit .zysub .zylead{font-size:1.15em}
+body[data-show="大頭小狀元"] .unit[data-label^="狀元小常識"] .zy,body[data-show="大頭小狀元"] .unit[data-label^="狀元小常識"] .zysub{line-height:1}
+body[data-show="大頭小狀元"] .unit[data-label^="狀元小常識"] .zylead{line-height:1}
