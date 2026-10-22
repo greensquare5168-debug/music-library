@@ -824,3 +824,6 @@ a:visited:hover{color:var(--link2)}
 
 /* 狀元小常識：主標「狀元」後的字縮小（比照黑蕉偵探社「任務」比例 26/20） */
 .unit .zysub{font-size:.77em}
+
+/* 狀元小常識：小字與大字底部對齊（S1E01 確認後套用） */
+body[data-show="大頭小狀元"] .unit[data-label^="狀元小常識"]{display:flex;align-items:flex-end;flex-wrap:wrap}
