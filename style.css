@@ -835,3 +835,7 @@ body[data-show="大頭小狀元"] .unit[data-label^="狀元小常識"] .zylead{l
 body[data-show="大頭小狀元"] .unit[data-label^="狀元小常識"]{min-height:35.2px;box-sizing:content-box}
 /* 孝瓏 2026-10-22：S1E01 狀元小常識 → 「狀元 小常識」置中，小字底部與大字底部對齊 */
 body[data-show="大頭小狀元"] .unit[data-label="狀元小常識 蠶是完全變態的昆蟲"]{display:flex;justify-content:center;align-items:flex-end}
+/* 孝瓏 2026-10-22：S1E01 狀元小常識 → 內容上下置中（左右不特別置中），小字與大字底部對齊 */
+body[data-show="大頭小狀元"] .unit[data-label="狀元小常識 蠶是完全變態的昆蟲"]{display:flex;justify-content:flex-start;align-items:center}
+body[data-show="大頭小狀元"] .unit[data-label="狀元小常識 蠶是完全變態的昆蟲"] .zyline{display:flex;align-items:flex-end}
+body[data-show="大頭小狀元"] .unit[data-label="狀元小常識 蠶是完全變態的昆蟲"] .zyline{transform:translateY(-1.7px)}
