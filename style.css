@@ -839,3 +839,7 @@ body[data-show="大頭小狀元"] .unit[data-label="狀元小常識 蠶是完全
 body[data-show="大頭小狀元"] .unit[data-label="狀元小常識 蠶是完全變態的昆蟲"]{display:flex;justify-content:flex-start;align-items:center}
 body[data-show="大頭小狀元"] .unit[data-label="狀元小常識 蠶是完全變態的昆蟲"] .zyline{display:flex;align-items:flex-end}
 body[data-show="大頭小狀元"] .unit[data-label="狀元小常識 蠶是完全變態的昆蟲"] .zyline{transform:translateY(-1.7px)}
+/* 孝瓏 2026-10-22：S1E02 狀元小常識（香蕉）→ 內容上下置中 */
+body[data-show="大頭小狀元"] .unit[data-label="狀元小常識 香蕉不能放冰箱"]{display:flex;justify-content:flex-start;align-items:center}
+body[data-show="大頭小狀元"] .unit[data-label="狀元小常識 香蕉不能放冰箱"] .zyline{display:flex;align-items:flex-end}
+body[data-show="大頭小狀元"] .unit[data-label="狀元小常識 香蕉不能放冰箱"] .zyline{transform:translateY(-1.5px)}
