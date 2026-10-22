@@ -821,3 +821,6 @@ a:visited:hover{color:var(--link2)}
 .entries li.r-intro{margin-bottom:26px}
 .entries li.r-outro{margin-top:26px}
 
+
+/* 狀元小常識：主標「狀元」後的字縮小（比照黑蕉偵探社「任務」比例 26/20） */
+.unit .zysub{font-size:.77em}
