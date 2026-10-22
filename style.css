@@ -843,3 +843,5 @@ body[data-show="大頭小狀元"] .unit[data-label="狀元小常識 蠶是完全
 body[data-show="大頭小狀元"] .unit[data-label="狀元小常識 香蕉不能放冰箱"]{display:flex;justify-content:flex-start;align-items:center}
 body[data-show="大頭小狀元"] .unit[data-label="狀元小常識 香蕉不能放冰箱"] .zyline{display:flex;align-items:flex-end}
 body[data-show="大頭小狀元"] .unit[data-label="狀元小常識 香蕉不能放冰箱"] .zyline{transform:translateY(-1.5px)}
+/* 孝瓏 2026-10-22：狀元小常識單元改用較接近節目字（思源黑體 Black／方頭粗黑） */
+body[data-show="大頭小狀元"] .unit[data-label^="狀元小常識"]{font-family:"Noto Sans CJK TC","Noto Sans TC","PingFang TC",sans-serif;font-weight:900;letter-spacing:.02em}
