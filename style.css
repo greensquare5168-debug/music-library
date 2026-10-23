@@ -4,6 +4,7 @@
   --warn:#b45309; --ok:#15803d;
 }
 *{box-sizing:border-box}
+html{scrollbar-gutter:stable}
 body{margin:0;background:var(--bg);color:var(--fg);
   font:16px/1.6 -apple-system,"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif}
 .wrap{max-width:960px;margin:0 auto;padding:0 20px}
