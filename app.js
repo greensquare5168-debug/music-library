@@ -17,9 +17,10 @@ function fitSrc(){
       f.style.height=Math.round(H*sc)+'px';
       continue;
     }
-    var W=Math.round(fw*H/fh);           // 依窗框比例選邏輯寬度（整頁等比縮小）
+    var W=1280;                          // 以桌機寬度渲染，再等比縮到框寬（避免內容被縮太小）
     ifr.style.width=W+'px'; ifr.style.height=H+'px';
-    var s=Math.min(fw/W, fh/H);
+    var s=fw/W;
+    f.style.height=Math.round(H*s)+'px';
     ifr.style.transform='scale('+s+')'; ifr.style.transformOrigin='top left';
   }
 }
