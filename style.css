@@ -846,3 +846,8 @@ body[data-show="大頭小狀元"] .unit[data-label="狀元小常識 香蕉不能
 body[data-show="大頭小狀元"] .unit[data-label="狀元小常識 香蕉不能放冰箱"] .zyline{transform:translateY(-1.5px)}
 /* 孝瓏 2026-10-22：狀元小常識單元改用較接近節目字（思源黑體 Black／方頭粗黑） */
 body[data-show="大頭小狀元"] .unit[data-label^="狀元小常識"]{font-family:"Noto Sans CJK TC","Noto Sans TC","PingFang TC",sans-serif;font-weight:900;letter-spacing:.02em}
+
+/* 列表記號：✕＝尚未發現使用作品、↻＝重複發行（孝瓏 2026-10-24） */
+.mark{display:inline-block;min-width:16px;text-align:center;font-size:12px;border-radius:4px;padding:1px 5px;margin-left:8px;margin-right:8px;line-height:1.25;vertical-align:middle}
+.mark-x{background:#fdecec;color:#d33;border:1px solid #f3c2c2}
+.mark-dup{background:#eef4ff;color:#2f6feb;border:1px solid #c8d8f8}

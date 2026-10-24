@@ -25,7 +25,7 @@
  var bar=document.querySelector('.albumfilter'); if(!bar) return;
  var ul=document.querySelector('ul.albumlist'); if(!ul) return;
  var rows=[].slice.call(ul.querySelectorAll('li'));
- function used(r){var m=r.querySelector('.muted');return !(m&&m.textContent.indexOf('尚未發現使用作品')>=0);}
+ function used(r){return !r.querySelector('.mark-x');}
  var n=rows.filter(used).length, stat=bar.querySelector('.afstat');
  if(stat){stat.textContent='已使用 '+n+' / '+rows.length+' 張';}
  var key='af:'+location.pathname;
