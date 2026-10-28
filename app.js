@@ -156,3 +156,17 @@ function openWin(u){
     });
   });
 })();
+
+/* 站內搜尋：導覽列搜尋框（2026-10-28） */
+(function(){
+  function go(inp){
+    var url=inp.getAttribute('data-go')||'/music-library/搜尋/index.html';
+    location.href=url+'?q='+encodeURIComponent(inp.value.trim());
+  }
+  document.querySelectorAll('.navsearch').forEach(function(box){
+    var inp=box.querySelector('.navq'), btn=box.querySelector('.navgo');
+    if(!inp) return;
+    if(btn) btn.onclick=function(){ go(inp); };
+    inp.addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preventDefault(); go(inp);} });
+  });
+})();
