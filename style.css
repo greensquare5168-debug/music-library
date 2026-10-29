@@ -851,3 +851,8 @@ body[data-show="大頭小狀元"] .unit[data-label^="狀元小常識"]{font-fami
 .mark{display:inline-block;min-width:16px;text-align:center;font-size:12px;border-radius:4px;padding:1px 5px;margin-left:8px;margin-right:8px;line-height:1.25;vertical-align:middle}
 .mark-x{background:#fdecec;color:#d33;border:1px solid #f3c2c2}
 .mark-dup{background:#eef4ff;color:#2f6feb;border:1px solid #c8d8f8}
+
+/* 導覽列搜尋框：貼齊視窗最右緣，不佔版面、不推動「音樂圖書館／使用公司」兩顆按鈕（孝瓏 2026-10-29） */
+.site-head{position:relative}
+.navsearch{display:inline-flex;gap:6px;align-items:center;position:absolute;right:20px;top:50%;transform:translateY(-50%)}
+@media(max-width:1500px){.navsearch{position:static;transform:none;margin-left:auto}}
