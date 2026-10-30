@@ -154,7 +154,7 @@ body[data-show="yoyo童話世界"] ul.entries:has(span.role) + ul.entries{margin
 body[data-show="yoyo童話世界"] ul.entries.tail{margin-top:26px}
 /* 單首音樂的組又緊接下一個標題 → 由標題上方那條線代表，不重複畫（免得雙線） */
 body[data-show="大頭小狀元"][data-season] .unit:not(.ad)+.entries:has(+.unit:not(.ad))>li:only-child{border-bottom:none}
-body[data-show="大頭小狀元"][data-season] .entries+.unit{margin-top:12px}
+body[data-show="大頭小狀元"][data-season] .entries+.unit{margin-top:20px}
 .adsec{margin-top:26px;padding:0 0 12px;border:3px solid #8fa3bd;border-radius:10px;background:none}
 .adsec>.unit{margin-top:12px}
 .adsec.pre{margin-top:22px}
@@ -547,7 +547,7 @@ body[data-show="yoyo童話世界"] ul.entries:has(span.role) + ul.entries{margin
 body[data-show="yoyo童話世界"] ul.entries.tail{margin-top:26px}
 /* 單首音樂的組又緊接下一個標題 → 由標題上方那條線代表，不重複畫（免得雙線） */
 body[data-show="大頭小狀元"][data-season] .unit:not(.ad)+.entries:has(+.unit:not(.ad))>li:only-child{border-bottom:none}
-body[data-show="大頭小狀元"][data-season] .entries+.unit{margin-top:12px}
+body[data-show="大頭小狀元"][data-season] .entries+.unit{margin-top:20px}
 .adsec{margin-top:26px;padding:0 0 12px;border:3px solid #8fa3bd;border-radius:10px;background:none}
 .adsec>.unit{margin-top:12px}
 .adsec.pre{margin-top:22px}
