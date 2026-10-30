@@ -47,7 +47,7 @@ function openWin(u){
   }
   function load(){
     if(idx) return Promise.resolve(idx);
-    return fetch(injectBase()+'search-index.json').then(function(r){return r.json();}).then(function(j){idx=j;return j;});
+    return fetch(injectBase()+'search-index.json?v=20261030b').then(function(r){return r.json();}).then(function(j){idx=j;return j;});
   }
   q.addEventListener('input',function(){    var s=q.value.trim().toLowerCase();
     if(s.length<1){ box.innerHTML=''; return; }

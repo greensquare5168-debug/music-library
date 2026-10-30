@@ -31,7 +31,7 @@
 <script>
 (function(){
   var idx=null;
-  function load(){ if(idx) return Promise.resolve(idx); return fetch('../search-index.json').then(r=>r.json()).then(d=>{idx=d;return d;}); }
+  function load(){ if(idx) return Promise.resolve(idx); return fetch('../search-index.json?v=20261030b').then(r=>r.json()).then(d=>{idx=d;return d;}); }
   function norm(s){ return (s||'').toLowerCase(); }
   function item(it){
     var li=document.createElement('li');
