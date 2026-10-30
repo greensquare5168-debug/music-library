@@ -19,10 +19,6 @@
   <nav class="topnav">
     <a class="navbtn" href="../罐頭音樂研究所/圖書館音樂/index.html">音樂圖書館</a>
     <a class="navbtn" href="../使用公司/index.html">使用公司</a>
-    <span style="display:inline-flex;gap:6px;align-items:center;margin-left:10px">
-      <input id="q" type="search" placeholder="搜尋曲名／頁面…" style="font:inherit;font-size:14px;padding:6px 10px;border:1px solid #cfd8e3;border-radius:8px;min-width:200px">
-      <button id="go" type="button" style="font:inherit;font-size:14px;padding:6px 12px;border-radius:8px;border:1px solid #2f6feb;background:#2f6feb;color:#fff;cursor:pointer">搜尋</button>
-    </span>
   <span class="navsearch"><input class="navq" type="search" data-go="../搜尋/index.html" placeholder="搜尋…" style="font:inherit;font-size:13px;padding:5px 9px;border:1px solid #cfd8e3;border-radius:8px;width:150px"><button class="navgo" type="button" style="font:inherit;font-size:13px;padding:5px 10px;border-radius:8px;border:1px solid #2f6feb;background:#2f6feb;color:#fff;cursor:pointer">搜尋</button></span></nav>
 </div></header>
 <main class="wrap">
@@ -50,12 +46,9 @@
       });
     });
   }
-  function go(v){ var u='?q='+encodeURIComponent(v); history.replaceState(null,'',u); render(v); }
-  document.getElementById('go').onclick=function(){ go(document.getElementById('q').value); };
-  document.getElementById('q').addEventListener('keydown',function(e){ if(e.key==='Enter'){ go(this.value); } });
   document.getElementById('q2').addEventListener('input',function(){ render(this.value); });
   var q=new URLSearchParams(location.search).get('q')||'';
-  if(q){ document.getElementById('q').value=q; document.getElementById('q2').value=q; render(q); }
+  if(q){ document.getElementById('q2').value=q; render(q); }
 })();
 </script>
 </body></html>
