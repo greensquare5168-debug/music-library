@@ -52,7 +52,7 @@ function openWin(u){
   q.addEventListener('input',function(){    var s=q.value.trim().toLowerCase();
     if(s.length<1){ box.innerHTML=''; return; }
     load().then(function(list){
-      var hits=list.filter(function(x){return x.t.toLowerCase().includes(s);}).slice(0,40);
+      var hits=list.filter(function(x){return (x.t+' '+(x.k||'')).toLowerCase().includes(s);}).sort(function(a,b){return (b.t.toLowerCase().includes(s)?1:0)-(a.t.toLowerCase().includes(s)?1:0);}).slice(0,40);
       box.innerHTML=hits.map(function(x){return '<a href="'+injectBase()+x.p+'">'+x.t+'</a>';}).join('')||'<span class="muted">無結果</span>';
     });
   });

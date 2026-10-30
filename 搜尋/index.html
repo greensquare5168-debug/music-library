@@ -37,7 +37,10 @@
       var res=document.getElementById('res'), stat=document.getElementById('stat');
       res.innerHTML=''; var k=norm(q).trim();
       if(!k){ stat.textContent=''; return; }
-      var hits=list.filter(function(it){ return norm(it.t).indexOf(k)>=0 || norm(decodeURIComponent(it.p)).indexOf(k)>=0; }).slice(0,200);
+      var hits=list.filter(function(it){ return norm(it.t).indexOf(k)>=0 || norm(it.k||'').indexOf(k)>=0 || norm(decodeURIComponent(it.p)).indexOf(k)>=0; })
+        .map(function(it){ return {it:it, s:(norm(it.t).indexOf(k)>=0?0:1)}; })
+        .sort(function(a,b){ return a.s-b.s || a.it.t.length-b.it.t.length; })
+        .map(function(x){ return x.it; }).slice(0,200);
       stat.textContent='找到 '+hits.length+' 筆';
       hits.forEach(function(it){
         var li=document.createElement('li');
