@@ -60,8 +60,12 @@ function openWin(u){
 
 // 左側清單：收合箭頭 + 分組收合（孝瓏 2026-10-08）
 (function(){
+  // 2026-11-04 孝瓏：「點左欄畫面會閃一下」
+  // 原因：頁面靜態左欄先畫出來 → app.js 用 tree.json 重畫時把整塊清空再長出來（＝閃 2 次）
+  // 解法：CSS 先隱藏左欄內容（背景卡片留著，版面不跳），等樹畫好才加 .ktree-ready 一次顯示
+  function treeReady(){ document.documentElement.classList.add('ktree-ready'); }
   var box=document.querySelector('.treebox');
-  if(!box) return;
+  if(!box){ treeReady(); return; }
   var btn=document.createElement('button');
   btn.type='button'; btn.className='navtoggle';
   box.parentNode.insertBefore(btn, box);
@@ -95,7 +99,7 @@ function openWin(u){
     fetch(base+'tree.json?v=20261104a').then(function(r){return r.json();}).then(function(t){
       var root=null;
       for(var j=0;j<t.length;j++){ if((t[j].h&&t[j].h===segs[idx]+'/')||t[j].n===segs[idx]){ root=t[j]; break; } }
-      if(!root) return;
+      if(!root){ treeReady(); return; }
       if(pathIsLib && root.c){
         for(var k=0;k<root.c.length;k++){ if(root.c[k].h && cur.indexOf(root.c[k].h)===0){ root=root.c[k]; break; } }
       }
@@ -130,9 +134,11 @@ function openWin(u){
         arw.addEventListener('click',function(e){ e.preventDefault(); e.stopPropagation(); toggle(); });
         if(hasC && ((OPEN[node.h||node.n]) || (isPath && (depth||0)<1))) toggle(true);
       }
+      // 先在「畫面外」把整棵樹組好，最後才一次換上（避免清空→長出的中間空窗）
       var ul0=document.createElement('ul'); ul0.className='tree';
-      box.innerHTML=''; box.appendChild(ul0);
       render(root,ul0,true,0);
+      box.innerHTML=''; box.appendChild(ul0);
+      treeReady();
       // 只在清單「可見」時把當前那頁置中（收合狀態不動作，避免展開時跑到最下面）
       function centerCur(){
         try{
@@ -145,7 +151,9 @@ function openWin(u){
         }catch(e){}
       }
       window.kmtCenterCur=centerCur;   // 2026-11-04 不再自動捲動（避免左欄每次換頁跑位）
-    }).catch(function(){});
+    }).catch(function(){ treeReady(); });
+  }else{
+    treeReady();
   }
   Array.prototype.forEach.call(box.querySelectorAll('.tree-h'), function(h){
     var ul=h.nextElementSibling;

@@ -869,3 +869,19 @@ body[data-show="大頭小狀元"] .unit[data-label^="狀元小常識"]{font-fami
   .treebox{left:max(0px, calc((100vw - 960px)/2 - 264px))}
   .navtoggle{left:max(236px, calc((100vw - 960px)/2 - 28px))}
 }
+
+/* ── 2026-11-04 孝瓏：「點左欄時畫面不要閃一下」 ──
+   1) 左欄內容等 JS 把樹畫好才顯示（卡片背景與寬度一開始就在，版面不會跳動）
+   2) 保險：JS 若沒跑起來，1.5 秒後自動顯示原本的靜態清單
+   3) 換頁用 Chrome 跨文件 View Transition 交叉淡入，消掉換頁瞬間的白閃 */
+.treebox{min-height:220px}
+.treebox>*{opacity:0}
+html.ktree-ready .treebox>*{opacity:1;transition:opacity .12s ease-out}
+@keyframes ktreeReveal{to{opacity:1}}
+html:not(.ktree-ready) .treebox>*{animation:ktreeReveal .01s linear 1.5s forwards}
+@view-transition{navigation:auto}
+::view-transition-old(root),::view-transition-new(root){animation-duration:.13s;animation-timing-function:ease-out}
+@media (prefers-reduced-motion: reduce){
+  ::view-transition-old(root),::view-transition-new(root){animation:none}
+  html.ktree-ready .treebox>*{transition:none}
+}
