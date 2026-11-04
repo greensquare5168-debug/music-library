@@ -863,3 +863,9 @@ body[data-show="大頭小狀元"] .unit[data-label^="狀元小常識"]{font-fami
   .wrap{margin-left:250px;margin-right:20px;max-width:960px}
   body.nav-collapsed .wrap{margin-left:auto;margin-right:auto}
 }
+
+/* 2026-11-04 孝瓏：寬螢幕時左框跑到最左邊、離內容很遠 → 讓側欄貼齊內容欄左側 */
+@media (min-width:1460px){
+  .treebox{left:max(0px, calc((100vw - 960px)/2 - 264px))}
+  .navtoggle{left:max(236px, calc((100vw - 960px)/2 - 28px))}
+}
