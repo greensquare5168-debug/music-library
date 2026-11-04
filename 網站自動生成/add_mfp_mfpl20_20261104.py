@@ -225,19 +225,15 @@ def build(tracks):
         d.mkdir(parents=True, exist_ok=True)
         shot = f'assets/srcimg/mfp-{t["file_slug"]}.png'
         if t['lib']:
-            src = ('<ul class="entries"><li>'
-                   '<div class="srccap">來源網站：musicforproductions.com '
-                   f'<a class="winlink" href="{esc(t["lib"])}" target="_blank" rel="noopener">前往網站 ↗</a></div>'
-                   f'<a class="srcimg" href="{esc(t["lib"])}" target="_blank" rel="noopener" title="點圖前往來源網站">'
+            src = (f'<ul class="entries"><li><a class="srcimg" href="{esc(t["lib"])}" target="_blank" rel="noopener" title="點圖前往來源網站">'
                    f'<img src="../../../../../{quote(shot)}" alt="來源預覽圖（點圖前往網站）" loading="lazy" '
                    'style="display:block;width:100%;max-width:920px;height:auto;border:1px solid #e3ecf3;border-radius:10px;margin:6px auto 26px">'
                    '</a></li></ul>')
         else:
             src = ''
         content = (f'<div class="content"><div class="album-card"><h1>{esc(t["label_name"])}</h1>'
-                   + src +
-                   f'<ul class="entries"><li><span class="muted">站上尚未發現使用</span></li></ul>'
-                   + '</div></div>')
+                   + src
+                   + '<p class="muted">（尚未發現使用作品）</p></div></div>')
         (d / 'index.html').write_text(
             head(t['label_name'], 5, False)
             + f'<main class="wrap">{crumb([("音樂圖書館", abs_url(LIB)), (LABEL_NAME, abs_url(LIB, LABEL_SLUG)), (f"{ALBUM_CODE} - {ALBUM_TITLE}", abs_url(LIB, LABEL_SLUG, ALBUM_SLUG)), (t["label_name"], None)])}'
