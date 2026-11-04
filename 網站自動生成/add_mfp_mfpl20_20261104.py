@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""把 MFP《MFPL-20 Best of Film Scores》(100 首) 建進「圖書館音樂研究所」正式網站。
+"""把 MFP《MFPL-20 Best of Film Scores》建進「圖書館音樂研究所」正式網站（v2）。
 
-- 新增 label 頁：罐頭音樂研究所/圖書館音樂/music-for-productions/
-- 新增專輯頁：.../mfpl-20-best-of-film-scores/
-- 新增 100 個曲目頁：.../<slug>/
-- 更新 tree.json（左欄導覽）與 search-index.json（站內搜尋）
+v2 調整（孝瓏 2026-11-04）：
+- 不做 100 個曲目頁（曲目只在專輯頁列出，點擊外連 MFP 原站）
+- 廠牌頁與專輯頁都加「全部／已使用」篩選（與站上其他廠牌頁一致）
+- 音樂圖書館首頁（index.html）的廠牌清單要出現 Music For Productions
+- tree.json 只放 廠牌→專輯；search-index 只加 廠牌＋專輯
 
-資料來源：data/mfpl20.json（由 MFP / SourceAudio 曲庫抓取）
+資料來源：圖書館音樂研究所/MFPL20_data_20261104.json（由 MFP / SourceAudio album 524836 抓取）
 """
 import json
 import re
@@ -34,21 +35,57 @@ def esc(s):
     return html.escape(s or '', quote=True)
 
 
-def slugify(s):
-    s = (s or '').lower()
-    s = re.sub(r'[^a-z0-9]+', '-', s)
-    return re.sub(r'-+', '-', s).strip('-')
+def rel_url(depth, *parts):
+    return ('../' * depth) + '/'.join(quote(p) for p in parts) + '/'
 
 
-# ── 模板零件 ────────────────────────────────────────────────
-def head(title, depth):
+FILTER_CSS = '''<style>
+.albumfilter{display:flex;gap:8px;align-items:center;margin:6px 0 12px;flex-wrap:wrap}
+.albumfilter .afbtn{font:inherit;font-size:14px;padding:5px 12px;border-radius:999px;border:1px solid #cfd8e3;background:#fff;color:#334;cursor:pointer}
+.albumfilter .afbtn.active{background:#2f6feb;border-color:#2f6feb;color:#fff}
+.albumfilter .afstat{margin-left:auto;font-size:13px;color:#6b7280}
+</style>'''
+
+FILTER_JS_TMPL = '''<script>
+(function(){
+ var bar=document.querySelector('.albumfilter'); if(!bar) return;
+ var ul=document.querySelector('ul.albumlist'); if(!ul) return;
+ var rows=[].slice.call(ul.querySelectorAll('li'));
+ function used(r){return !r.querySelector('.mark-x');}
+ var n=rows.filter(used).length, stat=bar.querySelector('.afstat');
+ if(stat){stat.textContent='已使用 '+n+' / '+rows.length+' __UNIT__';}
+ var key='af:'+location.pathname;
+ function apply(f){
+  rows.forEach(function(r){r.style.display=(f==='used'&&!used(r))?'none':'';});
+  [].forEach.call(bar.querySelectorAll('.afbtn'),function(b){b.classList.toggle('active',b.getAttribute('data-f')===f);});
+  try{localStorage.setItem(key,f);}catch(e){}
+ }
+ [].forEach.call(bar.querySelectorAll('.afbtn'),function(b){b.addEventListener('click',function(){apply(b.getAttribute('data-f'));});});
+ var f='all'; try{f=localStorage.getItem(key)||'all';}catch(e){}
+ apply(f);
+})();
+</script>'''
+
+
+def filter_js(unit):
+    return FILTER_JS_TMPL.replace('__UNIT__', unit)
+
+
+def filter_bar(unit):
+    return ('<div class="albumfilter">'
+            f'<button class="afbtn active" data-f="all">全部</button>'
+            f'<button class="afbtn" data-f="used">已使用</button>'
+            f'<span class="afstat">已使用 0 / 0 {unit}</span></div>')
+
+
+def head(title, depth, with_filter=False):
     up = '../' * depth
     return f'''<!DOCTYPE html>
 <html lang="zh-Hant"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{esc(title)}｜圖書館音樂研究所</title>
 <link rel="stylesheet" href="{up}style.css?v={CSS_VER}">
-</head><body data-show="{LABEL_SLUG}">
+{FILTER_CSS if with_filter else ''}</head><body data-show="{LABEL_SLUG}">
 <header class="site-head"><div class="wrap head-row">
   <div><a class="brand" href="{up}index.html">圖書館音樂研究所</a></div>
   <nav class="topnav">
@@ -59,38 +96,30 @@ def head(title, depth):
 '''
 
 
-def foot(depth):
+def foot(depth, with_filter=False, unit=''):
     up = '../' * depth
-    return f'''<footer class="wrap muted">資料來源：Point Music／Production Music Wiki／Discogs／Music For Productions（SourceAudio）　· 由 U4 整理生成（本全名＋使用頁面）</footer>
-<script src="{up}app.js?v={JS_VER}"></script>
-</body></html>
-'''
+    return (f'<footer class="wrap muted">資料來源：Point Music／Production Music Wiki／Discogs／Music For Productions（SourceAudio）　· 由 U4 整理生成（本全名＋使用頁面）</footer>\n'
+            f'<script src="{up}app.js?v={JS_VER}"></script>\n'
+            + (filter_js(unit) if with_filter else '') + '\n</body></html>\n')
 
 
-def crumb(items, depth):
-    """items: [(text, href_abs_or_None)]；href 一律絕對路徑 /music-library/..."""
+def crumb(items):
     out = []
     for text, href in items:
-        if href:
-            out.append(f'<a href="{href}">{esc(text)}</a>')
-        else:
-            out.append(esc(text))
+        out.append(f'<a href="{href}">{esc(text)}</a>' if href else esc(text))
     return '<div class="crumb">' + ' / '.join(out) + '</div>'
 
 
 def label_tree_ul():
-    """左欄：label 清單（沿用既有頁面的清單，改成絕對路徑並插入 MFP）。"""
     src = (ROOT / LIB / 'mode-production-music' / 'index.html').read_text(encoding='utf-8')
-    m = re.search(r'<ul class="tree">.*?</ul>', src, re.S)
-    ul = m.group(0)
-    # href 全部改絕對
+    ul = re.search(r'<ul class="tree">.*?</ul>', src, re.S).group(0)
+
     def fix(mm):
-        slug = mm.group(1).rstrip('/')
-        return f'href="{abs_url(LIB, slug)}"'
+        return f'href="{abs_url(LIB, mm.group(1).rstrip("/"))}"'
     ul = re.sub(r'href="[^"]*?/([^"/]+)/"', fix, ul)
-    # 在 Mode 之後插入 MFP
     li_mfp = f'<li><a href="{abs_url(LIB, LABEL_SLUG)}">{LABEL_NAME}</a></li>'
-    marker = re.search(r'<li><a href="' + re.escape(abs_url(LIB, 'mode-production-music')) + r'">Mode</a></li>', ul)
+    mode = abs_url(LIB, 'mode-production-music')
+    marker = re.search(r'<li><a href="' + re.escape(mode) + r'">Mode</a></li>', ul)
     if marker:
         ul = ul[:marker.end()] + li_mfp + ul[marker.end():]
     else:
@@ -98,123 +127,138 @@ def label_tree_ul():
     return ul
 
 
-def album_tree_ul(tracks):
-    items = ''.join(
-        f'<li><a href="{abs_url(LIB, LABEL_SLUG, ALBUM_SLUG, t["slug"])}">{esc(t["label_name"])}</a></li>'
-        for t in tracks)
-    return f'<div class="tree-h">{esc(ALBUM_CODE)} - {esc(ALBUM_TITLE)}</div><ul class="tree">{items}</ul>'
+def aside(with_album_link=True):
+    s = (f'<div class="tree-h"><a href="{abs_url(LIB)}">音樂圖書館</a></div>'
+         + label_tree_ul()
+         + f'<div class="tree-h">{LABEL_NAME}</div><ul class="tree">'
+         f'<li><a href="{abs_url(LIB, LABEL_SLUG, ALBUM_SLUG)}">{esc(ALBUM_CODE)} - {esc(ALBUM_TITLE)}</a></li></ul>')
+    return f'<aside class="treebox">{s}</aside>'
 
 
-def aside(depth, tracks, cur_slug=None, with_tracks=True):
-    label_ul = label_tree_ul()
-    first = (f'<div class="tree-h"><a href="{abs_url(LIB)}">音樂圖書館</a></div>{label_ul}'
-             f'<div class="tree-h">{LABEL_NAME}</div><ul class="tree">'
-             f'<li><a href="{abs_url(LIB, LABEL_SLUG, ALBUM_SLUG)}">{esc(ALBUM_CODE)} - {esc(ALBUM_TITLE)}</a></li></ul>')
-    if with_tracks:
-        first += album_tree_ul(tracks)
-    return f'<aside class="treebox">{first}</aside>'
-
-
-# ── 主資料 ──────────────────────────────────────────────────
 def load_tracks():
-    cand = [ROOT.parent / '網站demo' / 'data' / 'mfpl20.json',
-            Path('/home/jasonlin/clawd/projects/罐頭音樂/網站demo/data/mfpl20.json')]
+    cand = [ROOT.parent / '圖書館音樂研究所' / 'MFPL20_data_20261104.json',
+            ROOT.parent / '網站demo' / 'data' / 'mfpl20.json']
     src = next((c for c in cand if c.exists()), None)
     if src is None:
-        sys.exit('找不到 mfpl20.json')
+        sys.exit('找不到 MFPL20 資料檔')
     data = json.loads(src.read_text(encoding='utf-8'))
-    tr = data['labels'][0]['albums'][0]['tracks']
     out = []
-    for t in tr:
+    for t in data['labels'][0]['albums'][0]['tracks']:
         composer = t.get('composer') or ''
-        label_name = f"{t['title']} - {composer}" if composer else t['title']
         out.append({
-            'no': t.get('no', ''),
             'title': t['title'],
             'composer': composer,
             'desc': t.get('desc', ''),
             'genre': t.get('genre', ''),
             'keywords': t.get('keywords', ''),
             'lib': t.get('lib', ''),
-            'label_name': label_name,
-            'slug': slugify(label_name),
+            'label_name': f'{t["title"]} - {composer}' if composer else t['title'],
         })
     return out
 
 
-def build_pages(tracks):
+def mark_x():
+    return ('<span class="mark mark-x" title="尚未發現使用作品" style="display:inline-flex;align-items:center;'
+            'justify-content:center;width:18px;height:18px;padding:0;line-height:1;font-size:11px">✕</span>')
+
+
+def go():
+    return ('<span class="go" style="display:inline-flex;align-items:center;justify-content:center;height:18px;'
+            'line-height:1;transform:translateY(0.5px)">›</span>')
+
+
+def build(tracks):
     libdir = ROOT / LIB
-    # 1) label 頁
+
+    # ── 廠牌頁 ──
     d = libdir / LABEL_SLUG
     d.mkdir(parents=True, exist_ok=True)
-    rows = ''.join(
-        f'<li><a class="row" href="{abs_url(LIB, LABEL_SLUG, ALBUM_SLUG)}">'
-        f'<span class="rn">{esc(ALBUM_CODE)} - {esc(ALBUM_TITLE)}</span><span class="muted"></span>'
-        f'<span class="mark mark-x" title="尚未發現使用作品" style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;padding:0;line-height:1;font-size:11px">✕</span>'
-        f'<span class="go" style="display:inline-flex;align-items:center;justify-content:center;height:18px;line-height:1;transform:translateY(0.5px)">›</span></a></li>'
-        for _ in [0])
+    row = (f'<li><a class="row" href="{abs_url(LIB, LABEL_SLUG, ALBUM_SLUG)}">'
+           f'<span class="rn">{esc(ALBUM_CODE)} - {esc(ALBUM_TITLE)}</span><span class="muted"></span>'
+           f'{mark_x()}{go()}</a></li>')
     content = (f'<div class="content"><div class="album-card"><h1>{esc(LABEL_NAME)}</h1>'
-               f'<div class="album-meta"><span class="pill">1 張專輯</span>'
-               f'<span class="pill">100 首曲目</span></div>'
-               f'<ul class="albumlist">{rows}</ul></div></div>')
+               f'<div class="album-meta"><span class="pill">1 張專輯</span><span class="pill">100 首曲目</span></div>'
+               + filter_bar('張')
+               + f'<ul class="albumlist">{row}</ul></div></div>')
     (d / 'index.html').write_text(
-        head(LABEL_NAME, 3)
-        + f'<main class="wrap">{crumb([("音樂圖書館", abs_url(LIB)), (LABEL_NAME, None)], 3)}'
-        + f'<div class="layout">{aside(3, tracks, with_tracks=False)}'
-        + content + '</div></main>' + foot(3), encoding='utf-8')
+        head(LABEL_NAME, 3, True)
+        + f'<main class="wrap">{crumb([("音樂圖書館", abs_url(LIB)), (LABEL_NAME, None)])}'
+        + f'<div class="layout">{aside()}' + content + '</div></main>' + foot(3, True, '張'),
+        encoding='utf-8')
 
-    # 2) 專輯頁
+    # ── 專輯頁（曲目列；點擊外連 MFP 曲目頁） ──
     d = libdir / LABEL_SLUG / ALBUM_SLUG
     d.mkdir(parents=True, exist_ok=True)
     rows = ''.join(
-        f'<li><a class="row" href="{abs_url(LIB, LABEL_SLUG, ALBUM_SLUG, t["slug"])}">'
+        f'<li><a class="row" href="{esc(t["lib"])}" target="_blank" rel="noopener">'
         f'<span class="rn">{esc(t["label_name"])}</span><span class="muted"></span>'
-        f'<span class="mark mark-x" title="尚未發現使用作品" style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;padding:0;line-height:1;font-size:11px">✕</span>'
-        f'<span class="go" style="display:inline-flex;align-items:center;justify-content:center;height:18px;line-height:1;transform:translateY(0.5px)">›</span></a></li>'
+        f'{mark_x()}<span class="go" style="display:inline-flex;align-items:center;justify-content:center;height:18px;line-height:1;transform:translateY(0.5px)">↗</span></a></li>'
         for t in tracks)
     content = (f'<div class="content"><div class="album-card"><h1>{esc(ALBUM_CODE)} - {esc(ALBUM_TITLE)}</h1>'
                f'<div class="album-meta">'
                f'<span class="pill">Music For Productions – Library</span><span class="pill">2016</span>'
                f'<span class="pill">100 首（合輯，2016-06-22 發行）</span>'
                f'<a class="pill linkpill" href="https://search.musicforproductions.com/album/524836" target="_blank" rel="noopener">音樂庫頁 ↗</a></div>'
-               f'<div class="album-desc">Cinematic orchestral soundtracks from experienced MFP composers.</div>'
-               f'<ul class="albumlist">{rows}</ul></div></div>')
+               f'<div class="album-desc">Cinematic orchestral soundtracks from experienced MFP composers.　'
+               f'<span class="muted">（曲名點擊可連回 MFP 曲目頁）</span></div>'
+               + filter_bar('首')
+               + f'<ul class="albumlist">{rows}</ul></div></div>')
     (d / 'index.html').write_text(
-        head(f'{ALBUM_CODE} - {ALBUM_TITLE}', 4)
-        + f'<main class="wrap">{crumb([("音樂圖書館", abs_url(LIB)), (LABEL_NAME, abs_url(LIB, LABEL_SLUG)), (f"{ALBUM_CODE} - {ALBUM_TITLE}", None)], 4)}'
-        + f'<div class="layout">{aside(4, tracks)}' + content + '</div></main>' + foot(4), encoding='utf-8')
+        head(f'{ALBUM_CODE} - {ALBUM_TITLE}', 4, True)
+        + f'<main class="wrap">{crumb([("音樂圖書館", abs_url(LIB)), (LABEL_NAME, abs_url(LIB, LABEL_SLUG)), (f"{ALBUM_CODE} - {ALBUM_TITLE}", None)])}'
+        + f'<div class="layout">{aside()}' + content + '</div></main>' + foot(4, True, '首'),
+        encoding='utf-8')
 
-    # 3) 曲目頁 ×100
-    for t in tracks:
-        d = libdir / LABEL_SLUG / ALBUM_SLUG / t['slug']
-        d.mkdir(parents=True, exist_ok=True)
-        meta = []
-        if t['desc']:
-            meta.append(f'<div class="muted" style="margin:4px 0 10px">{esc(t["desc"])}</div>')
-        info = []
-        if t['genre']:
-            info.append(f'<div class="muted">類型：{esc(t["genre"])}</div>')
-        if t['keywords']:
-            info.append(f'<div class="muted">關鍵字：{esc(t["keywords"])}</div>')
-        alias = ('<div class="muted" style="margin-top:8px">※ Tracks &amp; Fields 平台以別名 '
-                 '<b>Creeping Around</b> 上架（同曲）</div>') if t['title'] == 'Tiptoes' else ''
-        src = (f'<ul class="entries"><li><a href="{esc(t["lib"])}" target="_blank" rel="noopener">'
-               f'Music For Productions 曲目頁 ↗</a></li></ul>') if t['lib'] else ''
-        content = (f'<div class="content"><div class="album-card"><h1>{esc(t["label_name"])}</h1>'
-                   + ''.join(meta) + ''.join(info)
-                   + '<ul class="entries"><li><span class="muted">站上尚未發現使用</span></li></ul>'
-                   + src + alias + '</div></div>')
-        (d / 'index.html').write_text(
-            head(t['label_name'], 5)
-            + f'<main class="wrap">{crumb([("音樂圖書館", abs_url(LIB)), (LABEL_NAME, abs_url(LIB, LABEL_SLUG)), (f"{ALBUM_CODE} - {ALBUM_TITLE}", abs_url(LIB, LABEL_SLUG, ALBUM_SLUG)), (t["label_name"], None)], 5)}'
-            + f'<div class="layout">{aside(5, tracks, cur_slug=t["slug"])}' + content + '</div></main>' + foot(5),
-            encoding='utf-8')
+    # ── 移除舊的 100 個曲目頁（v1 產物） ──
+    removed = 0
+    for child in d.iterdir():
+        if child.is_dir() and (child / 'index.html').exists():
+            for f in child.iterdir():
+                f.unlink()
+            child.rmdir()
+            removed += 1
+    print(f'removed {removed} track dirs')
 
 
-def update_tree(tracks):
+MARK_X = ('<span class="mark mark-x" title="尚未發現使用作品" style="display:inline-flex;align-items:center;'
+          'justify-content:center;width:18px;height:18px;padding:0;line-height:1;font-size:11px">✕</span>')
+GO = ('<span class="go" style="display:inline-flex;align-items:center;justify-content:center;height:18px;'
+      'line-height:1;transform:translateY(0.5px)">›</span>')
+
+
+def update_index_html():
+    p = ROOT / LIB / 'index.html'
+    s = p.read_text(encoding='utf-8')
+    changed = False
+    # (1) 左欄清單（aside tree）
+    if f'/{LABEL_SLUG}/' not in s:
+        li = f'<li><a href="../../{quote(LIB)}/{LABEL_SLUG}/">{LABEL_NAME}</a></li>'
+        marker = f'<li><a href="../../{quote(LIB)}/music-house/">Music House</a></li>'
+        if marker in s:
+            s = s.replace(marker, li + marker, 1)
+        else:
+            s = re.sub(r'(</ul>)', li + r'\1', s, count=1)
+        changed = True
+    # (2) 主內容的廠牌清單（ul.albumlist）
+    if f'href="./{LABEL_SLUG}/"' not in s:
+        row = (f'<li><a class="row" href="./{LABEL_SLUG}/"><span class="rn">{esc(LABEL_NAME)}</span>'
+               f'<span class="muted"></span>{MARK_X}{GO}</a></li>')
+        marker2 = '<li><a class="row" href="./music-house/">'
+        if marker2 in s:
+            s = s.replace(marker2, row + marker2, 1)
+        else:
+            print('warning: 主清單找不到 Music House 位置，MFP 未插入主清單')
+        changed = True
+    if changed:
+        p.write_text(s, encoding='utf-8')
+        print('index.html: MFP inserted (tree + main list)')
+    else:
+        print('index.html: already has MFP')
+
+
+def update_tree():
     p = ROOT / 'tree.json'
     tree = json.loads(p.read_text(encoding='utf-8'))
-
     lib = None
     stack = list(tree)
     while stack and lib is None:
@@ -224,20 +268,11 @@ def update_tree(tracks):
             break
         stack.extend(n.get('c', []))
     if lib is None:
-        sys.exit('tree.json 找不到 音樂圖書館 節點')
-
-    node = {
-        'n': LABEL_NAME,
-        'h': f'{LIB}/{LABEL_SLUG}/',
-        'c': [{
-            'n': f'{ALBUM_CODE} - {ALBUM_TITLE}',
-            'h': f'{LIB}/{LABEL_SLUG}/{ALBUM_SLUG}/',
-            'c': [{'n': t['label_name'], 'h': f'{LIB}/{LABEL_SLUG}/{ALBUM_SLUG}/{t["slug"]}/'} for t in tracks],
-        }],
-    }
+        sys.exit('tree.json 找不到 音樂圖書館')
+    node = {'n': LABEL_NAME, 'h': f'{LIB}/{LABEL_SLUG}/',
+            'c': [{'n': f'{ALBUM_CODE} - {ALBUM_TITLE}', 'h': f'{LIB}/{LABEL_SLUG}/{ALBUM_SLUG}/'}]}
     kids = lib.setdefault('c', [])
     kids[:] = [k for k in kids if k.get('n') != LABEL_NAME]
-    # 依名稱字母序插入（Mode 之後 / Music House 之前）
     pos = len(kids)
     for i, k in enumerate(kids):
         if (k.get('n') or '').lower() > LABEL_NAME.lower():
@@ -245,28 +280,25 @@ def update_tree(tracks):
             break
     kids.insert(pos, node)
     p.write_text(json.dumps(tree, ensure_ascii=False), encoding='utf-8')
-    print(f'tree.json: labels={len(kids)} (inserted at {pos})')
+    print(f'tree.json: labels={len(kids)} inserted@{pos} (no track nodes)')
 
 
 def update_search(tracks):
     p = ROOT / 'search-index.json'
     idx = json.loads(p.read_text(encoding='utf-8'))
-    enc = lambda *parts: '../' + '/'.join(quote(x) for x in parts) + '/'
     idx = [x for x in idx if LABEL_SLUG not in x.get('p', '')]
-
-    track_k = '|'.join(f'{t["label_name"]}✕›' for t in tracks)
+    enc = lambda *parts: '../' + '/'.join(quote(x) for x in parts) + '/'
     idx.append({'t': LABEL_NAME, 'p': enc(LIB, LABEL_SLUG), 'k': f'{ALBUM_CODE} - {ALBUM_TITLE}✕›'})
-    idx.append({'t': f'{ALBUM_CODE} - {ALBUM_TITLE}', 'p': enc(LIB, LABEL_SLUG, ALBUM_SLUG), 'k': track_k})
-    for t in tracks:
-        idx.append({'t': t['label_name'], 'p': enc(LIB, LABEL_SLUG, ALBUM_SLUG, t['slug'])})
+    idx.append({'t': f'{ALBUM_CODE} - {ALBUM_TITLE}', 'p': enc(LIB, LABEL_SLUG, ALBUM_SLUG),
+                'k': '|'.join(f'{t["label_name"]}✕↗' for t in tracks)})
     p.write_text(json.dumps(idx, ensure_ascii=False), encoding='utf-8')
-    print(f'search-index.json: {len(idx)} entries (+{2 + len(tracks)})')
+    print(f'search-index.json: {len(idx)} entries (+2)')
 
 
 if __name__ == '__main__':
     tracks = load_tracks()
-    print('tracks', len(tracks), 'e.g.', tracks[0]['label_name'], '→', tracks[0]['slug'])
-    build_pages(tracks)
-    update_tree(tracks)
+    build(tracks)
+    update_index_html()
+    update_tree()
     update_search(tracks)
     print('done')
