@@ -35,6 +35,12 @@ def esc(s):
     return html.escape(s or '', quote=True)
 
 
+def slugify(s):
+    s = (s or '').lower()
+    s = re.sub(r'[^a-z0-9]+', '-', s)
+    return re.sub(r'-+', '-', s).strip('-')
+
+
 def rel_url(depth, *parts):
     return ('../' * depth) + '/'.join(quote(p) for p in parts) + '/'
 
@@ -152,6 +158,7 @@ def load_tracks():
             'keywords': t.get('keywords', ''),
             'lib': t.get('lib', ''),
             'label_name': f'{t["title"]} - {composer}' if composer else t['title'],
+            'slug': slugify(f'{t["title"]} - {composer}' if composer else t['title']),
         })
     return out
 
@@ -199,7 +206,7 @@ def build(tracks):
     d = libdir / LABEL_SLUG / ALBUM_SLUG
     d.mkdir(parents=True, exist_ok=True)
     rows = ''.join(
-        f'<li><a class="row" href="{esc(t["lib"])}" target="_blank" rel="noopener">'
+        f'<li><a class="row" href="{abs_url(LIB, LABEL_SLUG, ALBUM_SLUG, t["slug"])}">'
         f'<span class="rn">{esc(t["label_name"])}</span><span class="muted"></span>'
         f'{mark_x()}{srcb(4)}{go()}</a></li>'
         for t in tracks)
@@ -211,15 +218,21 @@ def build(tracks):
         + f'<div class="layout">{aside()}' + content + '</div></main>' + foot(4, False),
         encoding='utf-8')
 
-    # ── 移除舊的 100 個曲目頁（v1 產物） ──
-    removed = 0
-    for child in d.iterdir():
-        if child.is_dir() and (child / 'index.html').exists():
-            for f in child.iterdir():
-                f.unlink()
-            child.rmdir()
-            removed += 1
-    print(f'removed {removed} track dirs')
+    # ── 曲目頁 ×N（站上標準：h1 + 來源連結 + 使用頁面）──
+    for t in tracks:
+        d = libdir / LABEL_SLUG / ALBUM_SLUG / t['slug']
+        d.mkdir(parents=True, exist_ok=True)
+        src = (f'<ul class="entries"><li><a href="{esc(t["lib"])}" target="_blank" rel="noopener">'
+               f'Music For Productions 曲目頁 ↗</a></li></ul>') if t['lib'] else ''
+        content = (f'<div class="content"><div class="album-card"><h1>{esc(t["label_name"])}</h1>'
+                   f'<ul class="entries"><li><span class="muted">站上尚未發現使用</span></li></ul>'
+                   + src + '</div></div>')
+        (d / 'index.html').write_text(
+            head(t['label_name'], 5, False)
+            + f'<main class="wrap">{crumb([("音樂圖書館", abs_url(LIB)), (LABEL_NAME, abs_url(LIB, LABEL_SLUG)), (f"{ALBUM_CODE} - {ALBUM_TITLE}", abs_url(LIB, LABEL_SLUG, ALBUM_SLUG)), (t["label_name"], None)])}'
+            + f'<div class="layout">{aside(5)}' + content + '</div></main>' + foot(5, False),
+            encoding='utf-8')
+
 
 
 MARK_X = ('<span class="mark mark-x" title="尚未發現使用作品" style="display:inline-flex;align-items:center;'
@@ -272,7 +285,8 @@ def update_tree():
     if lib is None:
         sys.exit('tree.json 找不到 音樂圖書館')
     node = {'n': LABEL_NAME, 'h': f'{LIB}/{LABEL_SLUG}/',
-            'c': [{'n': f'{ALBUM_CODE} - {ALBUM_TITLE}', 'h': f'{LIB}/{LABEL_SLUG}/{ALBUM_SLUG}/'}]}
+            'c': [{'n': f'{ALBUM_CODE} - {ALBUM_TITLE}', 'h': f'{LIB}/{LABEL_SLUG}/{ALBUM_SLUG}/',
+                   'c': [{'n': t['label_name'], 'h': f'{LIB}/{LABEL_SLUG}/{ALBUM_SLUG}/{t["slug"]}/'} for t in tracks]}]}
     kids = lib.setdefault('c', [])
     kids[:] = [k for k in kids if k.get('n') != LABEL_NAME]
     pos = len(kids)
@@ -292,7 +306,9 @@ def update_search(tracks):
     enc = lambda *parts: '../' + '/'.join(quote(x) for x in parts) + '/'
     idx.append({'t': LABEL_NAME, 'p': enc(LIB, LABEL_SLUG), 'k': f'{ALBUM_CODE} - {ALBUM_TITLE}✕›'})
     idx.append({'t': f'{ALBUM_CODE} - {ALBUM_TITLE}', 'p': enc(LIB, LABEL_SLUG, ALBUM_SLUG),
-                'k': '|'.join(f'{t["label_name"]}✕↗' for t in tracks)})
+                'k': '|'.join(f'{t["label_name"]}✕›' for t in tracks)})
+    for t in tracks:
+        idx.append({'t': t['label_name'], 'p': enc(LIB, LABEL_SLUG, ALBUM_SLUG, t['slug'])})
     p.write_text(json.dumps(idx, ensure_ascii=False), encoding='utf-8')
     print(f'search-index.json: {len(idx)} entries (+2)')
 
