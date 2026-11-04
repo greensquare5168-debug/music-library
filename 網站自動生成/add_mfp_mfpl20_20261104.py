@@ -159,6 +159,7 @@ def load_tracks():
             'lib': t.get('lib', ''),
             'label_name': f'{t["title"]} - {composer}' if composer else t['title'],
             'slug': slugify(f'{t["title"]} - {composer}' if composer else t['title']),
+            'file_slug': slugify(t['title']),
         })
     return out
 
@@ -222,11 +223,21 @@ def build(tracks):
     for t in tracks:
         d = libdir / LABEL_SLUG / ALBUM_SLUG / t['slug']
         d.mkdir(parents=True, exist_ok=True)
-        src = (f'<ul class="entries"><li><a href="{esc(t["lib"])}" target="_blank" rel="noopener">'
-               f'Music For Productions 曲目頁 ↗</a></li></ul>') if t['lib'] else ''
+        shot = f'assets/srcimg/mfp-{t["file_slug"]}.png'
+        if t['lib']:
+            src = ('<ul class="entries"><li>'
+                   '<div class="srccap">來源網站：musicforproductions.com '
+                   f'<a class="winlink" href="{esc(t["lib"])}" target="_blank" rel="noopener">前往網站 ↗</a></div>'
+                   f'<a class="srcimg" href="{esc(t["lib"])}" target="_blank" rel="noopener" title="點圖前往來源網站">'
+                   f'<img src="../../../../../{quote(shot)}" alt="來源預覽圖（點圖前往網站）" loading="lazy" '
+                   'style="display:block;width:100%;max-width:920px;height:auto;border:1px solid #e3ecf3;border-radius:10px;margin:6px auto 26px">'
+                   '</a></li></ul>')
+        else:
+            src = ''
         content = (f'<div class="content"><div class="album-card"><h1>{esc(t["label_name"])}</h1>'
+                   + src +
                    f'<ul class="entries"><li><span class="muted">站上尚未發現使用</span></li></ul>'
-                   + src + '</div></div>')
+                   + '</div></div>')
         (d / 'index.html').write_text(
             head(t['label_name'], 5, False)
             + f'<main class="wrap">{crumb([("音樂圖書館", abs_url(LIB)), (LABEL_NAME, abs_url(LIB, LABEL_SLUG)), (f"{ALBUM_CODE} - {ALBUM_TITLE}", abs_url(LIB, LABEL_SLUG, ALBUM_SLUG)), (t["label_name"], None)])}'
