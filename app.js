@@ -95,7 +95,7 @@ function openWin(u){
       if(pathIsLib && root.c){
         for(var k=0;k<root.c.length;k++){ if(root.c[k].h && cur.indexOf(root.c[k].h)===0){ root=root.c[k]; break; } }
       }
-      function render(node,ul,isPath){
+      function render(node,ul,isPath,depth){
         var li=document.createElement('li'); li.className='tnode';
         var hasC=!!(node.c&&node.c.length);
         var arw=document.createElement('span'); arw.className='arw';
@@ -113,7 +113,7 @@ function openWin(u){
           if(!hasC) return;
           if(!kids){
             kids=document.createElement('ul'); kids.className='tree'; kids.style.display='none'; li.appendChild(kids);
-            for(var q=0;q<node.c.length;q++){ var _k=node.c[q]; if(!pathIsLib && _k && _k.n==='音樂圖書館') continue; render(_k,kids,cur.indexOf(_k.h||'')===0); }
+            for(var q=0;q<node.c.length;q++){ var _k=node.c[q]; if(!pathIsLib && _k && _k.n==='音樂圖書館') continue; render(_k,kids,cur.indexOf(_k.h||'')===0,(depth||0)+1); }
           }
           var show=(open===undefined)?(kids.style.display==='none'):open;
           kids.style.display=show?'':'none';
@@ -121,11 +121,11 @@ function openWin(u){
           if(show) li.classList.add('open'); else li.classList.remove('open');
         }
         arw.addEventListener('click',function(e){ e.preventDefault(); e.stopPropagation(); toggle(); });
-        if(hasC && isPath) toggle(true);
+        if(hasC && isPath && (depth||0)<1) toggle(true);
       }
       var ul0=document.createElement('ul'); ul0.className='tree';
       box.innerHTML=''; box.appendChild(ul0);
-      render(root,ul0,true);
+      render(root,ul0,true,0);
       // 只在清單「可見」時把當前那頁置中（收合狀態不動作，避免展開時跑到最下面）
       function centerCur(){
         try{
@@ -137,8 +137,7 @@ function openWin(u){
           box.scrollTop=t;
         }catch(e){}
       }
-      centerCur();
-      window.kmtCenterCur=centerCur;
+      window.kmtCenterCur=centerCur;   // 2026-11-04 不再自動捲動（避免左欄每次換頁跑位）
     }).catch(function(){});
   }
   Array.prototype.forEach.call(box.querySelectorAll('.tree-h'), function(h){
