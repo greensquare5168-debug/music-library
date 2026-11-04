@@ -71,11 +71,10 @@ def filter_js(unit):
     return FILTER_JS_TMPL.replace('__UNIT__', unit)
 
 
-def filter_bar(unit):
+def filter_bar():
     return ('<div class="albumfilter">'
-            f'<button class="afbtn active" data-f="all">全部</button>'
-            f'<button class="afbtn" data-f="used">已使用</button>'
-            f'<span class="afstat">已使用 0 / 0 {unit}</span></div>')
+            '<button class="afbtn active" data-f="all">全部</button>'
+            '<button class="afbtn" data-f="used">已使用</button></div>')
 
 
 def head(title, depth, with_filter=False):
@@ -170,23 +169,25 @@ def go():
 def build(tracks):
     libdir = ROOT / LIB
 
-    # ── 廠牌頁 ──
+    # ── 廠牌頁（標題用官方 logo）──
     d = libdir / LABEL_SLUG
     d.mkdir(parents=True, exist_ok=True)
     row = (f'<li><a class="row" href="{abs_url(LIB, LABEL_SLUG, ALBUM_SLUG)}">'
            f'<span class="rn">{esc(ALBUM_CODE)} - {esc(ALBUM_TITLE)}</span><span class="muted"></span>'
            f'{mark_x()}{go()}</a></li>')
-    content = (f'<div class="content"><div class="album-card"><h1>{esc(LABEL_NAME)}</h1>'
-               f'<div class="album-meta"><span class="pill">1 張專輯</span><span class="pill">100 首曲目</span></div>'
-               + filter_bar('張')
+    logo = ('<img src="../../../assets/mfp-logo.png" alt="Music For Productions" '
+            'style="display:block;height:46px;width:auto">')
+    content = (f'<div class="content"><div class="album-card"><h1>{logo}</h1>'
+               f'<div class="album-meta"><span class="pill">1 張專輯</span></div>'
+               + filter_bar()
                + f'<ul class="albumlist">{row}</ul></div></div>')
     (d / 'index.html').write_text(
         head(LABEL_NAME, 3, True)
         + f'<main class="wrap">{crumb([("音樂圖書館", abs_url(LIB)), (LABEL_NAME, None)])}'
-        + f'<div class="layout">{aside()}' + content + '</div></main>' + foot(3, True, '張'),
+        + f'<div class="layout">{aside()}' + content + '</div></main>' + foot(3, True, ''),
         encoding='utf-8')
 
-    # ── 專輯頁（曲目列；點擊外連 MFP 曲目頁） ──
+    # ── 專輯頁（同站上其他專輯頁：h1 + 曲目列，不加多餘資訊）──
     d = libdir / LABEL_SLUG / ALBUM_SLUG
     d.mkdir(parents=True, exist_ok=True)
     rows = ''.join(
@@ -195,18 +196,11 @@ def build(tracks):
         f'{mark_x()}<span class="go" style="display:inline-flex;align-items:center;justify-content:center;height:18px;line-height:1;transform:translateY(0.5px)">↗</span></a></li>'
         for t in tracks)
     content = (f'<div class="content"><div class="album-card"><h1>{esc(ALBUM_CODE)} - {esc(ALBUM_TITLE)}</h1>'
-               f'<div class="album-meta">'
-               f'<span class="pill">Music For Productions – Library</span><span class="pill">2016</span>'
-               f'<span class="pill">100 首（合輯，2016-06-22 發行）</span>'
-               f'<a class="pill linkpill" href="https://search.musicforproductions.com/album/524836" target="_blank" rel="noopener">音樂庫頁 ↗</a></div>'
-               f'<div class="album-desc">Cinematic orchestral soundtracks from experienced MFP composers.　'
-               f'<span class="muted">（曲名點擊可連回 MFP 曲目頁）</span></div>'
-               + filter_bar('首')
-               + f'<ul class="albumlist">{rows}</ul></div></div>')
+               f'<ul class="albumlist">{rows}</ul></div></div>')
     (d / 'index.html').write_text(
-        head(f'{ALBUM_CODE} - {ALBUM_TITLE}', 4, True)
+        head(f'{ALBUM_CODE} - {ALBUM_TITLE}', 4, False)
         + f'<main class="wrap">{crumb([("音樂圖書館", abs_url(LIB)), (LABEL_NAME, abs_url(LIB, LABEL_SLUG)), (f"{ALBUM_CODE} - {ALBUM_TITLE}", None)])}'
-        + f'<div class="layout">{aside()}' + content + '</div></main>' + foot(4, True, '首'),
+        + f'<div class="layout">{aside()}' + content + '</div></main>' + foot(4, False),
         encoding='utf-8')
 
     # ── 移除舊的 100 個曲目頁（v1 產物） ──
