@@ -236,7 +236,7 @@ def build(tracks):
                    + '<p class="muted">（尚未發現使用作品）</p></div></div>')
         (d / 'index.html').write_text(
             head(t['label_name'], 5, False)
-            + f'<main class="wrap">{crumb([("音樂圖書館", abs_url(LIB)), (LABEL_NAME, abs_url(LIB, LABEL_SLUG)), (f"{ALBUM_CODE} - {ALBUM_TITLE}", abs_url(LIB, LABEL_SLUG, ALBUM_SLUG)), (t["label_name"], None)])}'
+            + f'<main class="wrap">{crumb([("音樂圖書館", abs_url(LIB)), (LABEL_NAME, abs_url(LIB, LABEL_SLUG)), (f"{ALBUM_CODE} - {ALBUM_TITLE}", abs_url(LIB, LABEL_SLUG, ALBUM_SLUG)), (t["title"], None)])}'
             + f'<div class="layout">{aside(5)}' + content + '</div></main>' + foot(5, False),
             encoding='utf-8')
 
