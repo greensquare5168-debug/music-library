@@ -88,6 +88,10 @@ function openWin(u){
     var base='/'+rawseg.slice(0,idx).join('/')+(idx?'/':'');   // 抓 tree.json 用原始（已編碼）路徑
     var cur=segs.slice(idx).join('/')+'/';
     var pathIsLib=/圖書館音樂\//.test(cur);
+    var OPENKEY='kmt_open_nodes_v1';
+    var OPEN={};
+    try{ (JSON.parse(localStorage.getItem(OPENKEY)||'[]')).forEach(function(k){OPEN[k]=1;}); }catch(e){}
+    function saveOpen(){ try{ localStorage.setItem(OPENKEY, JSON.stringify(Object.keys(OPEN))); }catch(e){} }
     fetch(base+'tree.json?v=20261104a').then(function(r){return r.json();}).then(function(t){
       var root=null;
       for(var j=0;j<t.length;j++){ if((t[j].h&&t[j].h===segs[idx]+'/')||t[j].n===segs[idx]){ root=t[j]; break; } }
@@ -119,9 +123,12 @@ function openWin(u){
           kids.style.display=show?'':'none';
           arw.textContent=show?'▾':'▸';
           if(show) li.classList.add('open'); else li.classList.remove('open');
+          var _k=node.h||node.n;
+          if(show){ OPEN[_k]=1; } else { delete OPEN[_k]; }
+          saveOpen();
         }
         arw.addEventListener('click',function(e){ e.preventDefault(); e.stopPropagation(); toggle(); });
-        if(hasC && isPath && (depth||0)<1) toggle(true);
+        if(hasC && ((OPEN[node.h||node.n]) || (isPath && (depth||0)<1))) toggle(true);
       }
       var ul0=document.createElement('ul'); ul0.className='tree';
       box.innerHTML=''; box.appendChild(ul0);
