@@ -856,3 +856,10 @@ body[data-show="大頭小狀元"] .unit[data-label^="狀元小常識"]{font-fami
 .site-head{position:relative}
 .navsearch{display:inline-flex;gap:6px;align-items:center;position:absolute;right:20px;top:50%;transform:translateY(-50%)}
 @media(max-width:1500px){.navsearch{position:static;transform:none;margin-left:auto}}
+
+/* 2026-11-04 孝瓏反映「左框跑位」：視窗寬度 861–1459 時，固定側欄(236px)會壓到置中內容
+   → 這段區間把內容往右讓開；側欄收合時恢復置中 */
+@media (min-width:861px) and (max-width:1459px){
+  .wrap{margin-left:250px;margin-right:20px;max-width:960px}
+  body.nav-collapsed .wrap{margin-left:auto;margin-right:auto}
+}
