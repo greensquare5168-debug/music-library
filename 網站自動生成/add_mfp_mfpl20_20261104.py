@@ -156,6 +156,16 @@ def load_tracks():
     return out
 
 
+def srcb(depth, alt='Music For Productions'):
+    up = '../' * depth
+    return ('<span class="srcb" style="position:relative;display:inline-flex;align-items:center;justify-content:center;'
+            'width:43px;height:24px;flex:0 0 43px;margin-left:6px;margin-right:10px">'
+            f'<span class="ytbadge ytimg" title="{esc(alt)}" style="position:static;margin:0;padding:0;background:none;'
+            'border-radius:0;box-shadow:none;min-width:0;display:flex;align-items:center;justify-content:center;line-height:0">'
+            f'<img src="{up}assets/mfp-logo.png" alt="{esc(alt)}" title="{esc(alt)}" '
+            'style="display:block;max-width:40px;max-height:24px;width:auto;height:auto"></span></span>')
+
+
 def mark_x():
     return ('<span class="mark mark-x" title="尚未發現使用作品" style="display:inline-flex;align-items:center;'
             'justify-content:center;width:18px;height:18px;padding:0;line-height:1;font-size:11px">✕</span>')
@@ -174,10 +184,8 @@ def build(tracks):
     d.mkdir(parents=True, exist_ok=True)
     row = (f'<li><a class="row" href="{abs_url(LIB, LABEL_SLUG, ALBUM_SLUG)}">'
            f'<span class="rn">{esc(ALBUM_CODE)} - {esc(ALBUM_TITLE)}</span><span class="muted"></span>'
-           f'{mark_x()}{go()}</a></li>')
-    logo = ('<img src="../../../assets/mfp-logo.png" alt="Music For Productions" '
-            'style="display:block;height:46px;width:auto">')
-    content = (f'<div class="content"><div class="album-card"><h1>{logo}</h1>'
+           f'{mark_x()}{srcb(3)}{go()}</a></li>')
+    content = (f'<div class="content"><div class="album-card"><h1>{esc(LABEL_NAME)}</h1>'
                f'<div class="album-meta"><span class="pill">1 張專輯</span></div>'
                + filter_bar()
                + f'<ul class="albumlist">{row}</ul></div></div>')
@@ -193,7 +201,7 @@ def build(tracks):
     rows = ''.join(
         f'<li><a class="row" href="{esc(t["lib"])}" target="_blank" rel="noopener">'
         f'<span class="rn">{esc(t["label_name"])}</span><span class="muted"></span>'
-        f'{mark_x()}<span class="go" style="display:inline-flex;align-items:center;justify-content:center;height:18px;line-height:1;transform:translateY(0.5px)">↗</span></a></li>'
+        f'{mark_x()}{srcb(4)}{go()}</a></li>'
         for t in tracks)
     content = (f'<div class="content"><div class="album-card"><h1>{esc(ALBUM_CODE)} - {esc(ALBUM_TITLE)}</h1>'
                f'<ul class="albumlist">{rows}</ul></div></div>')
