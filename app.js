@@ -18,10 +18,12 @@ function fitSrc(){
       continue;
     }
     var W=1280;                          // 以桌機寬度渲染，再等比縮到框寬（避免內容被縮太小）
-    if(src.indexOf('euromusicro')>=0 || src.indexOf('apmmusic.com')>=0){
-      // Euro／APM（孝瓏 2026-11-05）：內建窗口＝正常瀏覽視窗的可視範圍
-      // 孝瓏樣張實測＝1536×695 CSS px（1920×1080 螢幕 125% 縮放），比例 2.21:1
+    if(src.indexOf('euromusicro')>=0){
+      // Euro（孝瓏 2026-11-05）：內建窗口＝正常瀏覽視窗的可視範圍 1536×695（2.21:1）
       W=1536; H=695;
+    } else if(src.indexOf('apmmusic.com')>=0){
+      // APM：同樣 1536 寬；APM 頁首多一條搜尋列（約 +30px），H 加高到 725 才與樣張同樣停在第 3 首
+      W=1536; H=725;
     }
     ifr.style.width=W+'px'; ifr.style.height=H+'px';
     var s=fw/W;
