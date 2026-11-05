@@ -901,15 +901,15 @@ html:not(.ktree-ready) .treebox>*{animation:ktreeReveal .01s linear 1.5s forward
 .albumlist.cards .cover .coverph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:700;color:#c7d2e2}
 .albumlist.cards .cbody{padding:10px 12px 11px;display:flex;flex-direction:column;flex:1}
 .albumlist.cards .rn{font-size:13px !important;font-weight:600 !important;line-height:1.42 !important;color:#1f2937 !important;
-  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.84em;flex:0 0 auto !important}
+  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;min-height:4.26em;flex:0 0 auto !important}
 .albumlist.cards .muted{display:none !important}
 .albumlist.cards .cfoot{display:flex;align-items:center;justify-content:space-between;margin-top:10px;min-height:17px}
 .albumlist.cards .srcb{margin:0 !important;width:auto !important;flex:0 0 auto !important;height:16px !important}
 .albumlist.cards .srcb img{max-height:16px !important;max-width:44px !important}
 .albumlist.cards .mark{margin:0 !important}
 .albumlist.cards .go{display:none !important}
-.albumlist.cards .cover.logo{display:flex;align-items:center;justify-content:center;background:#fff;border-bottom:1px solid #eef1f6}
-.albumlist.cards .cover.logo img{max-width:62%;max-height:52%;width:auto;height:auto;object-fit:contain;opacity:.9}
+.albumlist.cards .cover.logo{display:flex;align-items:center;justify-content:center;background:#fff;border-bottom:1px solid #eef1f6;padding:8px}
+.albumlist.cards .cover.logo img{width:100%;height:100%;object-fit:contain;opacity:1}
 .albumlist.cards .coverph.brandph{font-size:30px;letter-spacing:1px;color:#b9c6d8;font-weight:800}
 .albumhero{display:flex;gap:18px;align-items:center;margin:0 0 18px}
 .herocover{position:relative;width:132px;height:132px;flex:0 0 132px;border-radius:0;background:#eef2f8 center/cover no-repeat;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 3px rgba(16,24,40,.10)}
