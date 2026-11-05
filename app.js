@@ -101,7 +101,7 @@ function openWin(u){
     var OPEN={};
     try{ (JSON.parse(localStorage.getItem(OPENKEY)||'[]')).forEach(function(k){OPEN[k]=1;}); }catch(e){}
     function saveOpen(){ try{ localStorage.setItem(OPENKEY, JSON.stringify(Object.keys(OPEN))); }catch(e){} }
-    fetch(base+'tree.json?v=20261105n').then(function(r){return r.json();}).then(function(t){
+    fetch(base+'tree.json?v=20261105q').then(function(r){return r.json();}).then(function(t){
       var root=null;
       for(var j=0;j<t.length;j++){ if((t[j].h&&t[j].h===segs[idx]+'/')||t[j].n===segs[idx]){ root=t[j]; break; } }
       if(!root){ treeReady(); return; }
