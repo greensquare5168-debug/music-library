@@ -18,6 +18,10 @@ function fitSrc(){
       continue;
     }
     var W=1280;                          // 以桌機寬度渲染，再等比縮到框寬（避免內容被縮太小）
+    if(src.indexOf('euromusicro')>=0){
+      // Euro（孝瓏 2026-11-05）：內建窗口要跟「正常瀏覽視窗」一樣高，不要拉到整頁
+      W=1920; H=800;
+    }
     ifr.style.width=W+'px'; ifr.style.height=H+'px';
     var s=fw/W;
     f.style.height=Math.round(H*s)+'px';
