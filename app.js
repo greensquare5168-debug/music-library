@@ -5,7 +5,6 @@ function fitSrc(){
     var f=fr[i], ifr=f.getElementsByTagName('iframe')[0];
     if(!ifr) continue;
     var H=parseFloat(ifr.getAttribute('data-h')||'0');
-    if(!H) continue;
     var fw=f.clientWidth, fh=f.clientHeight;
     if(!fw||!fh) continue;
     var src=(ifr.getAttribute('src')||'');
@@ -23,6 +22,11 @@ function fitSrc(){
       // 孝瓏樣張：書籤列下緣 →「工作列上緣」，1920×869 物理 = CSS 1536×695（2.21:1）
       W=1536; H=695;
     }
+    if(!H && src.indexOf('reliable-source.co.uk')>=0){
+      // RSM（孝瓏 2026-11-06 樣張）：正常瀏覽視窗＝1920×918 可視範圍
+      W=1920; H=918;
+    }
+    if(!H) continue;
     ifr.style.width=W+'px'; ifr.style.height=H+'px';
     var s=fw/W;
     f.style.height=Math.round(H*s)+'px';
