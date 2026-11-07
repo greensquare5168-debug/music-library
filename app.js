@@ -17,7 +17,8 @@ function fitSrc(){
       continue;
     }
     var W=1280;                          // 以桌機寬度渲染，再等比縮到框寬（避免內容被縮太小）
-    if(src.indexOf('euromusicro')>=0 || src.indexOf('apmmusic.com')>=0 || src.indexOf('flippermusic.it')>=0){
+    if(src.indexOf('flippermusic.it')>=0){ W=1536; }
+    if(src.indexOf('euromusicro')>=0 || src.indexOf('apmmusic.com')>=0){
       // Euro／APM（孝瓏 2026-11-05）：內建窗口＝正常瀏覽視窗的可視範圍
       // 孝瓏樣張：書籤列下緣 →「工作列上緣」，1920×869 物理 = CSS 1536×695（2.21:1）
       W=1536; H=695;
