@@ -176,7 +176,7 @@ body[data-show="大頭小狀元"][data-season] .entries+.unit{margin-top:20px}
 .tree li{padding:3px 7px;border-radius:7px;line-height:1.55}
 .tree li:hover{background:var(--card2)}
 .tree li.cur{background:var(--card2);font-weight:700}
-.tree a{color:var(--link);text-decoration:none}
+.tree a,.tree a:visited{color:var(--fg);text-decoration:none}
 @media(max-width:860px){.treebox{width:74%;top:70px;max-height:calc(100vh - 92px)}}
 
 /* 側欄收合鈕（貼在清單右緣） */
@@ -569,7 +569,7 @@ body[data-show="大頭小狀元"][data-season] .entries+.unit{margin-top:20px}
 .tree li{padding:3px 7px;border-radius:7px;line-height:1.55}
 .tree li:hover{background:var(--card2)}
 .tree li.cur{background:var(--card2);font-weight:700}
-.tree a{color:var(--link);text-decoration:none}
+.tree a,.tree a:visited{color:var(--fg);text-decoration:none}
 @media(max-width:860px){.treebox{width:74%;top:70px;max-height:calc(100vh - 92px)}}
 
 /* 側欄收合鈕（貼在清單右緣） */
