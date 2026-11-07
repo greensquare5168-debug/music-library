@@ -921,5 +921,8 @@ html:not(.ktree-ready) .treebox>*{animation:ktreeReveal .01s linear 1.5s forward
 /* 孝瓏 2026-11-07：左欄品牌就地展開（品牌 → 專輯 → 曲目），不用底部另開區塊 */
 .tree ul.tree{margin:2px 0 3px 4px;padding-left:9px;border-left:1px solid var(--line);display:none}
 .tree li.open>ul.tree{display:block}
-.tree .arw{cursor:pointer;display:inline-block;width:12px;color:var(--muted);font-size:10px;margin-right:1px}
+.tree .arw,.tree-h-toggle .arw{position:relative;cursor:pointer;display:inline-block;width:12px;height:12px;font-size:0;line-height:0;color:transparent;vertical-align:middle;margin-right:3px}
+.tree .arw::before,.tree-h-toggle .arw::before{content:"";position:absolute;left:2px;top:3px;width:0;height:0;border-left:5px solid var(--muted);border-top:4px solid transparent;border-bottom:4px solid transparent;transform:rotate(90deg);transition:transform .15s}
+.tree li:not(.open)>.arw::before{transform:rotate(0)}
+.tree-h-toggle.closed .arw::before{transform:rotate(0)}
 .tree li>ul.tree li{font-size:13px}
