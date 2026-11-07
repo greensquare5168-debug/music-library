@@ -918,3 +918,8 @@ html:not(.ktree-ready) .treebox>*{animation:ktreeReveal .01s linear 1.5s forward
 .albumcode{font-size:13px;color:#8a94a6;letter-spacing:.6px;margin-top:7px;font-weight:600}
 .albumlist:not(.cards) .rn{display:flex;flex-direction:column;gap:2px}
 .albumlist:not(.cards) .rnsub{display:block;font-size:12px;font-weight:400;color:#7b8798;letter-spacing:.2px}
+/* 孝瓏 2026-11-07：左欄品牌就地展開（品牌 → 專輯 → 曲目），不用底部另開區塊 */
+.tree ul.tree{margin:2px 0 3px 4px;padding-left:9px;border-left:1px solid var(--line);display:none}
+.tree li.open>ul.tree{display:block}
+.tree .arw{cursor:pointer;display:inline-block;width:12px;color:var(--muted);font-size:10px;margin-right:1px}
+.tree li>ul.tree li{font-size:13px}

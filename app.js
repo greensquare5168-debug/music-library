@@ -164,6 +164,15 @@ function openWin(u){
   }else{
     treeReady();
   }
+  // 2026-11-07 孝瓏：左欄品牌／專輯就地展開（點箭頭收合）
+  Array.prototype.forEach.call(box.querySelectorAll('.tree li > .arw'), function(arw){
+    arw.addEventListener('click', function(e){
+      e.preventDefault(); e.stopPropagation();
+      var li=arw.parentNode;
+      var open=li.classList.toggle('open');
+      arw.textContent = open ? '\u25be' : '\u25b8';
+    });
+  });
   Array.prototype.forEach.call(box.querySelectorAll('.tree-h'), function(h){
     var ul=h.nextElementSibling;
     if(!ul||!ul.classList||ul.className.indexOf('tree')<0) return;
