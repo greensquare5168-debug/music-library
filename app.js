@@ -1,37 +1,22 @@
 
 function fitSrc(){
+  // 孝瓏 2026-11-07：所有來源網站內嵌視窗一律「固定高度」
+  // ＝正常瀏覽器去掉網址列與下方工具列後的可視範圍（樣張 1920×869 物理 = CSS 1536×695，2.21:1）
+  var H_FIX=695;
   var fr=document.querySelectorAll('.srcframe');
   for(var i=0;i<fr.length;i++){
     var f=fr[i], ifr=f.getElementsByTagName('iframe')[0];
     if(!ifr) continue;
-    var H=parseFloat(ifr.getAttribute('data-h')||'0');
-    var fw=f.clientWidth, fh=f.clientHeight;
-    if(!fw||!fh) continue;
+    var fw=f.clientWidth;
+    if(!fw) continue;
     var src=(ifr.getAttribute('src')||'');
-    if(src.indexOf('groove-musicsearch')>=0){
-      // Groovers：滿版對齊左右（孝瓏 2026-10-18）
-      var W=1280, sc=fw/W;
-      ifr.style.width=W+'px'; ifr.style.height=H+'px';
-      ifr.style.transform='scale('+sc+')'; ifr.style.transformOrigin='top left';
-      f.style.height=Math.round(H*sc)+'px';
-      continue;
-    }
-    var W=1280;                          // 以桌機寬度渲染，再等比縮到框寬（避免內容被縮太小）
-    if(src.indexOf('flippermusic.it')>=0){ W=1536; }
-    if(src.indexOf('euromusicro')>=0 || src.indexOf('apmmusic.com')>=0){
-      // Euro／APM（孝瓏 2026-11-05）：內建窗口＝正常瀏覽視窗的可視範圍
-      // 孝瓏樣張：書籤列下緣 →「工作列上緣」，1920×869 物理 = CSS 1536×695（2.21:1）
-      W=1536; H=695;
-    }
-    if(!H && src.indexOf('reliable-source.co.uk')>=0){
-      // RSM（孝瓏 2026-11-06 樣張）：正常瀏覽視窗＝1920×918 可視範圍
-      W=1920; H=918;
-    }
-    if(!H) continue;
-    ifr.style.width=W+'px'; ifr.style.height=H+'px';
+    var W=1536;
+    if(src.indexOf('groove-musicsearch')>=0) W=1280;      // Groovers 滿版對齊（孝瓏 2026-10-18）
+    if(src.indexOf('reliable-source.co.uk')>=0) W=1920;   // RSM 樣張 1920×918
+    ifr.style.width=W+'px'; ifr.style.height=H_FIX+'px';
     var s=fw/W;
-    f.style.height=Math.round(H*s)+'px';
     ifr.style.transform='scale('+s+')'; ifr.style.transformOrigin='top left';
+    f.style.height=Math.round(H_FIX*s)+'px';
   }
 }
 document.addEventListener('DOMContentLoaded',fitSrc);
