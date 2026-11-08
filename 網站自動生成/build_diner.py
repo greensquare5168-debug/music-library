@@ -166,7 +166,7 @@ def build_label_page(albums):
         f'<li><a class="row" href="{abs_url(LIB, LABEL_SLUG, a["slug"])}" title="{esc(a["title"])}">'
         f'<span class="cover" style="background-image:url(\'{SITE_PREFIX}assets/covers/{LABEL_SLUG}__{a["code"]}.jpg\')">'
         f'<span class="codechip">{esc(a["code"].upper())}</span></span>'
-        f'<span class="cbody"><span class="rn">{esc(a["title"])}</span><span class="cfoot">'
+        f'<span class="cbody"><span class="rn">{esc(a["title"])}</span><span class="cfoot"><span></span>'
         f'{mark(any(t["pages"] for t in a["tracks"]))}</span></span></a></li>'
         for a in albums)
     content = (f'<div class="content"><div class="album-card"><h1>{esc(LABEL_NAME)}</h1>'
