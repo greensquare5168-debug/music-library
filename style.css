@@ -928,3 +928,7 @@ html:not(.ktree-ready) .treebox>*{animation:ktreeReveal .01s linear 1.5s forward
 .tree li>ul.tree li{font-size:13px}
 /* 孝瓏 2026-11-07：來源預覽圖（截圖）固定高度＝正常瀏覽視窗可視範圍（1536×695） */
 .srcimg img{height:auto !important;aspect-ratio:3/2;object-fit:contain;object-position:center top;background:#fff}
+
+/* 來源截圖框：與 iframe 版（.srcframe）同高（clamp 420~700），圖完整顯示不裁切（2026-11-08） */
+.srcimg{display:block;height:clamp(420px,64vh,700px);background:#fff;border:1px solid #e3ecf3;border-radius:10px;overflow:hidden}
+.srcimg img{width:100% !important;max-width:none !important;height:100% !important;aspect-ratio:auto !important;object-fit:contain !important;object-position:center top;border:none !important;border-radius:0 !important;margin:0 !important}
