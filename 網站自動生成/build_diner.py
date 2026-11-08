@@ -30,7 +30,7 @@ def esc(s):
 
 
 def slugify(s):
-    s = (s or '').lower()
+    s = (s or '').lower().replace("'", '').replace('’', '')
     s = re.sub(r'[^a-z0-9]+', '-', s)
     return re.sub(r'-+', '-', s).strip('-')
 
@@ -149,8 +149,8 @@ def load_albums():
                     'title': t['title'],
                     'composer': composer,
                     'label': label,
-                    'slug': slugify(f'{code}-{t.get("no")} {t["title"]}'),
-                    'desc': t.get('desc', ''),
+                    'slug': slugify(t['title']),
+                    'desc': '',
                     'lib': t.get('lib', ''),
                     'pages': t.get('pages', []),
                 })
@@ -168,8 +168,7 @@ def build_label_page(albums):
         f'{mark(any(t["pages"] for t in a["tracks"]))}{go()}</a></li>'
         for a in albums)
     content = (f'<div class="content"><div class="album-card"><h1>{esc(LABEL_NAME)}</h1>'
-               f'<div class="album-meta"><span class="pill">{len(albums)} 張專輯</span>'
-               f'<span class="pill">{sum(len(a["tracks"]) for a in albums)} 首</span></div>'
+               f'<div class="album-meta"><span class="pill">{len(albums)} 張專輯</span></div>'
                + filter_bar() + f'<ul class="albumlist">{rows}</ul></div></div>')
     d = ROOT / LIB / LABEL_SLUG
     d.mkdir(parents=True, exist_ok=True)
@@ -201,8 +200,11 @@ def build_album_pages(albums):
 
         for t in a['tracks']:
             if t['lib']:
-                src = (f'<ul class="entries"><li><a href="{esc(t["lib"])}" target="_blank" rel="noopener">'
-                       f'官網曲目頁（thedinermusic.com）</a></li></ul>')
+                src = ('<ul class="entries"><li>'
+                       '<div class="srccap">來源網站：thedinermusic.com '
+                       f'<a class="winlink" href="{esc(t["lib"])}" target="_blank" rel="noopener">前往網站 ↗</a></div>'
+                       f'<div class="srcframe"><iframe data-h="695" src="{esc(t["lib"])}" title="The Diner" loading="lazy" referrerpolicy="no-referrer"></iframe></div>'
+                       '</li></ul>')
             else:
                 src = ''
             if t['pages']:
@@ -211,8 +213,6 @@ def build_album_pages(albums):
             else:
                 usage = '<p class="muted">（尚未發現使用作品）</p>'
             meta = ''
-            if t['desc']:
-                meta = f'<p class="muted">{esc(t["desc"])}</p>'
             content = (f'<div class="content"><div class="album-card"><h1>{esc(t["label"])}</h1>'
                        + meta + src + usage + '</div></div>')
             d2 = ROOT / LIB / LABEL_SLUG / a['slug'] / t['slug']

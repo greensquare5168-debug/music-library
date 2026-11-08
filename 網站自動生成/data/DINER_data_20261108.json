@@ -8,192 +8,268 @@
  "albums": [
   {
    "code": "din064",
-   "title": "D-KD01 Kids",
+   "title": "Kids",
    "lib_url": "https://thedinermusic.com/albums/din064",
    "released": "2013-01-10",
    "cover_url": "https://storage.googleapis.com/cadenzabox-prod-mercury/thediner%2Freleases%2Fthe-diner%2Fdin064%2Fimages%2Fdin064.2049._1778789306524.jpg",
    "tracks": [
     {
      "no": 1,
-     "title": "D-KD0001 Ducks on a Train (30)",
-     "composer": "Eric Kaye / Shenandi",
-     "desc": "Kids. Fun, Funny, playful, quirky, whimsical, hilarious, silly, young, youthful, upbeat, with duck quack and train whistle. Sound effects FX, tambourine, loops, guitar, bass.",
+     "title": "Ducks on a Train",
+     "composer": "Eric Kaye & Shenandi",
      "genre": "Kids",
      "keywords": "",
      "length": 33,
      "lib": "https://thedinermusic.com/tracks?tracks=din064-1",
      "isrc": "QMMSD1203353",
-     "pages": []
+     "pages": [
+      {
+       "name": "巧連智",
+       "url": "/music-library/%E4%BD%BF%E7%94%A8%E5%85%AC%E5%8F%B8/%E5%B7%A7%E9%80%A3%E6%99%BA/"
+      }
+     ],
+     "title_raw": "D-KD0001 Ducks on a Train (30)"
     },
     {
      "no": 3,
-     "title": "D-KD0002 Wacky Escapades",
-     "composer": "Shenandi / Josh Peck",
-     "desc": "Kids. Quirky, playful, silly, goofy, whimsical, fun, funny, sneaky, cartoony, wacky, young, youthful, childlike. Horns, vibes, vibraphone, percussion, vibraslap, flexatone, bass, trombone.",
+     "title": "Wacky Escapades",
+     "composer": "Josh Peck & Shenandi",
      "genre": "Kids",
      "keywords": "",
      "length": 32,
      "lib": "https://thedinermusic.com/tracks?tracks=din064-3",
      "isrc": "QMMSD1203354",
-     "pages": []
+     "pages": [
+      {
+       "name": "巧連智",
+       "url": "/music-library/%E4%BD%BF%E7%94%A8%E5%85%AC%E5%8F%B8/%E5%B7%A7%E9%80%A3%E6%99%BA/"
+      }
+     ],
+     "title_raw": "D-KD0002 Wacky Escapades"
     },
     {
      "no": 4,
-     "title": "D-KD0003 Music Box Slumbertime",
-     "composer": "Shenandi / Scott Mann",
-     "desc": "Kids. Quirky, whimsical, peaceful lullaby, sleepy, soothing, intimate, young, youthful, baby babies, childlike. Glockenspiel, strings, pizzicato strings, music box.",
+     "title": "Music Box Slumbertime",
+     "composer": "Scott Mann & Shenandi",
      "genre": "Kids",
      "keywords": "",
      "length": 32,
      "lib": "https://thedinermusic.com/tracks?tracks=din064-4",
      "isrc": "QMMSD1203355",
-     "pages": []
+     "pages": [
+      {
+       "name": "巧連智",
+       "url": "/music-library/%E4%BD%BF%E7%94%A8%E5%85%AC%E5%8F%B8/%E5%B7%A7%E9%80%A3%E6%99%BA/"
+      }
+     ],
+     "title_raw": "D-KD0003 Music Box Slumbertime"
     },
     {
      "no": 5,
-     "title": "D-KD0004 Sixth Grade Rock (30)",
+     "title": "Sixth Grade Rock",
      "composer": "Demian Sims",
-     "desc": "Kids. Quirky, playful, silly, goofy, upbeat, fun, funny, wacky, young, youthful, tween teen. Distorted electric guitar, percussion, ear candy, electronic beats.",
      "genre": "Kids",
      "keywords": "",
      "length": 31,
      "lib": "https://thedinermusic.com/tracks?tracks=din064-5",
      "isrc": "QMMSD1203356",
-     "pages": []
+     "pages": [
+      {
+       "name": "巧連智",
+       "url": "/music-library/%E4%BD%BF%E7%94%A8%E5%85%AC%E5%8F%B8/%E5%B7%A7%E9%80%A3%E6%99%BA/"
+      }
+     ],
+     "title_raw": "D-KD0004 Sixth Grade Rock (30)"
     },
     {
      "no": 7,
-     "title": "D-KD0005 Go to Sleep (60)",
+     "title": "Go to Sleep",
      "composer": "Lisa Mazzotte",
-     "desc": "Kids. Quirky, whimsical, peaceful lullaby, sleepy, soothing, calming, intimate, young, youthful, baby babies, childlike. Sounds similar to a music box melody. Pizzicato strings, celeste, harp.",
      "genre": "Kids",
      "keywords": "",
      "length": 61,
      "lib": "https://thedinermusic.com/tracks?tracks=din064-7",
      "isrc": "QMMSD1203357",
-     "pages": []
+     "pages": [
+      {
+       "name": "巧連智",
+       "url": "/music-library/%E4%BD%BF%E7%94%A8%E5%85%AC%E5%8F%B8/%E5%B7%A7%E9%80%A3%E6%99%BA/"
+      }
+     ],
+     "title_raw": "D-KD0005 Go to Sleep (60)"
     },
     {
      "no": 10,
-     "title": "D-KD0006 Making Sand Castles",
+     "title": "Making Sand Castles",
      "composer": "Jared Hunter",
-     "desc": "Kids. Quirky, playful, silly, whimsical, fun, funny, upbeat, happy, wacky, feel good, light, friendly, young, youthful, childlike. Clean electric guitar, acoustic guitar, drums, wah wah guitar, marimba, xylophone, shaker, percussion",
      "genre": "Kids",
      "keywords": "",
      "length": 32,
      "lib": "https://thedinermusic.com/tracks?tracks=din064-10",
      "isrc": "QMMSD1203358",
-     "pages": []
+     "pages": [
+      {
+       "name": "巧連智",
+       "url": "/music-library/%E4%BD%BF%E7%94%A8%E5%85%AC%E5%8F%B8/%E5%B7%A7%E9%80%A3%E6%99%BA/"
+      }
+     ],
+     "title_raw": "D-KD0006 Making Sand Castles"
     },
     {
      "no": 11,
-     "title": "D-KD0007 Cartoony Vocal Dohs (30)",
-     "composer": "Eric Kaye / Stephen Cullo",
-     "desc": "Kids. Quirky, playful, silly, goofy, fun, funny, cartoony, wacky, young, youthful, childlike. Percussion, low male vocal samples, drums, marimba, xylophone, bass, drums.",
+     "title": "Cartoony Vocal Dohs",
+     "composer": "Eric Kaye & Stephen Cullo",
      "genre": "Kids",
      "keywords": "",
      "length": 36,
      "lib": "https://thedinermusic.com/tracks?tracks=din064-11",
      "isrc": "QMMSD1203359",
-     "pages": []
+     "pages": [
+      {
+       "name": "巧連智",
+       "url": "/music-library/%E4%BD%BF%E7%94%A8%E5%85%AC%E5%8F%B8/%E5%B7%A7%E9%80%A3%E6%99%BA/"
+      }
+     ],
+     "title_raw": "D-KD0007 Cartoony Vocal Dohs (30)"
     },
     {
      "no": 13,
-     "title": "D-KD0008 Oompah Parade (30)",
+     "title": "Oompah Parade",
      "composer": "Eric Kaye",
-     "desc": "Kids. Quirky, playful, silly, goofy, whimsical, fun, funny, hilarious, cartoony, wacky, young, youthful, childlike. Piano, harmonica, pizzicato strings, banjo, bass, electronic drums, beats.",
      "genre": "Kids",
      "keywords": "",
      "length": 31,
      "lib": "https://thedinermusic.com/tracks?tracks=din064-13",
      "isrc": "QMMSD1203360",
-     "pages": []
+     "pages": [
+      {
+       "name": "巧連智",
+       "url": "/music-library/%E4%BD%BF%E7%94%A8%E5%85%AC%E5%8F%B8/%E5%B7%A7%E9%80%A3%E6%99%BA/"
+      }
+     ],
+     "title_raw": "D-KD0008 Oompah Parade (30)"
     },
     {
      "no": 15,
-     "title": "D-KD0009 Watch the Snow Fall (60)",
+     "title": "Watch the Snow Fall",
      "composer": "Lisa Mazzotte",
-     "desc": "Kids. Whimsical, peaceful, hopeful, beautiful, warm, soft, light, airy, sleepy, soothing, intimate, young, youthful, baby babies, childlike. Piano, bells, bed, pad.",
      "genre": "Kids",
      "keywords": "",
      "length": 59,
      "lib": "https://thedinermusic.com/tracks?tracks=din064-15",
      "isrc": "QMMSD1203361",
-     "pages": []
+     "pages": [
+      {
+       "name": "巧連智",
+       "url": "/music-library/%E4%BD%BF%E7%94%A8%E5%85%AC%E5%8F%B8/%E5%B7%A7%E9%80%A3%E6%99%BA/"
+      }
+     ],
+     "title_raw": "D-KD0009 Watch the Snow Fall (60)"
     },
     {
      "no": 18,
-     "title": "D-KD0010 Doesn't That Feel Better",
-     "composer": "Shenandi / Zack Hemsey",
-     "desc": "Kids. Quirky, playful, airy, whimsical, warm, soft, gentle, bright, light, soothing, intimate, feminine, young, youthful, childlike. Piano, castanets, pizzicato strings, shaker, bass, woodblocks.",
+     "title": "Doesn't That Feel Better",
+     "composer": "Shenandi & Zack Hemsey",
      "genre": "Kids",
      "keywords": "",
      "length": 32,
      "lib": "https://thedinermusic.com/tracks?tracks=din064-18",
      "isrc": "QMMSD1203362",
-     "pages": []
+     "pages": [
+      {
+       "name": "巧連智",
+       "url": "/music-library/%E4%BD%BF%E7%94%A8%E5%85%AC%E5%8F%B8/%E5%B7%A7%E9%80%A3%E6%99%BA/"
+      }
+     ],
+     "title_raw": "D-KD0010 Doesn't That Feel Better"
     },
     {
      "no": 19,
-     "title": "D-KD0011 When the Elephant Saw the Mouse",
+     "title": "When the Elephant Saw the Mouse",
      "composer": "Jared Hunter",
-     "desc": "Kids. Quirky, playful, silly, goofy, whimsical, fun, funny, cartoony, wacky, young, youthful, childlike, happy. Starts slow, tempo and key gradually increase. Brass, tuba, marimba, xylophone, percussion, slide whistle, crash cymbal.",
      "genre": "Kids",
      "keywords": "",
      "length": 31,
      "lib": "https://thedinermusic.com/tracks?tracks=din064-19",
      "isrc": "QMMSD1203363",
-     "pages": []
+     "pages": [
+      {
+       "name": "巧連智",
+       "url": "/music-library/%E4%BD%BF%E7%94%A8%E5%85%AC%E5%8F%B8/%E5%B7%A7%E9%80%A3%E6%99%BA/"
+      }
+     ],
+     "title_raw": "D-KD0011 When the Elephant Saw the Mouse"
     },
     {
      "no": 20,
-     "title": "D-KD0012 Antics Abound",
-     "composer": "Shenandi / Nukorn Visutyothapibal",
-     "desc": "Kids. Quirky, playful, silly, goofy, whimsical, fun, funny, light, bright, sneaky, cartoony, young, youthful, childlike. Piano, percussion, sound effects FX, shaker, pizzicato strings, bass, bell tree, drums, muted trumpet, bongos.",
+     "title": "Antics Abound",
+     "composer": "Nukorn Visutyothapibal & Shenandi",
      "genre": "Kids",
      "keywords": "",
      "length": 31,
      "lib": "https://thedinermusic.com/tracks?tracks=din064-20",
      "isrc": "QMMSD1203364",
-     "pages": []
+     "pages": [
+      {
+       "name": "巧連智",
+       "url": "/music-library/%E4%BD%BF%E7%94%A8%E5%85%AC%E5%8F%B8/%E5%B7%A7%E9%80%A3%E6%99%BA/"
+      }
+     ],
+     "title_raw": "D-KD0012 Antics Abound"
     },
     {
      "no": 21,
-     "title": "D-KD0013 To Be Young Again (30)",
-     "composer": "Shenandi / Demian Sims",
-     "desc": "Kids. Quirky, playful, beautiful, building, whimsical, fun, light, uplifting, warm, young, youthful, childlike, green, medium tempo, major. Percussion, marimba, xylophone, shaker, triangle, drums, reverse, pizzicato strings, fretless bass, guiro.",
+     "title": "To Be Young Again",
+     "composer": "Demian Sims & Shenandi",
      "genre": "Kids",
      "keywords": "",
      "length": 30,
      "lib": "https://thedinermusic.com/tracks?tracks=din064-21",
      "isrc": "QMMSD1203365",
-     "pages": []
+     "pages": [
+      {
+       "name": "巧連智",
+       "url": "/music-library/%E4%BD%BF%E7%94%A8%E5%85%AC%E5%8F%B8/%E5%B7%A7%E9%80%A3%E6%99%BA/"
+      }
+     ],
+     "title_raw": "D-KD0013 To Be Young Again (30)"
     },
     {
      "no": 25,
-     "title": "D-KD0014 Playing in the Sun (30)",
-     "composer": "Eric Kaye / Shenandi",
-     "desc": "Kids. Quirky, playful, percussive, whimsical, fun, funny, warm, soothing, intimate, young, youthful, childlike. Marimba, xylophone, shaker, percussion.",
+     "title": "Playing in the Sun",
+     "composer": "Eric Kaye & Shenandi",
      "genre": "Kids",
      "keywords": "",
      "length": 32,
      "lib": "https://thedinermusic.com/tracks?tracks=din064-25",
      "isrc": "QMMSD1203368",
-     "pages": []
+     "pages": [
+      {
+       "name": "巧連智",
+       "url": "/music-library/%E4%BD%BF%E7%94%A8%E5%85%AC%E5%8F%B8/%E5%B7%A7%E9%80%A3%E6%99%BA/"
+      }
+     ],
+     "title_raw": "D-KD0014 Playing in the Sun (30)"
     },
     {
      "no": 27,
-     "title": "D-KD0015 March of the Puffins",
+     "title": "March of the Puffins",
      "composer": "Vinnie Zummo",
-     "desc": "Kids. Quirky reggae, sunny, playful, silly, goofy, whimsical, fun, funny, cartoony, wacky, young, youthful, childlike. Upbeat lift at :16. Percussion, sound effects FX, drums, bass, piano, shaker, electric guitar",
      "genre": "Kids",
      "keywords": "",
      "length": 31,
      "lib": "https://thedinermusic.com/tracks?tracks=din064-27",
      "isrc": "QMMSD1203369",
-     "pages": []
+     "pages": [
+      {
+       "name": "巧連智",
+       "url": "/music-library/%E4%BD%BF%E7%94%A8%E5%85%AC%E5%8F%B8/%E5%B7%A7%E9%80%A3%E6%99%BA/"
+      }
+     ],
+     "title_raw": "D-KD0015 March of the Puffins"
     }
-   ]
+   ],
+   "title_raw": "D-KD01 Kids"
   }
  ]
 }
