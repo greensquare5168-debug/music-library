@@ -932,3 +932,7 @@ html:not(.ktree-ready) .treebox>*{animation:ktreeReveal .01s linear 1.5s forward
 /* 來源截圖框：與 iframe 版（.srcframe）同高（clamp 420~700），圖完整顯示不裁切（2026-11-08） */
 .srcimg{display:block;height:clamp(420px,64vh,700px);background:#fff;border:1px solid #e3ecf3;border-radius:10px;overflow:hidden}
 .srcimg img{width:100% !important;max-width:none !important;height:100% !important;aspect-ratio:auto !important;object-fit:contain !important;object-position:center top;border:none !important;border-radius:0 !important;margin:0 !important}
+
+/* 來源截圖框：改用與截圖同比例（11:7），全站高度一致且不留上下白（2026-11-08b） */
+.srcimg{display:block;height:auto !important;aspect-ratio:11/7;background:#fff;border:1px solid #e3ecf3;border-radius:10px;overflow:hidden}
+.srcimg img{width:100% !important;max-width:none !important;height:100% !important;aspect-ratio:auto !important;object-fit:contain !important;object-position:center bottom;border:none !important;border-radius:0 !important;margin:0 !important}
