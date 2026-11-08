@@ -190,7 +190,10 @@ def build_album_pages(albums):
             + '</span><span class="muted"></span>'
             f'{mark(t["pages"])}{go()}</a></li>'
             for t in a['tracks'])
-        content = (f'<div class="content"><div class="album-card"><h1>{esc(a["label"])}</h1>'
+        content = (f'<div class="content"><div class="album-card">'
+                   f'<div class="albumhero"><div class="herocover" style="background-image:url(\'{SITE_PREFIX}assets/covers/{LABEL_SLUG}__{a["code"]}.jpg\')"></div>'
+                   f'<div class="heroinfo"><h1>{esc(a["title"])}</h1>'
+                   f'<div class="albumcode">{esc(a["code"].upper())}</div></div></div>'
                    f'<ul class="albumlist">{rows}</ul></div></div>')
         d = ROOT / LIB / LABEL_SLUG / a['slug']
         d.mkdir(parents=True, exist_ok=True)
