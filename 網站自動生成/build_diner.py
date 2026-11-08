@@ -129,6 +129,14 @@ def mark(pages):
             'justify-content:center;width:18px;height:18px;padding:0;line-height:1;font-size:11px">✕</span>')
 
 
+BADGE = ('<span class="srcb" style="position:relative;display:inline-flex;align-items:center;justify-content:center;'
+         'width:43px;height:24px;flex:0 0 43px;margin-left:6px;margin-right:10px">'
+         '<span class="ytbadge ytimg" title="The Diner" style="position:static;margin:0;padding:0;background:none;'
+         'border-radius:0;box-shadow:none;min-width:0;display:flex;align-items:center;justify-content:center;line-height:0">'
+         f'<img src="{SITE_PREFIX}assets/brands/the-diner.png" alt="The Diner" title="The Diner" '
+         'style="display:block;max-width:40px;max-height:24px;width:auto;height:auto"></span></span>')
+
+
 def go():
     return ('<span class="go" style="display:inline-flex;align-items:center;justify-content:center;height:18px;'
             'line-height:1;transform:translateY(0.5px)">›</span>')
@@ -188,7 +196,7 @@ def build_album_pages(albums):
             f'<span class="rn">{esc(t["title"])}'
             + (f'<span class="rnsub">{esc(t["composer"])}</span>' if t['composer'] else '')
             + '</span><span class="muted"></span>'
-            f'{mark(t["pages"])}{go()}</a></li>'
+            f'{mark(t["pages"])}{BADGE}{go()}</a></li>'
             for t in a['tracks'])
         content = (f'<div class="content"><div class="album-card">'
                    f'<div class="albumhero"><div class="herocover" style="background-image:url(\'{SITE_PREFIX}assets/covers/{LABEL_SLUG}__{a["code"]}.jpg\')"></div>'
@@ -206,7 +214,7 @@ def build_album_pages(albums):
         for t in a['tracks']:
             if t['lib']:
                 src = ('<ul class="entries"><li>'
-                       '<div class="srccap">來源網站：thedinermusic.com '
+                       '<div class="srccap">' + BADGE + '來源網站：thedinermusic.com '
                        f'<a class="winlink" href="{esc(t["lib"])}" target="_blank" rel="noopener">前往網站 ↗</a></div>'
                        f'<div class="srcframe"><iframe data-h="695" src="{esc(t["lib"])}" title="The Diner" loading="lazy" referrerpolicy="no-referrer"></iframe></div>'
                        '</li></ul>')
