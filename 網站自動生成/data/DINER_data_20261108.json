@@ -15,138 +15,128 @@
    "tracks": [
     {
      "no": 1,
+     "kd": "D-KD0001",
      "title": "Ducks on a Train",
+     "title_raw": "Ducks on a Train",
      "composer": "Eric Kaye & Shenandi",
+     "lib": "https://thedinermusic.com/tracks?tracks=din064-1",
      "genre": "Kids",
      "keywords": "",
-     "length": 33,
-     "lib": "https://thedinermusic.com/tracks?tracks=din064-1",
-     "isrc": "QMMSD1203353",
-     "pages": [],
-     "title_raw": "D-KD0001 Ducks on a Train (30)"
+     "pages": []
     },
     {
      "no": 3,
+     "kd": "D-KD0002",
      "title": "Wacky Escapades",
+     "title_raw": "Wacky Escapades",
      "composer": "Josh Peck & Shenandi",
+     "lib": "https://thedinermusic.com/tracks?tracks=din064-3",
      "genre": "Kids",
      "keywords": "",
-     "length": 32,
-     "lib": "https://thedinermusic.com/tracks?tracks=din064-3",
-     "isrc": "QMMSD1203354",
      "pages": [
       {
        "name": "巧連智低年級版 2013年04月號 知識閱讀本CD 會爬伸的攀緣植物",
        "url": "/music-library/%E7%BD%90%E9%A0%AD%E9%9F%B3%E6%A8%82%E7%A0%94%E7%A9%B6%E6%89%80/%E5%B7%A7%E9%80%A3%E6%99%BA/%E4%BD%8E%E5%B9%B4%E7%B4%9A%E7%89%88/%E5%B7%A7%E9%80%A3%E6%99%BA%E4%BD%8E%E5%B9%B4%E7%B4%9A%E7%89%88cd/%E5%B7%A7%E9%80%A3%E6%99%BA%E4%BD%8E%E5%B9%B4%E7%B4%9A%E7%89%882013%E5%B9%B404%E6%9C%88%E8%99%9Fcd-%E6%9C%83%E7%88%AC%E4%BC%B8%E7%9A%84%E6%94%80%E7%B7%A3%E6%A4%8D%E7%89%A9/"
       }
-     ],
-     "title_raw": "D-KD0002 Wacky Escapades"
+     ]
     },
     {
      "no": 4,
+     "kd": "D-KD0003",
      "title": "Music Box Slumbertime",
+     "title_raw": "Music Box Slumbertime",
      "composer": "Scott Mann & Shenandi",
+     "lib": "https://thedinermusic.com/tracks?tracks=din064-4",
      "genre": "Kids",
      "keywords": "",
-     "length": 32,
-     "lib": "https://thedinermusic.com/tracks?tracks=din064-4",
-     "isrc": "QMMSD1203355",
-     "pages": [],
-     "title_raw": "D-KD0003 Music Box Slumbertime"
+     "pages": []
     },
     {
      "no": 5,
+     "kd": "D-KD0004",
      "title": "Sixth Grade Rock",
+     "title_raw": "Sixth Grade Rock",
      "composer": "Demian Sims",
+     "lib": "https://thedinermusic.com/tracks?tracks=din064-5",
      "genre": "Kids",
      "keywords": "",
-     "length": 31,
-     "lib": "https://thedinermusic.com/tracks?tracks=din064-5",
-     "isrc": "QMMSD1203356",
-     "pages": [],
-     "title_raw": "D-KD0004 Sixth Grade Rock (30)"
+     "pages": []
     },
     {
      "no": 7,
+     "kd": "D-KD0005",
      "title": "Go to Sleep",
+     "title_raw": "Go to Sleep",
      "composer": "Lisa Mazzotte",
+     "lib": "https://thedinermusic.com/tracks?tracks=din064-7",
      "genre": "Kids",
      "keywords": "",
-     "length": 61,
-     "lib": "https://thedinermusic.com/tracks?tracks=din064-7",
-     "isrc": "QMMSD1203357",
-     "pages": [],
-     "title_raw": "D-KD0005 Go to Sleep (60)"
+     "pages": []
     },
     {
      "no": 10,
+     "kd": "D-KD0006",
      "title": "Making Sand Castles",
+     "title_raw": "Making Sand Castles",
      "composer": "Jared Hunter",
+     "lib": "https://thedinermusic.com/tracks?tracks=din064-10",
      "genre": "Kids",
      "keywords": "",
-     "length": 32,
-     "lib": "https://thedinermusic.com/tracks?tracks=din064-10",
-     "isrc": "QMMSD1203358",
-     "pages": [],
-     "title_raw": "D-KD0006 Making Sand Castles"
+     "pages": []
     },
     {
      "no": 11,
+     "kd": "D-KD0007",
      "title": "Cartoony Vocal Dohs",
+     "title_raw": "Cartoony Vocal Dohs",
      "composer": "Eric Kaye & Stephen Cullo",
+     "lib": "https://thedinermusic.com/tracks?tracks=din064-11",
      "genre": "Kids",
      "keywords": "",
-     "length": 36,
-     "lib": "https://thedinermusic.com/tracks?tracks=din064-11",
-     "isrc": "QMMSD1203359",
-     "pages": [],
-     "title_raw": "D-KD0007 Cartoony Vocal Dohs (30)"
+     "pages": []
     },
     {
      "no": 13,
+     "kd": "D-KD0008",
      "title": "Oompah Parade",
+     "title_raw": "Oompah Parade",
      "composer": "Eric Kaye",
+     "lib": "https://thedinermusic.com/tracks?tracks=din064-13",
      "genre": "Kids",
      "keywords": "",
-     "length": 31,
-     "lib": "https://thedinermusic.com/tracks?tracks=din064-13",
-     "isrc": "QMMSD1203360",
-     "pages": [],
-     "title_raw": "D-KD0008 Oompah Parade (30)"
+     "pages": []
     },
     {
      "no": 15,
+     "kd": "D-KD0009",
      "title": "Watch the Snow Fall",
+     "title_raw": "Watch the Snow Fall",
      "composer": "Lisa Mazzotte",
+     "lib": "https://thedinermusic.com/tracks?tracks=din064-15",
      "genre": "Kids",
      "keywords": "",
-     "length": 59,
-     "lib": "https://thedinermusic.com/tracks?tracks=din064-15",
-     "isrc": "QMMSD1203361",
-     "pages": [],
-     "title_raw": "D-KD0009 Watch the Snow Fall (60)"
+     "pages": []
     },
     {
      "no": 18,
+     "kd": "D-KD0010",
      "title": "Doesn't That Feel Better",
+     "title_raw": "Doesn't That Feel Better",
      "composer": "Shenandi & Zack Hemsey",
+     "lib": "https://thedinermusic.com/tracks?tracks=din064-18",
      "genre": "Kids",
      "keywords": "",
-     "length": 32,
-     "lib": "https://thedinermusic.com/tracks?tracks=din064-18",
-     "isrc": "QMMSD1203362",
-     "pages": [],
-     "title_raw": "D-KD0010 Doesn't That Feel Better"
+     "pages": []
     },
     {
      "no": 19,
+     "kd": "D-KD0011",
      "title": "When the Elephant Saw the Mouse",
+     "title_raw": "When the Elephant Saw the Mouse",
      "composer": "Jared Hunter",
+     "lib": "https://thedinermusic.com/tracks?tracks=din064-19",
      "genre": "Kids",
      "keywords": "",
-     "length": 31,
-     "lib": "https://thedinermusic.com/tracks?tracks=din064-19",
-     "isrc": "QMMSD1203363",
      "pages": [
       {
        "name": "巧連智低年級版 2013年04月號 知識閱讀本CD 會爬伸的攀緣植物",
@@ -156,61 +146,589 @@
        "name": "巧連智低年級版 2013年05月號 知識閱讀本CD 出海去賞鯨豚",
        "url": "/music-library/%E7%BD%90%E9%A0%AD%E9%9F%B3%E6%A8%82%E7%A0%94%E7%A9%B6%E6%89%80/%E5%B7%A7%E9%80%A3%E6%99%BA/%E4%BD%8E%E5%B9%B4%E7%B4%9A%E7%89%88/%E5%B7%A7%E9%80%A3%E6%99%BA%E4%BD%8E%E5%B9%B4%E7%B4%9A%E7%89%88cd/%E5%B7%A7%E9%80%A3%E6%99%BA%E4%BD%8E%E5%B9%B4%E7%B4%9A%E7%89%882013%E5%B9%B405%E6%9C%88%E8%99%9Fcd-%E5%87%BA%E6%B5%B7%E5%8E%BB%E8%B3%9E%E9%AF%A8%E8%B1%9A/"
       }
-     ],
-     "title_raw": "D-KD0011 When the Elephant Saw the Mouse"
+     ]
     },
     {
      "no": 20,
+     "kd": "D-KD0012",
      "title": "Antics Abound",
+     "title_raw": "Antics Abound",
      "composer": "Nukorn Visutyothapibal & Shenandi",
+     "lib": "https://thedinermusic.com/tracks?tracks=din064-20",
      "genre": "Kids",
      "keywords": "",
-     "length": 31,
-     "lib": "https://thedinermusic.com/tracks?tracks=din064-20",
-     "isrc": "QMMSD1203364",
-     "pages": [],
-     "title_raw": "D-KD0012 Antics Abound"
+     "pages": []
     },
     {
      "no": 21,
+     "kd": "D-KD0013",
      "title": "To Be Young Again",
+     "title_raw": "To Be Young Again",
      "composer": "Demian Sims & Shenandi",
+     "lib": "https://thedinermusic.com/tracks?tracks=din064-21",
      "genre": "Kids",
      "keywords": "",
-     "length": 30,
-     "lib": "https://thedinermusic.com/tracks?tracks=din064-21",
-     "isrc": "QMMSD1203365",
-     "pages": [],
-     "title_raw": "D-KD0013 To Be Young Again (30)"
+     "pages": []
     },
     {
      "no": 25,
+     "kd": "D-KD0014",
      "title": "Playing in the Sun",
+     "title_raw": "Playing in the Sun",
      "composer": "Eric Kaye & Shenandi",
+     "lib": "https://thedinermusic.com/tracks?tracks=din064-25",
      "genre": "Kids",
      "keywords": "",
-     "length": 32,
-     "lib": "https://thedinermusic.com/tracks?tracks=din064-25",
-     "isrc": "QMMSD1203368",
      "pages": [
       {
        "name": "巧連智低年級版 2013年04月號 知識閱讀本CD 會爬伸的攀緣植物",
        "url": "/music-library/%E7%BD%90%E9%A0%AD%E9%9F%B3%E6%A8%82%E7%A0%94%E7%A9%B6%E6%89%80/%E5%B7%A7%E9%80%A3%E6%99%BA/%E4%BD%8E%E5%B9%B4%E7%B4%9A%E7%89%88/%E5%B7%A7%E9%80%A3%E6%99%BA%E4%BD%8E%E5%B9%B4%E7%B4%9A%E7%89%88cd/%E5%B7%A7%E9%80%A3%E6%99%BA%E4%BD%8E%E5%B9%B4%E7%B4%9A%E7%89%882013%E5%B9%B404%E6%9C%88%E8%99%9Fcd-%E6%9C%83%E7%88%AC%E4%BC%B8%E7%9A%84%E6%94%80%E7%B7%A3%E6%A4%8D%E7%89%A9/"
       }
-     ],
-     "title_raw": "D-KD0014 Playing in the Sun (30)"
+     ]
     },
     {
      "no": 27,
+     "kd": "D-KD0015",
      "title": "March of the Puffins",
+     "title_raw": "March of the Puffins",
      "composer": "Vinnie Zummo",
+     "lib": "https://thedinermusic.com/tracks?tracks=din064-27",
      "genre": "Kids",
      "keywords": "",
-     "length": 31,
-     "lib": "https://thedinermusic.com/tracks?tracks=din064-27",
-     "isrc": "QMMSD1203369",
-     "pages": [],
-     "title_raw": "D-KD0015 March of the Puffins"
+     "pages": []
+    },
+    {
+     "no": 28,
+     "kd": "D-KD0016",
+     "title": "Breakfast is the Funnest Meal of the Day",
+     "title_raw": "Breakfast is the Funnest Meal of the Day",
+     "composer": "",
+     "lib": "https://thedinermusic.com/tracks?tracks=din064-28",
+     "genre": "Kids",
+     "keywords": "",
+     "pages": []
+    },
+    {
+     "no": 30,
+     "kd": "D-KD0017",
+     "title": "Ethereal Vibes",
+     "title_raw": "Ethereal Vibes",
+     "composer": "Eric Kaye",
+     "lib": "https://thedinermusic.com/tracks?tracks=din064-30",
+     "genre": "Kids",
+     "keywords": "",
+     "pages": [
+      {
+       "name": "巧連智低年級版 2013年04月號 知識閱讀本CD 會爬伸的攀緣植物",
+       "url": "/music-library/%E7%BD%90%E9%A0%AD%E9%9F%B3%E6%A8%82%E7%A0%94%E7%A9%B6%E6%89%80/%E5%B7%A7%E9%80%A3%E6%99%BA/%E4%BD%8E%E5%B9%B4%E7%B4%9A%E7%89%88/%E5%B7%A7%E9%80%A3%E6%99%BA%E4%BD%8E%E5%B9%B4%E7%B4%9A%E7%89%88cd/%E5%B7%A7%E9%80%A3%E6%99%BA%E4%BD%8E%E5%B9%B4%E7%B4%9A%E7%89%882013%E5%B9%B404%E6%9C%88%E8%99%9Fcd-%E6%9C%83%E7%88%AC%E4%BC%B8%E7%9A%84%E6%94%80%E7%B7%A3%E6%A4%8D%E7%89%A9/"
+      }
+     ]
+    },
+    {
+     "no": 32,
+     "kd": "D-KD0018",
+     "title": "Ska Is For Kids Too",
+     "title_raw": "Ska Is For Kids Too",
+     "composer": "",
+     "lib": "https://thedinermusic.com/tracks?tracks=din064-32",
+     "genre": "Kids",
+     "keywords": "",
+     "pages": []
+    },
+    {
+     "no": 33,
+     "kd": "D-KD0019",
+     "title": "Light Bright Sunny Fun",
+     "title_raw": "Light Bright Sunny Fun",
+     "composer": "",
+     "lib": "https://thedinermusic.com/tracks?tracks=din064-33",
+     "genre": "Kids",
+     "keywords": "",
+     "pages": []
+    },
+    {
+     "no": 35,
+     "kd": "D-KD0020",
+     "title": "Cartoon Funhouse",
+     "title_raw": "Cartoon Funhouse",
+     "composer": "",
+     "lib": "https://thedinermusic.com/tracks?tracks=din064-35",
+     "genre": "Kids",
+     "keywords": "",
+     "pages": []
+    },
+    {
+     "no": 37,
+     "kd": "D-KD0021",
+     "title": "Drifting in Dreamland",
+     "title_raw": "Drifting in Dreamland",
+     "composer": "",
+     "lib": "https://thedinermusic.com/tracks?tracks=din064-37",
+     "genre": "Kids",
+     "keywords": "",
+     "pages": []
+    },
+    {
+     "no": 41,
+     "kd": "D-KD0022",
+     "title": "The Apple Juice Bop",
+     "title_raw": "The Apple Juice Bop",
+     "composer": "",
+     "lib": "https://thedinermusic.com/tracks?tracks=din064-41",
+     "genre": "Kids",
+     "keywords": "",
+     "pages": []
+    },
+    {
+     "no": 43,
+     "kd": "D-KD0023",
+     "title": "Slumbering Gently",
+     "title_raw": "Slumbering Gently",
+     "composer": "",
+     "lib": "https://thedinermusic.com/tracks?tracks=din064-43",
+     "genre": "Kids",
+     "keywords": "",
+     "pages": []
+    },
+    {
+     "no": 44,
+     "kd": "D-KD0024",
+     "title": "Coming 'Round The Mountain",
+     "title_raw": "Coming 'Round The Mountain",
+     "composer": "",
+     "lib": "https://thedinermusic.com/tracks?tracks=din064-44",
+     "genre": "Kids",
+     "keywords": "",
+     "pages": []
+    },
+    {
+     "no": 45,
+     "kd": "D-KD0025",
+     "title": "Videogaming",
+     "title_raw": "Videogaming",
+     "composer": "",
+     "lib": "https://thedinermusic.com/tracks?tracks=din064-45",
+     "genre": "Kids",
+     "keywords": "",
+     "pages": []
+    },
+    {
+     "no": 47,
+     "kd": "D-KD0026",
+     "title": "DJ At The Playground",
+     "title_raw": "DJ At The Playground",
+     "composer": "",
+     "lib": "https://thedinermusic.com/tracks?tracks=din064-47",
+     "genre": "Kids",
+     "keywords": "",
+     "pages": []
+    },
+    {
+     "no": 48,
+     "kd": "D-KD0027",
+     "title": "Clown Wedding",
+     "title_raw": "Clown Wedding",
+     "composer": "",
+     "lib": "https://thedinermusic.com/tracks?tracks=din064-48",
+     "genre": "Kids",
+     "keywords": "",
+     "pages": []
+    },
+    {
+     "no": 50,
+     "kd": "D-KD0028",
+     "title": "Three Legged Race",
+     "title_raw": "Three Legged Race",
+     "composer": "",
+     "lib": "https://thedinermusic.com/tracks?tracks=din064-50",
+     "genre": "Kids",
+     "keywords": "",
+     "pages": []
+    },
+    {
+     "no": 52,
+     "kd": "D-KD0029",
+     "title": "Junk Food Party",
+     "title_raw": "Junk Food Party",
+     "composer": "",
+     "lib": "https://thedinermusic.com/tracks?tracks=din064-52",
+     "genre": "Kids",
+     "keywords": "",
+     "pages": []
+    },
+    {
+     "no": 53,
+     "kd": "D-KD0030",
+     "title": "Clowns On Parade",
+     "title_raw": "Clowns On Parade",
+     "composer": "",
+     "lib": "https://thedinermusic.com/tracks?tracks=din064-53",
+     "genre": "Kids",
+     "keywords": "",
+     "pages": []
+    },
+    {
+     "no": 55,
+     "kd": "D-KD0031",
+     "title": "Sleep Tight",
+     "title_raw": "Sleep Tight",
+     "composer": "",
+     "lib": "https://thedinermusic.com/tracks?tracks=din064-55",
+     "genre": "Kids",
+     "keywords": "",
+     "pages": []
+    },
+    {
+     "no": 56,
+     "kd": "D-KD0032",
+     "title": "Don't Let The Bed Bugs Bite",
+     "title_raw": "Don't Let The Bed Bugs Bite",
+     "composer": "",
+     "lib": "https://thedinermusic.com/tracks?tracks=din064-56",
+     "genre": "Kids",
+     "keywords": "",
+     "pages": []
+    },
+    {
+     "no": 57,
+     "kd": "D-KD0033",
+     "title": "My First Music Box",
+     "title_raw": "My First Music Box",
+     "composer": "",
+     "lib": "https://thedinermusic.com/tracks?tracks=din064-57",
+     "genre": "Kids",
+     "keywords": "",
+     "pages": []
+    },
+    {
+     "no": 58,
+     "kd": "D-KD0034",
+     "title": "Johannes Brahms, Lullaby, Wiegenlied, Guten Abend, gute Nacht, Op. 49, No. 4",
+     "title_raw": "Johannes Brahms, Lullaby, Wiegenlied, Guten Abend, gute Nacht, Op. 49, No. 4",
+     "composer": "",
+     "lib": "https://thedinermusic.com/tracks?tracks=din064-58",
+     "genre": "Kids",
+     "keywords": "",
+     "pages": []
+    },
+    {
+     "no": 59,
+     "kd": "D-KD0035",
+     "title": "Rock-A-Bye Baby",
+     "title_raw": "Rock-A-Bye Baby",
+     "composer": "",
+     "lib": "https://thedinermusic.com/tracks?tracks=din064-59",
+     "genre": "Kids",
+     "keywords": "",
+     "pages": []
+    },
+    {
+     "no": 62,
+     "kd": "D-KD0036",
+     "title": "Frere Jacques, Are You Sleeping",
+     "title_raw": "Frere Jacques, Are You Sleeping",
+     "composer": "",
+     "lib": "https://thedinermusic.com/tracks?tracks=din064-62",
+     "genre": "Kids",
+     "keywords": "",
+     "pages": []
+    },
+    {
+     "no": 63,
+     "kd": "D-KD0037",
+     "title": "Bear On A Tricycle",
+     "title_raw": "Bear On A Tricycle",
+     "composer": "",
+     "lib": "https://thedinermusic.com/tracks?tracks=din064-63",
+     "genre": "Kids",
+     "keywords": "",
+     "pages": []
+    },
+    {
+     "no": 64,
+     "kd": "D-KD0038",
+     "title": "The Kitchen Sink",
+     "title_raw": "The Kitchen Sink",
+     "composer": "",
+     "lib": "https://thedinermusic.com/tracks?tracks=din064-64",
+     "genre": "Kids",
+     "keywords": "",
+     "pages": []
+    },
+    {
+     "no": 66,
+     "kd": "D-KD0039",
+     "title": "Snack Time",
+     "title_raw": "Snack Time",
+     "composer": "",
+     "lib": "https://thedinermusic.com/tracks?tracks=din064-66",
+     "genre": "Kids",
+     "keywords": "",
+     "pages": []
+    },
+    {
+     "no": 67,
+     "kd": "D-KD0040",
+     "title": "Feety Pajamas",
+     "title_raw": "Feety Pajamas",
+     "composer": "",
+     "lib": "https://thedinermusic.com/tracks?tracks=din064-67",
+     "genre": "Kids",
+     "keywords": "",
+     "pages": []
+    },
+    {
+     "no": 68,
+     "kd": "D-KD0041",
+     "title": "Super Fun Brilliant Time",
+     "title_raw": "Super Fun Brilliant Time",
+     "composer": "",
+     "lib": "https://thedinermusic.com/tracks?tracks=din064-68",
+     "genre": "Kids",
+     "keywords": "",
+     "pages": []
+    },
+    {
+     "no": 69,
+     "kd": "D-KD0042",
+     "title": "Cradle Limbo",
+     "title_raw": "Cradle Limbo",
+     "composer": "",
+     "lib": "https://thedinermusic.com/tracks?tracks=din064-69",
+     "genre": "Kids",
+     "keywords": "",
+     "pages": []
+    },
+    {
+     "no": 70,
+     "kd": "D-KD0043",
+     "title": "Cookie Recon Mission",
+     "title_raw": "Cookie Recon Mission",
+     "composer": "",
+     "lib": "https://thedinermusic.com/tracks?tracks=din064-70",
+     "genre": "Kids",
+     "keywords": "",
+     "pages": []
+    },
+    {
+     "no": 71,
+     "kd": "D-KD0044",
+     "title": "The Terrible Twos",
+     "title_raw": "The Terrible Twos",
+     "composer": "",
+     "lib": "https://thedinermusic.com/tracks?tracks=din064-71",
+     "genre": "Kids",
+     "keywords": "",
+     "pages": []
+    },
+    {
+     "no": 72,
+     "kd": "D-KD0045",
+     "title": "Julius Fucik, Entrance Of The Gladiators",
+     "title_raw": "Julius Fucik, Entrance Of The Gladiators",
+     "composer": "",
+     "lib": "https://thedinermusic.com/tracks?tracks=din064-72",
+     "genre": "Kids",
+     "keywords": "",
+     "pages": []
+    },
+    {
+     "no": 73,
+     "kd": "D-KD0046",
+     "title": "Circus After Party",
+     "title_raw": "Circus After Party",
+     "composer": "",
+     "lib": "https://thedinermusic.com/tracks?tracks=din064-73",
+     "genre": "Kids",
+     "keywords": "",
+     "pages": []
+    },
+    {
+     "no": 75,
+     "kd": "D-KD0047",
+     "title": "Escape From Preschool",
+     "title_raw": "Escape From Preschool",
+     "composer": "",
+     "lib": "https://thedinermusic.com/tracks?tracks=din064-75",
+     "genre": "Kids",
+     "keywords": "",
+     "pages": []
+    },
+    {
+     "no": 76,
+     "kd": "D-KD0048",
+     "title": "Physical Comedy",
+     "title_raw": "Physical Comedy",
+     "composer": "",
+     "lib": "https://thedinermusic.com/tracks?tracks=din064-76",
+     "genre": "Kids",
+     "keywords": "",
+     "pages": []
+    },
+    {
+     "no": 79,
+     "kd": "D-KD0049",
+     "title": "Building Blocks",
+     "title_raw": "Building Blocks",
+     "composer": "",
+     "lib": "https://thedinermusic.com/tracks?tracks=din064-79",
+     "genre": "Kids",
+     "keywords": "",
+     "pages": []
+    },
+    {
+     "no": 80,
+     "kd": "D-KD0050",
+     "title": "A Smile Is Worth A Million Bucks",
+     "title_raw": "A Smile Is Worth A Million Bucks",
+     "composer": "",
+     "lib": "https://thedinermusic.com/tracks?tracks=din064-80",
+     "genre": "Kids",
+     "keywords": "",
+     "pages": []
+    },
+    {
+     "no": 84,
+     "kd": "D-KD0051",
+     "title": "Cartoons On Carmine",
+     "title_raw": "Cartoons On Carmine",
+     "composer": "",
+     "lib": "https://thedinermusic.com/tracks?tracks=din064-84",
+     "genre": "Kids",
+     "keywords": "",
+     "pages": []
+    },
+    {
+     "no": 85,
+     "kd": "D-KD0052",
+     "title": "Twinkle Twinkle Little Star, Magical Version",
+     "title_raw": "Twinkle Twinkle Little Star, Magical Version",
+     "composer": "",
+     "lib": "https://thedinermusic.com/tracks?tracks=din064-85",
+     "genre": "Kids",
+     "keywords": "",
+     "pages": []
+    },
+    {
+     "no": 86,
+     "kd": "D-KD0053",
+     "title": "Unibrow",
+     "title_raw": "Unibrow",
+     "composer": "",
+     "lib": "https://thedinermusic.com/tracks?tracks=din064-86",
+     "genre": "Kids",
+     "keywords": "",
+     "pages": []
+    },
+    {
+     "no": 87,
+     "kd": "D-KD0054",
+     "title": "Puzzle Pieces",
+     "title_raw": "Puzzle Pieces",
+     "composer": "",
+     "lib": "https://thedinermusic.com/tracks?tracks=din064-87",
+     "genre": "Kids",
+     "keywords": "",
+     "pages": []
+    },
+    {
+     "no": 88,
+     "kd": "D-KD0055",
+     "title": "Twinkle Twinkle Little Star, Gentle Lullaby Version",
+     "title_raw": "Twinkle Twinkle Little Star, Gentle Lullaby Version",
+     "composer": "",
+     "lib": "https://thedinermusic.com/tracks?tracks=din064-88",
+     "genre": "Kids",
+     "keywords": "",
+     "pages": []
+    },
+    {
+     "no": 89,
+     "kd": "D-KD0056",
+     "title": "Kazoo Keeper",
+     "title_raw": "Kazoo Keeper",
+     "composer": "",
+     "lib": "https://thedinermusic.com/tracks?tracks=din064-89",
+     "genre": "Kids",
+     "keywords": "",
+     "pages": []
+    },
+    {
+     "no": 90,
+     "kd": "D-KD0057",
+     "title": "Happy to Play",
+     "title_raw": "Happy to Play",
+     "composer": "",
+     "lib": "https://thedinermusic.com/tracks?tracks=din064-90",
+     "genre": "Kids",
+     "keywords": "",
+     "pages": []
+    },
+    {
+     "no": 91,
+     "kd": "D-KD0058",
+     "title": "The Antics of An Anteater",
+     "title_raw": "The Antics of An Anteater",
+     "composer": "",
+     "lib": "https://thedinermusic.com/tracks?tracks=din064-91",
+     "genre": "Kids",
+     "keywords": "",
+     "pages": []
+    },
+    {
+     "no": 92,
+     "kd": "D-KD0059",
+     "title": "Twinkle Twinkle Little Star, Piano Version",
+     "title_raw": "Twinkle Twinkle Little Star, Piano Version",
+     "composer": "",
+     "lib": "https://thedinermusic.com/tracks?tracks=din064-92",
+     "genre": "Kids",
+     "keywords": "",
+     "pages": []
+    },
+    {
+     "no": 93,
+     "kd": "D-KD0060",
+     "title": "Twinkle Twinkle Little Star, Folky Guitar Version",
+     "title_raw": "Twinkle Twinkle Little Star, Folky Guitar Version",
+     "composer": "",
+     "lib": "https://thedinermusic.com/tracks?tracks=din064-93",
+     "genre": "Kids",
+     "keywords": "",
+     "pages": []
+    },
+    {
+     "no": 94,
+     "kd": "D-KD0061",
+     "title": "Clap to the Banjo",
+     "title_raw": "Clap to the Banjo",
+     "composer": "",
+     "lib": "https://thedinermusic.com/tracks?tracks=din064-94",
+     "genre": "Kids",
+     "keywords": "",
+     "pages": []
+    },
+    {
+     "no": 95,
+     "kd": "D-KD0062",
+     "title": "Jelly Bean Jive",
+     "title_raw": "Jelly Bean Jive",
+     "composer": "",
+     "lib": "https://thedinermusic.com/tracks?tracks=din064-95",
+     "genre": "Kids",
+     "keywords": "",
+     "pages": []
+    },
+    {
+     "no": 96,
+     "kd": "D-KD0063",
+     "title": "Single Motor Momentum",
+     "title_raw": "Single Motor Momentum",
+     "composer": "",
+     "lib": "https://thedinermusic.com/tracks?tracks=din064-96",
+     "genre": "Kids",
+     "keywords": "",
+     "pages": []
     }
    ],
    "title_raw": "D-KD01 Kids"
