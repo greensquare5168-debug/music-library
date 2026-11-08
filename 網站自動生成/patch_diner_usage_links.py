@@ -26,6 +26,9 @@ MAP = {
     'To Be Young Again': (21, 'Demian Sims & Shenandi'),
     'Playing in the Sun': (25, 'Eric Kaye & Shenandi'),
     'March of the Puffins': (27, 'Vinnie Zummo'),
+    'The Kitchen Sink': (64, 'Deborah Nadine Hurwitz'),
+    'Clown Wedding': (48, 'Craig Stuart Garfinkle'),
+    'Escape From Preschool': (75, 'Nick Seeley & Shenandi'),
     'Ethereal Vibes': (30, None),
 }
 
