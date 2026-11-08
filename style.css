@@ -937,6 +937,6 @@ html:not(.ktree-ready) .treebox>*{animation:ktreeReveal .01s linear 1.5s forward
 .srcimg{display:block;height:auto !important;aspect-ratio:11/7;background:#fff;border:1px solid #e3ecf3;border-radius:10px;overflow:hidden}
 .srcimg img{width:100% !important;max-width:none !important;height:100% !important;aspect-ratio:auto !important;object-fit:contain !important;object-position:center bottom;border:none !important;border-radius:0 !important;margin:0 !important}
 
-/* 來源截圖：微放大 12% 把網站自身左右白邊推出框外（原圖不動、不裁檔），高度仍統一 */
+/* 來源截圖（WCPM 重拍 1200x695）：cover 精確填滿框，左右多餘白邊自動修掉 */
 .srcimg{overflow:hidden}
-.srcimg img{width:112% !important;max-width:none !important;height:auto !important;margin:0 0 0 -6% !important;display:block;object-fit:cover;object-position:center top}
+.srcimg img{width:100% !important;height:100% !important;max-width:none !important;object-fit:cover !important;object-position:center top;margin:0 !important;display:block}
