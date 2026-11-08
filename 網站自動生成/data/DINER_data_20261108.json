@@ -601,7 +601,7 @@
     {
      "no": 85,
      "kd": "D-KD0052",
-     "title": "Twinkle Twinkle Little Star, Magical Version",
+     "title": "Twinkle Twinkle Little Star",
      "title_raw": "Twinkle Twinkle Little Star, Magical Version",
      "composer": "Josh Peck & Shenandi",
      "lib": "https://thedinermusic.com/tracks?tracks=din064-85",
@@ -627,17 +627,6 @@
      "title_raw": "Puzzle Pieces",
      "composer": "Garrett Ienner & Shenandi",
      "lib": "https://thedinermusic.com/tracks?tracks=din064-87",
-     "genre": "Kids",
-     "keywords": "",
-     "pages": []
-    },
-    {
-     "no": 88,
-     "kd": "D-KD0055",
-     "title": "Twinkle Twinkle Little Star, Gentle Lullaby Version",
-     "title_raw": "Twinkle Twinkle Little Star, Gentle Lullaby Version",
-     "composer": "Demian Sims & Shenandi",
-     "lib": "https://thedinermusic.com/tracks?tracks=din064-88",
      "genre": "Kids",
      "keywords": "",
      "pages": []
@@ -671,28 +660,6 @@
      "title_raw": "The Antics of An Anteater",
      "composer": "Demian Sims & Shenandi",
      "lib": "https://thedinermusic.com/tracks?tracks=din064-91",
-     "genre": "Kids",
-     "keywords": "",
-     "pages": []
-    },
-    {
-     "no": 92,
-     "kd": "D-KD0059",
-     "title": "Twinkle Twinkle Little Star, Piano Version",
-     "title_raw": "Twinkle Twinkle Little Star, Piano Version",
-     "composer": "Shenandi & Zack Hemsey",
-     "lib": "https://thedinermusic.com/tracks?tracks=din064-92",
-     "genre": "Kids",
-     "keywords": "",
-     "pages": []
-    },
-    {
-     "no": 93,
-     "kd": "D-KD0060",
-     "title": "Twinkle Twinkle Little Star, Folky Guitar Version",
-     "title_raw": "Twinkle Twinkle Little Star, Folky Guitar Version",
-     "composer": "Jean Grobler & Shenandi",
-     "lib": "https://thedinermusic.com/tracks?tracks=din064-93",
      "genre": "Kids",
      "keywords": "",
      "pages": []
