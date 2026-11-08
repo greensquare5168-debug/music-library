@@ -944,3 +944,8 @@ html:not(.ktree-ready) .treebox>*{animation:ktreeReveal .01s linear 1.5s forward
 /* 來源截圖框高度與 iframe 內嵌視窗完全一致（clamp 420~700），圖片 cover 填滿 */
 .srcimg{display:block;height:clamp(420px,64vh,700px) !important;aspect-ratio:auto !important;overflow:hidden;background:#fff;border:1px solid #e3ecf3;border-radius:10px}
 .srcimg img{width:100% !important;height:100% !important;max-width:none !important;object-fit:cover !important;object-position:center top;margin:0 !important;border:none !important;border-radius:0 !important;display:block}
+
+/* 統一根據「扣掉網址列＋工作列後的內容視窗高度」= 695px（iframe 與截圖一致） */
+.srcframe{height:695px !important}
+.srcimg{display:block;height:695px !important;aspect-ratio:auto !important;overflow:hidden;background:#fff;border:1px solid #e3ecf3;border-radius:10px}
+.srcimg img{width:100% !important;height:100% !important;max-width:none !important;object-fit:cover !important;object-position:center top;margin:0 !important;display:block}
