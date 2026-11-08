@@ -133,7 +133,7 @@ BADGE = ('<span class="srcb" style="position:relative;display:inline-flex;align-
          'width:43px;height:24px;flex:0 0 43px;margin-left:6px;margin-right:10px">'
          '<span class="ytbadge ytimg" title="The Diner" style="position:static;margin:0;padding:0;background:none;'
          'border-radius:0;box-shadow:none;min-width:0;display:flex;align-items:center;justify-content:center;line-height:0">'
-         f'<img src="{SITE_PREFIX}assets/brands/the-diner.png" alt="The Diner" title="The Diner" '
+         f'<img src="{SITE_PREFIX}assets/badges/the-diner.png" alt="The Diner" title="The Diner" '
          'style="display:block;max-width:40px;max-height:24px;width:auto;height:auto"></span></span>')
 
 
