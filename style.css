@@ -996,3 +996,8 @@ html:not(.ktree-ready) .treebox>*{animation:ktreeReveal .01s linear 1.5s forward
 .treebox .tree li>ul.tree li{font-size:14px !important}
 .tree a,.tree a:visited,.treebox a,.treebox a:visited{color:var(--fg) !important}
 .tree a.curlink{color:#1a56db !important}
+
+/* 2026-11-09 孝瓏：左欄上下貼齊視窗、左邊貼齊邊緣（桌機） */
+@media (min-width:861px){
+  .treebox{top:76px !important;bottom:0 !important;height:auto !important;max-height:none !important;border-radius:0 !important}
+}
