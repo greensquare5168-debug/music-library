@@ -91,18 +91,76 @@ function openWin(u){
     var OPEN={};
     try{ (JSON.parse(localStorage.getItem(OPENKEY)||'[]')).forEach(function(k){OPEN[k]=1;}); }catch(e){}
     function saveOpen(){ try{ localStorage.setItem(OPENKEY, JSON.stringify(Object.keys(OPEN))); }catch(e){} }
-    fetch(base+'tree.json?v=20261109a').then(function(r){return r.json();}).then(function(t){
-      // 2026-11-09 孝瓏：「對，緊貼」→ 改成真正的多層樹（子項緊貼父項正下方）
-      // 舊版只認「網址第一段＝樹根名」（使用公司/知識補給站…），但本站多數頁面在「罐頭音樂研究所/…」底下
-      // → 找不到根就一直沿用靜態左欄（使用公司清單 + 另一個季/集清單），展開看起來像跑到最底部。
-      // 新版：用「解析後的真實網址」在整棵樹裡找當前頁，找到就從它所屬的頂層節點開始畫，
-      //       並自動展開沿途所有父節點。
-      var curAbs=decodeURIComponent(location.pathname).replace(/\/index\.html$/,'/');
-      if(curAbs.slice(-1)!=='/') curAbs+='/';
-      function absOf(h){
-        if(!h) return '';
-        try{ return decodeURIComponent(new URL(base+h, location.origin).pathname); }catch(e){ return h; }
+    var pathKey={};   // 由 build() 填入「當前頁的祖先鏈」，render() 共用
+    var curAbs=decodeURIComponent(location.pathname).replace(/\/index\.html$/,'/');
+    if(curAbs.slice(-1)!=='/') curAbs+='/';
+    var linkBase=base, inLib=pathIsLib;
+    function absOf(h){
+      if(!h) return '';
+      try{ return decodeURIComponent(new URL(linkBase+h, location.origin).pathname); }catch(e){ return h; }
+    }
+    // 子項標題去掉與父項重複的前綴（例：父「大頭小狀元 第3季」→ 子只顯示「第08集 洋芋片」）
+    function labelOf(node,pname){
+      var n=node.n||'';
+      if(pname && n.indexOf(pname)===0){
+        var rest=n.slice(pname.length).replace(/^[\s\-｜:：]+/,'');
+        if(rest) return rest;
       }
+      return n;
+    }
+    function render(node,ul,depth,pname){
+      var li=document.createElement('li'); li.className='tnode';
+      var hasC=!!(node.c&&node.c.length);
+      var label=labelOf(node,pname);
+      var key=node.h||node.n;
+      if(hasC){
+        var arw=document.createElement('span'); arw.className='arw';
+        arw.textContent='▸'; li.appendChild(arw);
+      }else{
+        // 2026-11-09 孝瓏：「最小的分頁不用加展開箭頭」→ 沒子項只留空白對齊
+        var pad=document.createElement('span');
+        pad.setAttribute('style','display:inline-block;width:12px;margin-right:3px');
+        li.appendChild(pad);
+      }
+      if(node.h){
+        var a=document.createElement('a'); a.href=linkBase+node.h; a.textContent=label; a.title=node.n;
+        if(absOf(node.h)===curAbs) a.className='curlink';
+        li.appendChild(a);
+      }else{
+        var sp=document.createElement('span'); sp.className='dh'; sp.textContent=label; sp.title=node.n; li.appendChild(sp);
+      }
+      ul.appendChild(li);
+      var kids=null;
+      function toggle(open){
+        if(!hasC) return;
+        if(!kids){
+          kids=document.createElement('ul'); kids.className='tree'; kids.style.display='none'; li.appendChild(kids);
+          for(var q=0;q<node.c.length;q++){ var _k=node.c[q]; if(!inLib && _k && _k.n==='音樂圖書館') continue; render(_k,kids,depth+1,node.n); }
+        }
+        var show=(open===undefined)?(kids.style.display==='none'):open;
+        kids.style.display=show?'':'none';
+        var arw=li.querySelector('.arw');
+        if(arw) arw.textContent=show?'▾':'▸';
+        if(show) li.classList.add('open'); else li.classList.remove('open');
+        if(show){ OPEN[key]=1; } else { delete OPEN[key]; }
+        saveOpen();
+      }
+      if(hasC && li.querySelector('.arw')) li.querySelector('.arw').addEventListener('click',function(e){ e.preventDefault(); e.stopPropagation(); toggle(); });
+      if(hasC && (OPEN[key] || pathKey[key])) toggle(true);   // 沿途父節點一律展開（緊貼）
+    }
+    // 只在清單「可見」時把當前那頁置中（收合狀態不動作，避免展開時跑到最下面）
+    function centerCur(){
+      try{
+        if(!box.clientHeight){ return; }          // 清單收合中 → 不要動
+        var ce=box.querySelector('a.curlink');
+        if(!ce){ box.scrollTop=0; return; }
+        var t=ce.offsetTop-box.clientHeight/2, mx=box.scrollHeight-box.clientHeight;
+        if(t<0)t=0; if(t>mx)t=mx;
+        box.scrollTop=t;
+      }catch(e){}
+    }
+    function build(t){
+      // 用「解析後的真實網址」在整棵樹裡找當前頁（最長前綴），沿途父節點自動展開
       function walk(node, chain){
         var best=null, me=chain.concat([node]), u=absOf(node.h);
         if(u && curAbs.indexOf(u)===0) best={len:u.length, chain:me};
@@ -118,71 +176,29 @@ function openWin(u){
         var r=walk(t[j], []);
         if(r && (!hit || r.len>hit.len)) hit=r;
       }
-      if(!hit){ treeReady(); return; }        // 這頁不在樹裡（例：音樂圖書館）→ 保留原靜態左欄
+      if(!hit) return false;                  // 這頁不在樹裡 → 保留原本靜態左欄
       var root=hit.chain[0];
-      var pathKey={};
+      pathKey={};
       for(var q=0;q<hit.chain.length;q++){ pathKey[hit.chain[q].h||hit.chain[q].n]=1; }
-      var inLib=/圖書館音樂\//.test(curAbs);
-      // 子項標題去掉與父項重複的前綴（例：父「大頭小狀元 第3季」→ 子只顯示「第08集 洋芋片」）
-      // 樹狀縮排後名字不重複＝不會動不動就被截掉
-      function labelOf(node,pname){
-        var n=node.n||'';
-        if(pname && n.indexOf(pname)===0){
-          var rest=n.slice(pname.length).replace(/^[\s\-｜:：]+/,'');
-          if(rest) return rest;
-        }
-        return n;
-      }
-      function render(node,ul,depth,pname){
-        var li=document.createElement('li'); li.className='tnode';
-        var hasC=!!(node.c&&node.c.length);
-        var label=labelOf(node,pname);
-        var arw=document.createElement('span'); arw.className='arw';
-        arw.textContent=hasC?'▸':'\u00a0'; li.appendChild(arw);
-        var key=node.h||node.n;
-        if(node.h){
-          var a=document.createElement('a'); a.href=base+node.h; a.textContent=label; a.title=node.n;
-          if(absOf(node.h)===curAbs) a.className='curlink';
-          li.appendChild(a);
-        }else{
-          var sp=document.createElement('span'); sp.className='dh'; sp.textContent=label; sp.title=node.n; li.appendChild(sp);
-        }
-        ul.appendChild(li);
-        var kids=null;
-        function toggle(open){
-          if(!hasC) return;
-          if(!kids){
-            kids=document.createElement('ul'); kids.className='tree'; kids.style.display='none'; li.appendChild(kids);
-            for(var q=0;q<node.c.length;q++){ var _k=node.c[q]; if(!inLib && _k && _k.n==='音樂圖書館') continue; render(_k,kids,depth+1,node.n); }
-          }
-          var show=(open===undefined)?(kids.style.display==='none'):open;
-          kids.style.display=show?'':'none';
-          arw.textContent=show?'▾':'▸';
-          if(show) li.classList.add('open'); else li.classList.remove('open');
-          if(show){ OPEN[key]=1; } else { delete OPEN[key]; }
-          saveOpen();
-        }
-        arw.addEventListener('click',function(e){ e.preventDefault(); e.stopPropagation(); toggle(); });
-        if(hasC && (OPEN[key] || pathKey[key])) toggle(true);   // 沿途父節點一律展開（緊貼）
-      }
       // 先在「畫面外」把整棵樹組好，最後才一次換上（避免清空→長出的中間空窗）
       var ul0=document.createElement('ul'); ul0.className='tree';
       render(root,ul0,0);
       box.innerHTML=''; box.appendChild(ul0);
       treeReady();
-      // 只在清單「可見」時把當前那頁置中（收合狀態不動作，避免展開時跑到最下面）
-      function centerCur(){
-        try{
-          if(!box.clientHeight){ return; }          // 清單收合中 → 不要動
-          var ce=box.querySelector('a.curlink');
-          if(!ce){ box.scrollTop=0; return; }
-          var t=ce.offsetTop-box.clientHeight/2, mx=box.scrollHeight-box.clientHeight;
-          if(t<0)t=0; if(t>mx)t=mx;
-          box.scrollTop=t;
-        }catch(e){}
-      }
       window.kmtCenterCur=centerCur;   // 2026-11-04 不再自動捲動（避免左欄每次換頁跑位）
-    }).catch(function(){ treeReady(); });
+      return true;
+    }
+    if(pathIsLib){
+      // 音樂圖書館：改用 tree-lib.json（品牌 → 專輯 → 曲目）
+      linkBase=base+'罐頭音樂研究所/圖書館音樂/';
+      fetch(base+'tree-lib.json?v=20261109b').then(function(r){return r.json();}).then(function(t){
+        if(!build(t)) treeReady();
+      }).catch(function(){ treeReady(); });
+    }else{
+      fetch(base+'tree.json?v=20261109b').then(function(r){return r.json();}).then(function(t){
+        if(!build(t)) treeReady();
+      }).catch(function(){ treeReady(); });
+    }
   }else{
     treeReady();
   }
