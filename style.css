@@ -1001,3 +1001,6 @@ html:not(.ktree-ready) .treebox>*{animation:ktreeReveal .01s linear 1.5s forward
 @media (min-width:861px){
   .treebox{top:76px !important;bottom:0 !important;height:auto !important;max-height:none !important;border-radius:0 !important}
 }
+
+/* 2026-11-09 孝瓏：滑鼠移過去不要出現陰影（卡片 hover 取消陰影與位移） */
+.albumlist.cards a.row:hover{box-shadow:none !important;transform:none !important}
