@@ -260,9 +260,10 @@ function openWin(u){
   wrap.appendChild(btn);
   var panel=document.createElement('div');
   panel.style.cssText='position:absolute;left:0;top:100%;margin-top:6px;min-width:168px;background:#fff;border:1px solid #e3ecf3;border-radius:10px;box-shadow:0 8px 22px rgba(16,24,40,.14);padding:6px;display:none;z-index:120';
-  [['語言學習區','語言學習區/'],['知識補給站','知識補給站/'],['使用公司','使用公司/'],['搜尋','搜尋/']].forEach(function(it){
+  [['語言學習區','https://greensquare5168-debug.github.io/multi-language/'],
+   ['知識補給站','https://greensquare5168-debug.github.io/animal-knowledge/']].forEach(function(it){
     var a=document.createElement('a');
-    a.href=base+encodeURIComponent(it[1].split('/')[0])+'/';
+    a.href=it[1];
     a.textContent=it[0];
     a.style.cssText='display:block;padding:7px 10px;border-radius:7px;color:#1f2937;text-decoration:none;font-size:13px;white-space:nowrap';
     a.onmouseover=function(){a.style.background='#f1f5f9';};
