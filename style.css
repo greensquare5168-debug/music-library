@@ -990,3 +990,9 @@ html:not(.ktree-ready) .treebox>*{animation:ktreeReveal .01s linear 1.5s forward
 /* 2026-11-09 孝瓏：左欄「現在這一頁」要明顯不同顏色 */
 .tnode a.curlink{background:#e8f0fe !important;color:#1a56db !important;font-weight:700 !important;
   border-radius:6px !important;padding:1px 6px !important;margin-left:-6px !important;display:inline-block !important}
+
+/* 2026-11-09 孝瓏：左欄各層字級一致（不因層級或面板寬度變小）；點過的不變色 */
+.treebox,.treebox .tree,.treebox .tree li,.treebox .tree li a,.treebox .tree-h{font-size:14px !important}
+.treebox .tree li>ul.tree li{font-size:14px !important}
+.tree a,.tree a:visited,.treebox a,.treebox a:visited{color:var(--fg) !important}
+.tree a.curlink{color:#1a56db !important}

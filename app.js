@@ -94,8 +94,8 @@ function openWin(u){
     var pathIsLib=/圖書館音樂\//.test(cur);
     var OPENKEY='kmt_open_nodes_v1';
     var OPEN={};
-    try{ (JSON.parse(localStorage.getItem(OPENKEY)||'[]')).forEach(function(k){OPEN[k]=1;}); }catch(e){}
-    function saveOpen(){ try{ localStorage.setItem(OPENKEY, JSON.stringify(Object.keys(OPEN))); }catch(e){} }
+    // 2026-11-09 孝瓏：重新整理後手動展開的要收起（不讀 localStorage），只留目前頁面的路徑展開
+    function saveOpen(){}   // 不持久化展開狀態
     var pathKey={};   // 由 build() 填入「當前頁的祖先鏈」，render() 共用
     var curAbs=decodeURIComponent(location.pathname).replace(/\/index\.html$/,'/');
     if(curAbs.slice(-1)!=='/') curAbs+='/';
