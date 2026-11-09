@@ -986,3 +986,7 @@ html:not(.ktree-ready) .treebox>*{animation:ktreeReveal .01s linear 1.5s forward
 
 /* 2026-11-09 孝瓏：相鄰的條目清單之間留空行 */
 .entries + .entries{margin-top:16px}
+
+/* 2026-11-09 孝瓏：左欄「現在這一頁」要明顯不同顏色 */
+.tnode a.curlink{background:#e8f0fe !important;color:#1a56db !important;font-weight:700 !important;
+  border-radius:6px !important;padding:1px 6px !important;margin-left:-6px !important;display:inline-block !important}
