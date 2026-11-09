@@ -241,3 +241,38 @@ function openWin(u){
     inp.addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preventDefault(); go(inp);} });
   });
 })();
+
+/* 2026-11-09 孝瓏：左上角標題加展開箭頭 → 可切換 語言學習區 / 知識補給站 */
+(function(){
+  var brand=document.querySelector('.site-head .brand');
+  if(!brand || brand.dataset.navReady) return;
+  brand.dataset.navReady='1';
+  var href=brand.getAttribute('href')||'';
+  var base=href.replace(/index\.html$/,'');
+  var wrap=document.createElement('span');
+  wrap.style.cssText='position:relative;display:inline-flex;align-items:center;gap:2px';
+  brand.parentNode.insertBefore(wrap, brand);
+  wrap.appendChild(brand);
+  var btn=document.createElement('button');
+  btn.type='button'; btn.textContent='▾';
+  btn.title='切換分區';
+  btn.style.cssText='border:0;background:transparent;cursor:pointer;font-size:12px;line-height:1;padding:0 2px;color:#64748b';
+  wrap.appendChild(btn);
+  var panel=document.createElement('div');
+  panel.style.cssText='position:absolute;left:0;top:100%;margin-top:6px;min-width:168px;background:#fff;border:1px solid #e3ecf3;border-radius:10px;box-shadow:0 8px 22px rgba(16,24,40,.14);padding:6px;display:none;z-index:120';
+  [['語言學習區','語言學習區/'],['知識補給站','知識補給站/'],['使用公司','使用公司/'],['搜尋','搜尋/']].forEach(function(it){
+    var a=document.createElement('a');
+    a.href=base+encodeURIComponent(it[1].split('/')[0])+'/';
+    a.textContent=it[0];
+    a.style.cssText='display:block;padding:7px 10px;border-radius:7px;color:#1f2937;text-decoration:none;font-size:13px;white-space:nowrap';
+    a.onmouseover=function(){a.style.background='#f1f5f9';};
+    a.onmouseout=function(){a.style.background='transparent';};
+    panel.appendChild(a);
+  });
+  wrap.appendChild(panel);
+  btn.addEventListener('click',function(e){
+    e.preventDefault(); e.stopPropagation();
+    panel.style.display = panel.style.display==='block' ? 'none' : 'block';
+  });
+  document.addEventListener('click',function(){ panel.style.display='none'; });
+})();
