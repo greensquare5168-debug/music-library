@@ -190,6 +190,8 @@ function openWin(u){
       render(root,ul0,0);
       box.innerHTML=''; box.appendChild(ul0);
       treeReady();
+      // 2026-11-09 孝瓏：左欄要顯示「現在這一頁」→ 畫好後置中
+      try{ setTimeout(centerCur, 30); }catch(e){}
       window.kmtCenterCur=centerCur;   // 2026-11-04 不再自動捲動（避免左欄每次換頁跑位）
       return true;
     }

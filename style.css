@@ -983,3 +983,6 @@ html:not(.ktree-ready) .treebox>*{animation:ktreeReveal .01s linear 1.5s forward
 
 /* 2026-11-09 孝瓏：拒絕內嵌的來源→框高較矮（避免一大塊白） */
 .srcframe[data-nofit="1"]{height:clamp(260px,46vh,430px) !important;background:#f8fafc !important}
+
+/* 2026-11-09 孝瓏：相鄰的條目清單之間留空行 */
+.entries + .entries{margin-top:16px}
