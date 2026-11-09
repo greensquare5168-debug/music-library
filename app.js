@@ -129,7 +129,7 @@ function openWin(u){
       }
       if(node.h){
         var a=document.createElement('a'); a.href=linkBase+node.h; a.textContent=label; a.title=node.n;
-        if(absOf(node.h)===curAbs) a.className='curlink';
+        if(absOf(node.h)===curAbs || (window.__kmtCurHref && node.h===window.__kmtCurHref)) a.className='curlink';
         li.appendChild(a);
       }else{
         var sp=document.createElement('span'); sp.className='dh'; sp.textContent=label; sp.title=node.n; li.appendChild(sp);
@@ -181,8 +181,24 @@ function openWin(u){
         var r=walk(t[j], []);
         if(r && (!hit || r.len>hit.len)) hit=r;
       }
+      // 2026-11-09 孝瓏：若只比對到很淺的節點，再用「最後一段路徑」比對（如 使用公司/公視 ↔ 罐頭音樂研究所/公視）
+      {
+        var segsNow=curAbs.replace(/\/$/,'').split('/').filter(Boolean);
+        var tail2=segsNow.slice(-1).join('/');
+        function walk2(node, chain){
+          var best=null, me=chain.concat([node]), u=absOf(node.h).replace(/\/$/,'');
+          if(u && u.slice(-tail2.length-1)===('/'+tail2)) best={len:u.length, chain:me};
+          var kids=node.c||[];
+          for(var q=0;q<kids.length;q++){ var rr=walk2(kids[q], me); if(rr && (!best || rr.len>best.len)) best=rr; }
+          return best;
+        }
+        var hit2=null;
+        for(var j2=0;j2<t.length;j2++){ var r2=walk2(t[j2], []); if(r2 && (!hit2 || r2.len>hit2.len)) hit2=r2; }
+        if(hit2 && (!hit || hit2.chain.length>hit.chain.length)) hit=hit2;
+      }
       if(!hit) return false;                  // 這頁不在樹裡 → 保留原本靜態左欄
       var root=hit.chain[0];
+      window.__kmtCurHref=hit.chain[hit.chain.length-1].h||'';
       pathKey={};
       for(var q=0;q<hit.chain.length;q++){ pathKey[hit.chain[q].h||hit.chain[q].n]=1; }
       // 先在「畫面外」把整棵樹組好，最後才一次換上（避免清空→長出的中間空窗）
