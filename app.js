@@ -187,7 +187,12 @@ function openWin(u){
       for(var q=0;q<hit.chain.length;q++){ pathKey[hit.chain[q].h||hit.chain[q].n]=1; }
       // 先在「畫面外」把整棵樹組好，最後才一次換上（避免清空→長出的中間空窗）
       var ul0=document.createElement('ul'); ul0.className='tree';
-      render(root,ul0,0);
+      // 2026-11-09 孝瓏：左欄不要「音樂圖書館」那一層，直接從品牌開始
+      if(!root.h && root.n==='音樂圖書館' && root.c){
+        for(var bi=0;bi<root.c.length;bi++) render(root.c[bi], ul0, 0);
+      }else{
+        render(root,ul0,0);
+      }
       box.innerHTML=''; box.appendChild(ul0);
       treeReady();
       // 2026-11-09 孝瓏：左欄要顯示「現在這一頁」→ 畫好後置中
