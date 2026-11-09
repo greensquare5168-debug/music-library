@@ -1051,3 +1051,8 @@ html:not(.ktree-ready) .treebox>*{animation:ktreeReveal .01s linear 1.5s forward
 }
 .treebox{box-shadow:none !important}
 .albumlist.cards .cover,.albumlist.cards .cover.logo,.herocover{box-shadow:none !important}
+
+/* 2026-11-09 孝瓏：「有使用作品」勾勾預設樣式（避免個別頁漏寫 inline style 時沒框） */
+.mark{background:#eaf7ef;color:#12894a;border:1px solid #bfe6cd}
+.mark.mark-x{background:#fdecec;color:#d33;border:1px solid #f3c2c2}
+.mark.mark-dup{background:#eef4ff;color:#2f6feb;border:1px solid #c8d8f8}
