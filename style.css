@@ -945,8 +945,9 @@ html:not(.ktree-ready) .treebox>*{animation:ktreeReveal .01s linear 1.5s forward
 .srcimg{display:block;height:clamp(420px,64vh,700px) !important;aspect-ratio:auto !important;overflow:hidden;background:#fff;border:1px solid #e3ecf3;border-radius:10px}
 .srcimg img{width:100% !important;height:100% !important;max-width:none !important;object-fit:cover !important;object-position:center top;margin:0 !important;border:none !important;border-radius:0 !important;display:block}
 
-/* 統一根據「扣掉網址列＋工作列後的內容視窗高度」= 695px（iframe 與截圖一致） */
-.srcframe{height:695px !important}
+/* 統一根據「扣掉網址列＋工作列後的內容視窗高度」= 695px（iframe 與截圖一致）
+   2026-11-09 21:xx 孝瓏：改由 JS(fitSrc) 依實際縮放設定高度 → 這裡不能加 !important，否則窄視窗時框比 iframe 高，底部出現白框 */
+.srcframe{height:695px}
 .srcimg{display:block;height:695px !important;aspect-ratio:auto !important;overflow:hidden;background:#fff;border:1px solid #e3ecf3;border-radius:10px}
 .srcimg img{width:100% !important;height:100% !important;max-width:none !important;object-fit:cover !important;object-position:center top;margin:0 !important;display:block}
 
@@ -975,7 +976,7 @@ html:not(.ktree-ready) .treebox>*{animation:ktreeReveal .01s linear 1.5s forward
   .albumhero{gap:12px !important}
   .albumhero .herocover{width:96px !important;height:96px !important;flex:0 0 96px !important}
   .albumhero h1{font-size:18px !important}
-  .srcframe{height:clamp(260px,48vh,430px) !important}
+  .srcframe{height:clamp(260px,48vh,430px)}
   .srcimg img{max-width:100% !important}
   .albumlist:not(.cards) .row{padding:8px 8px !important}
   footer.wrap{font-size:11px}
