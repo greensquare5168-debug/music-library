@@ -13,6 +13,7 @@ function fitSrc(){
     var W=1536;
     if(src.indexOf('groove-musicsearch')>=0) W=1280;      // Groovers 滿版對齊（孝瓏 2026-10-18）
     if(src.indexOf('reliable-source.co.uk')>=0) W=1920;   // RSM 樣張 1920×918
+    if(src.indexOf('euromusicro')>=0) W=1140;              // euromusicro 用 Bootstrap 4 容器 1140，避免右側多一塊白
     ifr.style.width=W+'px'; ifr.style.height=H_FIX+'px';
     var s=fw/W;
     ifr.style.transform='scale('+s+')'; ifr.style.transformOrigin='top left';
