@@ -91,24 +91,61 @@ function openWin(u){
     var OPEN={};
     try{ (JSON.parse(localStorage.getItem(OPENKEY)||'[]')).forEach(function(k){OPEN[k]=1;}); }catch(e){}
     function saveOpen(){ try{ localStorage.setItem(OPENKEY, JSON.stringify(Object.keys(OPEN))); }catch(e){} }
-    fetch(base+'tree.json?v=20261105q').then(function(r){return r.json();}).then(function(t){
-      var root=null;
-      for(var j=0;j<t.length;j++){ if((t[j].h&&t[j].h===segs[idx]+'/')||t[j].n===segs[idx]){ root=t[j]; break; } }
-      if(!root){ treeReady(); return; }
-      if(pathIsLib && root.c){
-        for(var k=0;k<root.c.length;k++){ if(root.c[k].h && cur.indexOf(root.c[k].h)===0){ root=root.c[k]; break; } }
+    fetch(base+'tree.json?v=20261109a').then(function(r){return r.json();}).then(function(t){
+      // 2026-11-09 孝瓏：「對，緊貼」→ 改成真正的多層樹（子項緊貼父項正下方）
+      // 舊版只認「網址第一段＝樹根名」（使用公司/知識補給站…），但本站多數頁面在「罐頭音樂研究所/…」底下
+      // → 找不到根就一直沿用靜態左欄（使用公司清單 + 另一個季/集清單），展開看起來像跑到最底部。
+      // 新版：用「解析後的真實網址」在整棵樹裡找當前頁，找到就從它所屬的頂層節點開始畫，
+      //       並自動展開沿途所有父節點。
+      var curAbs=decodeURIComponent(location.pathname).replace(/\/index\.html$/,'/');
+      if(curAbs.slice(-1)!=='/') curAbs+='/';
+      function absOf(h){
+        if(!h) return '';
+        try{ return decodeURIComponent(new URL(base+h, location.origin).pathname); }catch(e){ return h; }
       }
-      function render(node,ul,isPath,depth){
+      function walk(node, chain){
+        var best=null, me=chain.concat([node]), u=absOf(node.h);
+        if(u && curAbs.indexOf(u)===0) best={len:u.length, chain:me};
+        var kids=node.c||[];
+        for(var q=0;q<kids.length;q++){
+          var r=walk(kids[q], me);
+          if(r && (!best || r.len>best.len)) best=r;
+        }
+        return best;
+      }
+      var hit=null;
+      for(var j=0;j<t.length;j++){
+        var r=walk(t[j], []);
+        if(r && (!hit || r.len>hit.len)) hit=r;
+      }
+      if(!hit){ treeReady(); return; }        // 這頁不在樹裡（例：音樂圖書館）→ 保留原靜態左欄
+      var root=hit.chain[0];
+      var pathKey={};
+      for(var q=0;q<hit.chain.length;q++){ pathKey[hit.chain[q].h||hit.chain[q].n]=1; }
+      var inLib=/圖書館音樂\//.test(curAbs);
+      // 子項標題去掉與父項重複的前綴（例：父「大頭小狀元 第3季」→ 子只顯示「第08集 洋芋片」）
+      // 樹狀縮排後名字不重複＝不會動不動就被截掉
+      function labelOf(node,pname){
+        var n=node.n||'';
+        if(pname && n.indexOf(pname)===0){
+          var rest=n.slice(pname.length).replace(/^[\s\-｜:：]+/,'');
+          if(rest) return rest;
+        }
+        return n;
+      }
+      function render(node,ul,depth,pname){
         var li=document.createElement('li'); li.className='tnode';
         var hasC=!!(node.c&&node.c.length);
+        var label=labelOf(node,pname);
         var arw=document.createElement('span'); arw.className='arw';
         arw.textContent=hasC?'▸':'\u00a0'; li.appendChild(arw);
+        var key=node.h||node.n;
         if(node.h){
-          var a=document.createElement('a'); a.href=base+node.h; a.textContent=node.n;
-          if(node.h===cur) a.className='curlink';
+          var a=document.createElement('a'); a.href=base+node.h; a.textContent=label; a.title=node.n;
+          if(absOf(node.h)===curAbs) a.className='curlink';
           li.appendChild(a);
         }else{
-          var sp=document.createElement('span'); sp.className='dh'; sp.textContent=node.n; li.appendChild(sp);
+          var sp=document.createElement('span'); sp.className='dh'; sp.textContent=label; sp.title=node.n; li.appendChild(sp);
         }
         ul.appendChild(li);
         var kids=null;
@@ -116,22 +153,21 @@ function openWin(u){
           if(!hasC) return;
           if(!kids){
             kids=document.createElement('ul'); kids.className='tree'; kids.style.display='none'; li.appendChild(kids);
-            for(var q=0;q<node.c.length;q++){ var _k=node.c[q]; if(!pathIsLib && _k && _k.n==='音樂圖書館') continue; render(_k,kids,cur.indexOf(_k.h||'')===0,(depth||0)+1); }
+            for(var q=0;q<node.c.length;q++){ var _k=node.c[q]; if(!inLib && _k && _k.n==='音樂圖書館') continue; render(_k,kids,depth+1,node.n); }
           }
           var show=(open===undefined)?(kids.style.display==='none'):open;
           kids.style.display=show?'':'none';
           arw.textContent=show?'▾':'▸';
           if(show) li.classList.add('open'); else li.classList.remove('open');
-          var _k=node.h||node.n;
-          if(show){ OPEN[_k]=1; } else { delete OPEN[_k]; }
+          if(show){ OPEN[key]=1; } else { delete OPEN[key]; }
           saveOpen();
         }
         arw.addEventListener('click',function(e){ e.preventDefault(); e.stopPropagation(); toggle(); });
-        if(hasC && ((OPEN[node.h||node.n]) || (isPath && (depth||0)<1))) toggle(true);
+        if(hasC && (OPEN[key] || pathKey[key])) toggle(true);   // 沿途父節點一律展開（緊貼）
       }
       // 先在「畫面外」把整棵樹組好，最後才一次換上（避免清空→長出的中間空窗）
       var ul0=document.createElement('ul'); ul0.className='tree';
-      render(root,ul0,true,0);
+      render(root,ul0,0);
       box.innerHTML=''; box.appendChild(ul0);
       treeReady();
       // 只在清單「可見」時把當前那頁置中（收合狀態不動作，避免展開時跑到最下面）
