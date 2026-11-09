@@ -1030,3 +1030,8 @@ html:not(.ktree-ready) .treebox>*{animation:ktreeReveal .01s linear 1.5s forward
 @media (min-width:1000px){
   .treebox{padding-top:8px !important}
 }
+
+/* 2026-11-09 孝瓏：游標移到專輯/曲目上不要任何背景陰影或浮起 */
+.tnode:hover,.tree li:hover,.treebox .tree li:hover,.treebox .tnode:hover{background:transparent !important;box-shadow:none !important}
+.albumlist a.row:hover,.albumlist.cards a.row:hover{box-shadow:none !important;transform:none !important;background:transparent !important}
+.albumlist.cards a.row:hover{background:#fff !important}
