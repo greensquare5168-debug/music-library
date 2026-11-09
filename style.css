@@ -949,3 +949,8 @@ html:not(.ktree-ready) .treebox>*{animation:ktreeReveal .01s linear 1.5s forward
 .srcframe{height:695px !important}
 .srcimg{display:block;height:695px !important;aspect-ratio:auto !important;overflow:hidden;background:#fff;border:1px solid #e3ecf3;border-radius:10px}
 .srcimg img{width:100% !important;height:100% !important;max-width:none !important;object-fit:cover !important;object-position:center top;margin:0 !important;display:block}
+
+/* 2026-11-09 孝瓏：來源截圖預覽改「完整顯示、不裁切、不拉長」
+   高度＝圖片原始比例（等同瀏覽器扣掉分頁/網址列/書籤/工具列後的內容高度），不再用固定高 + cover */
+.srcimg{display:block !important;height:auto !important;aspect-ratio:auto !important;overflow:visible !important;background:transparent !important;border:0 !important;border-radius:0 !important}
+.srcimg img{width:100% !important;max-width:920px !important;height:auto !important;object-fit:contain !important;object-position:center top !important;border:1px solid #e3ecf3 !important;border-radius:10px !important;margin:6px auto 26px !important;display:block !important}
