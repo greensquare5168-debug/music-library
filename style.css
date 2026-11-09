@@ -1035,3 +1035,18 @@ html:not(.ktree-ready) .treebox>*{animation:ktreeReveal .01s linear 1.5s forward
 .tnode:hover,.tree li:hover,.treebox .tree li:hover,.treebox .tnode:hover{background:transparent !important;box-shadow:none !important}
 .albumlist a.row:hover,.albumlist.cards a.row:hover{box-shadow:none !important;transform:none !important;background:transparent !important}
 .albumlist.cards a.row:hover{background:#fff !important}
+
+/* 2026-11-09 21:15 孝瓏：品牌區域（品牌卡片／品牌列表）不要任何陰影，游標移過去也不要 */
+.brandlist li,.brandlist li:hover,.brandlist li:focus,
+.albumlist.cards a.row,.albumlist.cards a.row:hover,.albumlist.cards a.row:focus,
+.albumlist a.row:hover,.albumlist a.row:focus{
+  box-shadow:none !important;
+  transform:none !important;
+  filter:none !important;
+}
+.brandlist li:hover,.tree li:hover,.tnode:hover{
+  background:transparent !important;
+  box-shadow:none !important;
+}
+.treebox{box-shadow:none !important}
+.albumlist.cards .cover,.albumlist.cards .cover.logo,.herocover{box-shadow:none !important}
