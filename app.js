@@ -7,6 +7,10 @@ function fitSrc(){
   for(var i=0;i<fr.length;i++){
     var f=fr[i], ifr=f.getElementsByTagName('iframe')[0];
     if(!ifr) continue;
+    if(f.getAttribute('data-nofit')){        // 對方網站拒絕內嵌：維持原比例填滿框，不再縮放
+      ifr.style.width='100%'; ifr.style.height='100%'; ifr.style.transform='none';
+      continue;
+    }
     var fw=f.clientWidth;
     if(!fw) continue;
     var src=(ifr.getAttribute('src')||'');

@@ -980,3 +980,6 @@ html:not(.ktree-ready) .treebox>*{animation:ktreeReveal .01s linear 1.5s forward
   .albumlist:not(.cards) .row{padding:8px 8px !important}
   footer.wrap{font-size:11px}
 }
+
+/* 2026-11-09 孝瓏：拒絕內嵌的來源→框高較矮（避免一大塊白） */
+.srcframe[data-nofit="1"]{height:clamp(260px,46vh,430px) !important;background:#f8fafc !important}
