@@ -1015,3 +1015,9 @@ html:not(.ktree-ready) .treebox>*{animation:ktreeReveal .01s linear 1.5s forward
 @media (min-width:1000px){
   .treebox{box-shadow:none !important;border:0 !important;background:#fff !important}
 }
+
+/* 2026-11-09 孝瓏：左欄已貼齊最左，箭頭要跟著貼在左欄右緣（不再依視窗寬度外推） */
+@media (min-width:861px){
+  .navtoggle{left:236px !important}
+  body.nav-collapsed .navtoggle{left:0 !important}
+}
