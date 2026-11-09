@@ -219,11 +219,11 @@ function openWin(u){
     if(pathIsLib){
       // 音樂圖書館：改用 tree-lib.json（品牌 → 專輯 → 曲目）
       linkBase=base+'罐頭音樂研究所/圖書館音樂/';
-      fetch(base+'tree-lib.json?v=20261109b').then(function(r){return r.json();}).then(function(t){
+      fetch(base+'tree-lib.json?v=20261110p').then(function(r){return r.json();}).then(function(t){
         if(!build(t)) treeReady();
       }).catch(function(){ treeReady(); });
     }else{
-      fetch(base+'tree.json?v=20261109b').then(function(r){return r.json();}).then(function(t){
+      fetch(base+'tree.json?v=20261110p').then(function(r){return r.json();}).then(function(t){
         if(!build(t)) treeReady();
       }).catch(function(){ treeReady(); });
     }
