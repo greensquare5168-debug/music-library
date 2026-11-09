@@ -860,7 +860,7 @@ body[data-show="大頭小狀元"] .unit[data-label^="狀元小常識"]{font-fami
 /* 2026-11-04 孝瓏反映「左框跑位」：視窗寬度 861–1459 時，固定側欄(236px)會壓到置中內容
    → 這段區間把內容往右讓開；側欄收合時恢復置中 */
 @media (min-width:861px) and (max-width:1459px){
-  .wrap{margin-left:250px;margin-right:20px;max-width:960px}
+  .wrap{margin-left:236px;margin-right:20px;max-width:960px}
   body.nav-collapsed .wrap{margin-left:auto;margin-right:auto}
 }
 
@@ -1004,3 +1004,14 @@ html:not(.ktree-ready) .treebox>*{animation:ktreeReveal .01s linear 1.5s forward
 
 /* 2026-11-09 孝瓏：滑鼠移過去不要出現陰影（卡片 hover 取消陰影與位移） */
 .albumlist.cards a.row:hover{box-shadow:none !important;transform:none !important}
+
+/* 2026-11-09 孝瓏：左欄貼齊視窗最左與最上（桌機寬螢幕），內容避開 header 高度 */
+@media (min-width:1000px){
+  .treebox{left:0 !important;top:0 !important;height:100vh !important;bottom:auto !important;
+    padding-top:86px !important;border-radius:0 !important;z-index:120 !important}
+}
+
+/* 2026-11-09 孝瓏：左欄與頁面無縫（去陰影、去邊框，與 header 同色） */
+@media (min-width:1000px){
+  .treebox{box-shadow:none !important;border:0 !important;background:#fff !important}
+}
