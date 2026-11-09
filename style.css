@@ -954,3 +954,29 @@ html:not(.ktree-ready) .treebox>*{animation:ktreeReveal .01s linear 1.5s forward
    高度＝圖片原始比例（等同瀏覽器扣掉分頁/網址列/書籤/工具列後的內容高度），不再用固定高 + cover */
 .srcimg{display:block !important;height:auto !important;aspect-ratio:auto !important;overflow:visible !important;background:transparent !important;border:0 !important;border-radius:0 !important}
 .srcimg img{width:100% !important;max-width:920px !important;height:auto !important;object-fit:contain !important;object-position:center top !important;border:1px solid #e3ecf3 !important;border-radius:10px !important;margin:6px auto 26px !important;display:block !important}
+
+/* 2026-11-09 孝瓏：手機版（≤860px）＝抽屜式左欄＋漢堡鈕＋單欄內容 */
+.mnav{display:none}
+@media (max-width:860px){
+  .wrap{padding-left:10px !important;padding-right:10px !important}
+  .site-head .head-row{display:flex;align-items:center;gap:6px;padding:8px 10px}
+  .site-head .brand{font-size:16px}
+  .topnav{gap:4px !important}
+  .topnav .navbtn{font-size:12px !important;padding:4px 8px !important}
+  .topnav .navsearch{display:none !important}
+  .mnav{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;flex:0 0 34px;
+    border:1px solid var(--line);border-radius:9px;background:#fff;color:#334;font-size:16px;line-height:1;cursor:pointer;margin-right:2px}
+  .treebox{position:fixed !important;left:0;top:0;height:100vh;max-height:100vh !important;width:86vw;max-width:340px;
+    transform:translateX(-102%);transition:transform .22s ease;z-index:210;border-radius:0 !important;
+    padding:56px 12px 18px !important;box-shadow:0 10px 30px rgba(15,23,42,.25)}
+  body.mnav-open .treebox{transform:none}
+  body.mnav-open::after{content:"";position:fixed;inset:0;background:rgba(15,23,42,.42);z-index:205}
+  .navtoggle{display:none !important}
+  .albumhero{gap:12px !important}
+  .albumhero .herocover{width:96px !important;height:96px !important;flex:0 0 96px !important}
+  .albumhero h1{font-size:18px !important}
+  .srcframe{height:clamp(260px,48vh,430px) !important}
+  .srcimg img{max-width:100% !important}
+  .albumlist:not(.cards) .row{padding:8px 8px !important}
+  footer.wrap{font-size:11px}
+}

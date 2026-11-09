@@ -276,3 +276,27 @@ function openWin(u){
   });
   document.addEventListener('click',function(){ panel.style.display='none'; });
 })();
+
+/* 2026-11-09 孝瓏：手機版漢堡選單 */
+(function(){
+  if(window.innerWidth>860) return;
+  var head=document.querySelector('.site-head .head-row');
+  if(!head || document.querySelector('.mnav')) return;
+  var btn=document.createElement('button');
+  btn.type='button'; btn.className='mnav'; btn.setAttribute('aria-label','開啟選單');
+  btn.textContent='☰';
+  head.insertBefore(btn, head.firstChild);
+  function close(){ document.body.classList.remove('mnav-open'); }
+  btn.addEventListener('click', function(e){
+    e.preventDefault(); e.stopPropagation();
+    document.body.classList.toggle('mnav-open');
+  });
+  var tb=document.querySelector('.treebox');
+  if(tb){ tb.addEventListener('click', function(e){ if(e.target.closest('a')) close(); }); }
+  document.addEventListener('click', function(e){
+    if(!document.body.classList.contains('mnav-open')) return;
+    if(e.target.closest('.treebox')||e.target.closest('.mnav')) return;
+    close();
+  });
+  window.addEventListener('resize', function(){ if(window.innerWidth>860) close(); });
+})();
