@@ -196,6 +196,8 @@ function openWin(u){
         for(var j2=0;j2<t.length;j2++){ var r2=walk2(t[j2], []); if(r2 && (!hit2 || r2.len>hit2.len)) hit2=r2; }
         if(hit2 && (!hit || hit2.chain.length>hit.chain.length)) hit=hit2;
       }
+      // 2026-11-10：音樂圖書館首頁（品牌總覽）本身不在節點裡 → 用根節點畫（否則只剩無箭頭的靜態左欄）
+      if(!hit && inLib && t && t.length){ hit={chain:[t[0]]}; }
       if(!hit) return false;                  // 這頁不在樹裡 → 保留原本靜態左欄
       var root=hit.chain[0];
       window.__kmtCurHref=hit.chain[hit.chain.length-1].h||'';
