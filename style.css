@@ -223,7 +223,8 @@ body[data-show="大頭小狀元"][data-season] .unit[data-label^="安管達人"]
 /* 孝瓏 2026-10-14：兒童美髮師 江謝寀（第1季第05集）＝綠字＋白框（字幕實測綠 #2d8535） */
 body[data-show="大頭小狀元"][data-season] .unit[data-label^="兒童美髮師"]{color:#2d8535;-webkit-text-stroke:4px #ffffff}
 /* 孝瓏 2026-10-14：全台第一間玩具診所（yoyo小狀元第1季第10集 玩具醫生）＝白字＋黑色方框 */
-body[data-show="大頭小狀元"][data-season] .unit[data-label^="全台第一間玩具診所"]{padding:8px 14px;border-top:none;border-radius:0;font-size:22px;paint-order:stroke fill;color:#ffffff;-webkit-text-stroke:0;background-color:#111111;background-image:none}
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="全台第一間玩具診所"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#111111;-webkit-text-stroke:0;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="全台第一間玩具診所"] .hl{display:inline-block;background:rgba(0,0,0,.45);color:#fff;padding:2px 10px;border-radius:6px}
 /* 孝瓏 2026-10-14：古古食 所有標題＝黑字＋米色底（擷取自畫面 #e6e0d0） */
 body[data-show^="古古食"] .unit{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#111111;-webkit-text-stroke-width:0;background-color:#e6e0d0;background-image:none}
 /* 孝瓏 2026-10-14：爬蟲解說員 葉岳龍＝藍紫字＋白框（藍底） */
@@ -616,7 +617,8 @@ body[data-show="大頭小狀元"][data-season] .unit[data-label^="安管達人"]
 /* 孝瓏 2026-10-14：兒童美髮師 江謝寀（第1季第05集）＝綠字＋白框（字幕實測綠 #2d8535） */
 body[data-show="大頭小狀元"][data-season] .unit[data-label^="兒童美髮師"]{color:#2d8535;-webkit-text-stroke:4px #ffffff}
 /* 孝瓏 2026-10-14：全台第一間玩具診所（yoyo小狀元第1季第10集 玩具醫生）＝白字＋黑色方框 */
-body[data-show="大頭小狀元"][data-season] .unit[data-label^="全台第一間玩具診所"]{padding:8px 14px;border-top:none;border-radius:0;font-size:22px;paint-order:stroke fill;color:#ffffff;-webkit-text-stroke:0;background-color:#111111;background-image:none}
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="全台第一間玩具診所"]{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#111111;-webkit-text-stroke:0;background-color:#6bbbfb;background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%)}
+body[data-show="大頭小狀元"][data-season] .unit[data-label^="全台第一間玩具診所"] .hl{display:inline-block;background:rgba(0,0,0,.45);color:#fff;padding:2px 10px;border-radius:6px}
 /* 孝瓏 2026-10-14：古古食 所有標題＝黑字＋米色底（擷取自畫面 #e6e0d0） */
 body[data-show^="古古食"] .unit{padding:8px 14px;border-top:none;border-radius:9px;font-size:22px;paint-order:stroke fill;color:#111111;-webkit-text-stroke-width:0;background-color:#e6e0d0;background-image:none}
 /* 孝瓏 2026-10-14：爬蟲解說員 葉岳龍＝藍紫字＋白框（藍底） */
