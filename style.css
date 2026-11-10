@@ -1074,3 +1074,12 @@ body[data-show^="狗狗週記"] .entries li:has(> .role)>a{display:block}
 .treebox .tree li:hover,.treebox .tnode:hover{background:transparent !important;box-shadow:none !important}
 .treebox .tree li a,.treebox .tree li a:hover,.treebox .tnode>a:hover{background:transparent !important;box-shadow:none !important}
 .treebox a.curlink,.treebox a.curlink:hover{background:#e8f0fe !important;color:#1a56db !important;font-weight:700 !important;border-radius:6px !important}
+
+/* 2026-11-10 孝瓏：頂端橫幅分區切換（音樂圖書館／語言學習區／知識補給站／使用公司）
+   目前所在分區用藍底白字標示；窄螢幕允許換行，避免擠爆 */
+.navbtn.on{background:var(--link);color:#fff !important;border-color:var(--link);font-weight:700}
+.navbtn.on:hover{background:var(--link);text-decoration:none}
+@media (max-width:860px){
+  .site-head .head-row{flex-wrap:wrap}
+  .topnav{flex-wrap:wrap;justify-content:flex-end}
+}
