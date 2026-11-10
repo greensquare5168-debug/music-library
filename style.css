@@ -1067,3 +1067,8 @@ body[data-show^="狗狗週記"] .entries li:has(> .role){padding:10px 2px}
 body[data-show^="狗狗週記"] .entries li:has(> .role)>.role{
   display:block;font-weight:700;margin:0 0 8px;padding-bottom:6px;border-bottom:2px solid #b8c7d6}
 body[data-show^="狗狗週記"] .entries li:has(> .role)>a{display:block}
+
+/* 2026-11-10 孝瓏：左欄全站統一 —— 不要 hover 陰影/底色，只標示目前所在頁 */
+.treebox .tree li:hover,.treebox .tnode:hover{background:transparent !important;box-shadow:none !important}
+.treebox .tree li a,.treebox .tree li a:hover,.treebox .tnode>a:hover{background:transparent !important;box-shadow:none !important}
+.treebox a.curlink,.treebox a.curlink:hover{background:#e8f0fe !important;color:#1a56db !important;font-weight:700 !important;border-radius:6px !important}

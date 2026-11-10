@@ -63,7 +63,7 @@ function openWin(u){
   // 2026-11-04 孝瓏：「點左欄畫面會閃一下」
   // 原因：頁面靜態左欄先畫出來 → app.js 用 tree.json 重畫時把整塊清空再長出來（＝閃 2 次）
   // 解法：CSS 先隱藏左欄內容（背景卡片留著，版面不跳），等樹畫好才加 .ktree-ready 一次顯示
-  function treeReady(){ document.documentElement.classList.add('ktree-ready'); }
+  function treeReady(){ document.documentElement.classList.add('ktree-ready'); try{ if(window.__markStaticCur) window.__markStaticCur(); }catch(e){} }
   var box=document.querySelector('.treebox');
   if(!box){ treeReady(); return; }
   var btn=document.createElement('button');
@@ -198,6 +198,23 @@ function openWin(u){
       }
       // 2026-11-10：音樂圖書館首頁（品牌總覽）本身不在節點裡 → 用根節點畫（否則只剩無箭頭的靜態左欄）
       if(!hit && inLib && t && t.length){ hit={chain:[t[0]]}; }
+      // 2026-11-10：靜態左欄也要標示目前所在頁（比對 pathname）
+      function markStaticCur(){
+        try{
+          var here=decodeURIComponent(location.pathname).replace(/\/index\.html$/,'/');
+          if(here.slice(-1)!=='/') here+='/';
+          var as=box.querySelectorAll('a[href]');
+          for(var i=0;i<as.length;i++){
+            var a=as[i];
+            try{
+              var p=new URL(a.getAttribute('href'),location.href).pathname;
+              p=decodeURIComponent(p); if(p.slice(-1)!=='/') p+='/';
+              if(p===here){ a.classList.add('curlink'); }
+            }catch(e){}
+          }
+        }catch(e){}
+      }
+      window.__markStaticCur=markStaticCur;
       if(!hit) return false;                  // 這頁不在樹裡 → 保留原本靜態左欄
       var root=hit.chain[0];
       window.__kmtCurHref=hit.chain[hit.chain.length-1].h||'';
