@@ -1097,3 +1097,6 @@ body[data-show^="狗狗週記"] .entries li:has(> .role)>a{display:block}
 .entries li{padding:5px 2px !important;line-height:1.9 !important;border-bottom:0 !important}
 .blankline{height:auto !important;line-height:1.9 !important;padding:5px 0 !important;margin:0 !important}
 .entries li.blankline{height:auto !important;line-height:1.9 !important;padding:5px 2px !important}
+
+/* 2026-11-11 孝瓏：片頭曲／片尾曲列不再自帶 26px 間距（改用空行） */
+.r-intro,.r-outro{margin-top:0 !important;margin-bottom:0 !important}
