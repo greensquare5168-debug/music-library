@@ -1194,12 +1194,12 @@ body[data-show^="狗狗週記"] .entries li:has(> .role)>a{display:block}
 .plainlabel{border:0 !important;background:none !important;padding:2px 0 !important;margin:6px 0 2px !important;
   font-size:14.5px !important;font-weight:700 !important;color:#2b3648 !important;-webkit-text-stroke:0 !important}
 
-/* 2026-11-11 孝瓏：水果冰淇淋三關標題用大標題樣式 */
+/* 2026-11-11 孝瓏：水果冰淇淋三關標題改用「橫線」樣式（同簡介） */
 .unit.bigtitle{
-  padding:8px 14px !important;border:none !important;border-radius:9px !important;
-  font-size:22px !important;font-weight:700 !important;color:#2b3648 !important;
-  background-color:#6bbbfb !important;
-  background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%) !important;
-  display:flex !important;align-items:center;min-height:51px;box-sizing:border-box;
-  -webkit-text-stroke:0 !important;margin:6px 0 4px !important;
+  padding:2px 0 8px !important;border:none !important;border-bottom:2px solid #8fa3bd !important;
+  border-radius:0 !important;font-size:16px !important;font-weight:700 !important;
+  color:#2b3648 !important;background:none !important;
+  display:block !important;text-align:left !important;min-height:0 !important;
+  -webkit-text-stroke:0 !important;margin:20px 0 4px !important;
 }
+
