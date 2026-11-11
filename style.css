@@ -1196,7 +1196,7 @@ body[data-show^="狗狗週記"] .entries li:has(> .role)>a{display:block}
 
 /* 2026-11-11 孝瓏：水果冰淇淋三關標題改用「橫線」樣式（同簡介） */
 .unit.bigtitle{
-  padding:2px 0 8px !important;border:none !important;border-bottom:2px solid #8fa3bd !important;
+  padding:2px 0 8px !important;border:none !important;border-bottom:1px solid #c3cedb !important;
   border-radius:0 !important;font-size:16px !important;font-weight:700 !important;
   color:#2b3648 !important;background:none !important;
   display:block !important;text-align:left !important;min-height:0 !important;
