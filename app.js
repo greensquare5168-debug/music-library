@@ -352,16 +352,17 @@ function openWin(u){
   window.addEventListener('resize', function(){ if(window.innerWidth>860) close(); });
 })();
 
-/* 音樂圖書館：右上隱藏「語言學習區／知識補給站」按鈕（僅在圖書館內容頁） */
+/* 音樂圖書館：右上隱藏「語言學習區」（全站；2026-11-11 孝瓏：要分開）
+   知識補給站：只在圖書館內容頁隱藏 */
 (function(){
   var p;
   try { p = decodeURIComponent(location.pathname); } catch(e){ p = location.pathname; }
-  if(p.indexOf('/罐頭音樂研究所/') < 0) return;
+  var inLib = p.indexOf('/罐頭音樂研究所/') >= 0;
   document.querySelectorAll('nav.topnav a.navbtn').forEach(function(a){
     var h = '';
     try { h = decodeURIComponent(a.getAttribute('href')||''); } catch(e){ h = a.getAttribute('href')||''; }
-    if(h.indexOf('語言學習區') >= 0 || h.indexOf('知識補給站') >= 0){
-      a.style.display = 'none';
-    }
+    var isLang = h.indexOf('multi-language') >= 0 || h.indexOf('語言學習區') >= 0;
+    var isKnow = h.indexOf('知識補給站') >= 0;
+    if(isLang || (isKnow && inLib)){ a.style.display = 'none'; }
   });
 })();
