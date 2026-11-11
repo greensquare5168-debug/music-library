@@ -350,3 +350,17 @@ function openWin(u){
   });
   window.addEventListener('resize', function(){ if(window.innerWidth>860) close(); });
 })();
+
+/* 音樂圖書館：右上隱藏「語言學習區／知識補給站」按鈕（僅在圖書館內容頁） */
+(function(){
+  var p;
+  try { p = decodeURIComponent(location.pathname); } catch(e){ p = location.pathname; }
+  if(p.indexOf('/罐頭音樂研究所/') < 0) return;
+  document.querySelectorAll('nav.topnav a.navbtn').forEach(function(a){
+    var h = '';
+    try { h = decodeURIComponent(a.getAttribute('href')||''); } catch(e){ h = a.getAttribute('href')||''; }
+    if(h.indexOf('語言學習區') >= 0 || h.indexOf('知識補給站') >= 0){
+      a.style.display = 'none';
+    }
+  });
+})();
