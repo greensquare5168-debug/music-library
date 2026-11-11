@@ -309,7 +309,8 @@ function openWin(u){
   var panel=document.createElement('div');
   panel.style.cssText='position:absolute;left:0;top:100%;margin-top:6px;min-width:168px;background:#fff;border:1px solid #e3ecf3;border-radius:10px;box-shadow:0 8px 22px rgba(16,24,40,.14);padding:6px;display:none;z-index:120';
   /* 2026-11-10：改連本站分區（與頂端橫幅同一份），不再指向外部舊站 */
-  [['語言學習區',base+'語言學習區/index.html'],
+  /* 2026-11-11 孝瓏：左上切換選單的「語言學習區」→ 外部 multi-language 站 */
+  [['語言學習區','https://greensquare5168-debug.github.io/multi-language/'],
    ['知識補給站',base+'知識補給站/index.html']].forEach(function(it){
     var a=document.createElement('a');
     a.href=it[1];
