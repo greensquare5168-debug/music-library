@@ -1176,3 +1176,7 @@ body[data-show^="狗狗週記"] .entries li:has(> .role)>a{display:block}
 .unit[data-label^="老闆 柳丁爸爸"]{color:#ffffff !important;-webkit-text-stroke:4px #22346b !important;paint-order:stroke fill !important}
 .unit[data-label^="柳丁"]{color:#ffffff !important;-webkit-text-stroke:4px #f2c433 !important;paint-order:stroke fill !important}
 .unit[data-label^="老闆 蕭文福"]{color:#ffffff !important;-webkit-text-stroke:4px #2c38a8 !important;paint-order:stroke fill !important}
+
+/* 2026-11-11 孝瓏：香博士時間字級與一般大標題一致（22px） */
+.unit[data-label="香博士時間"] .hx{font-size:22px !important}
+.unit[data-label="香博士時間"] .hb{font-size:22px !important;letter-spacing:normal !important}
