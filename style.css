@@ -1171,3 +1171,8 @@ body[data-show^="狗狗週記"] .entries li:has(> .role)>a{display:block}
   -webkit-text-stroke:0 !important;
   text-shadow:none !important;
 }
+
+/* 2026-11-11 孝瓏：海產店達人等自訂段落框文字顏色（避免被其他規則蓋成黑） */
+.unit[data-label^="老闆 柳丁爸爸"]{color:#22346b !important;-webkit-text-stroke:4px #ffffff !important;paint-order:stroke fill !important}
+.unit[data-label^="柳丁"]{color:#f2c433 !important;-webkit-text-stroke:4px #7a4f28 !important;paint-order:stroke fill !important}
+.unit[data-label^="老闆 蕭文福"]{color:#ffffff !important;-webkit-text-stroke:4px #2c38a8 !important;paint-order:stroke fill !important}
