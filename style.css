@@ -1205,14 +1205,14 @@ body[data-show^="狗狗週記"] .entries li:has(> .role)>a{display:block}
 
 
 
-/* 2026-11-11 孝瓏：清潔隊員長標題框 → 大頭同款（藍色漸層、同高） */
+/* 2026-11-11 孝瓏：清潔隊員長標題框 → 藍色漸層、全白字、無描邊、同高 */
 .unit[data-label="台北市環保局 內湖區清潔隊 西湖分隊夜間班"]{
   border:none !important;border-radius:9px !important;
   background-color:#6bbbfb !important;
   background-image:linear-gradient(135deg,#6bbbfb 0 33.4%,#9bd4fd 33.4% 66.7%,#d3ecff 66.7% 100%) !important;
   padding:8px 14px !important;min-height:51px !important;box-sizing:border-box !important;
   display:flex !important;align-items:center !important;
-  font-size:22px !important;font-weight:700 !important;color:#69d280 !important;
-  -webkit-text-stroke:4px #ffffff !important;paint-order:stroke fill !important;
+  font-size:22px !important;font-weight:700 !important;color:#fff !important;
+  -webkit-text-stroke:0 !important;text-shadow:none !important;
   margin:26px 0 4px !important;white-space:normal !important;line-height:1.2 !important;
 }
