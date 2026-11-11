@@ -1154,3 +1154,7 @@ body[data-show^="狗狗週記"] .entries li:has(> .role)>a{display:block}
 
 /* 香博士時間框上方不要額外 margin（空行已足夠） */
 .unit[data-label="香博士時間"]{margin-top:0 !important}
+
+/* 香博士時間框：文字靠左（與其他大標題框一致） */
+.unit[data-label="香博士時間"]{justify-content:flex-start !important}
+.unit[data-label="香博士時間"] .hyl{transform:none !important}
