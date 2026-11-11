@@ -1108,3 +1108,6 @@ body[data-show^="狗狗週記"] .entries li:has(> .role)>a{display:block}
 
 /* 2026-11-11 孝瓏：廣告後片段字級同一般內文（16px） */
 .unit.ad{font-size:16px !important}
+
+/* 2026-11-11 孝瓏：簡介／片尾曲 分隔橫線不再撐開間距 */
+.entries li>div[style*="border-top:2px solid #8fa3bd"]{margin:2px 0 0 !important}
