@@ -1087,3 +1087,8 @@ body[data-show^="狗狗週記"] .entries li:has(> .role)>a{display:block}
 .unit{margin-top:0 !important;margin-bottom:0 !important}
 .blankline{height:1.7em;line-height:1.7;margin:0;padding:0}
 .entries li.blankline{height:1.7em;line-height:1.7;margin:0;padding:0;border:0}
+
+/* 2026-11-11 孝瓏：每行間距一致（含空行） */
+.entries li{padding:0 2px !important;border-bottom:0 !important;line-height:1.7}
+.blankline{height:auto !important;line-height:1.7 !important;margin:0 !important;padding:0 !important}
+.entries li.blankline{height:auto !important;line-height:1.7 !important;padding:0 2px !important}
