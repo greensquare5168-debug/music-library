@@ -1132,3 +1132,22 @@ body[data-show^="狗狗週記"] .entries li:has(> .role)>a{display:block}
 
 /* 2026-11-11 孝瓏：簡介的橫線與歌名也貼緊（同片尾曲） */
 .entries li[style*="border-bottom:none"]>div[style*="border-top"]{margin-bottom:2px !important}
+
+/* 2026-11-11 孝瓏：香字白描邊（用 text-shadow 四向，兼容性最好） */
+.unit[data-label="香博士時間"] .hx{
+  -webkit-text-stroke:0 !important;
+  font-size:36px !important;
+  text-shadow:
+    -2px -2px 0 #fff, 0 -2px 0 #fff, 2px -2px 0 #fff,
+    -2px  0   0 #fff,                  2px  0   0 #fff,
+    -2px  2px 0 #fff, 0  2px 0 #fff,   2px  2px 0 #fff !important;
+}
+
+/* 香字描邊加強（多層 text-shadow 疊出實心白邊） */
+.unit[data-label="香博士時間"] .hx{
+  text-shadow:
+    -3px -3px 0 #fff, 0 -3px 0 #fff, 3px -3px 0 #fff,
+    -3px  0   0 #fff,                3px  0   0 #fff,
+    -3px  3px 0 #fff, 0  3px 0 #fff, 3px  3px 0 #fff,
+    -4px -4px 0 #fff, 4px -4px 0 #fff, -4px 4px 0 #fff, 4px 4px 0 #fff !important;
+}
