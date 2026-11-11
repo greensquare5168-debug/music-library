@@ -1158,3 +1158,10 @@ body[data-show^="狗狗週記"] .entries li:has(> .role)>a{display:block}
 /* 香博士時間框：文字靠左（與其他大標題框一致） */
 .unit[data-label="香博士時間"]{justify-content:flex-start !important}
 .unit[data-label="香博士時間"] .hyl{transform:none !important}
+
+/* 2026-11-11 孝瓏：香字改用 -webkit-text-stroke + paint-order（紅字＋粗白邊，實測有效） */
+.unit[data-label="香博士時間"] .hx{
+  -webkit-text-stroke:8px #fff !important;
+  paint-order:stroke fill !important;
+  text-shadow:none !important;
+}
