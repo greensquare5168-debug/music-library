@@ -1204,6 +1204,12 @@ body[data-show^="狗狗週記"] .entries li:has(> .role)>a{display:block}
 }
 
 
-/* 2026-11-11 孝瓏：長標題框字級自動縮小，維持與其他大標題同高 */
-.unit[data-label="台北市環保局 內湖區清潔隊 西湖分隊夜間班"]{font-size:20px !important;white-space:normal !important;line-height:1.15 !important;padding:6px 14px !important;align-items:center !important}
-.unit[data-label="台北市環保局 內湖區清潔隊 西湖分隊夜間班"] .blk{font-size:20px !important;white-space:normal !important;line-height:1.15 !important}
+
+/* 2026-11-11 孝瓏：清潔隊員長標題框改用與其他大標題相同樣式（同高） */
+.unit[data-label="台北市環保局 內湖區清潔隊 西湖分隊夜間班"]{
+  border:2px solid #8fa3bd !important;border-radius:9px !important;background:#fff !important;
+  padding:8px 14px !important;min-height:51px !important;box-sizing:border-box !important;
+  display:flex !important;align-items:center !important;
+  font-size:22px !important;font-weight:700 !important;color:#2b3648 !important;
+  margin:26px 0 4px !important;-webkit-text-stroke:0 !important;white-space:normal !important;line-height:1.2 !important;
+}
