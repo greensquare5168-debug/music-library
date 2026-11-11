@@ -1129,3 +1129,6 @@ body[data-show^="狗狗週記"] .entries li:has(> .role)>a{display:block}
 }
 .unit[data-label="香博士時間"] .hb{color:#111;font-size:19px;font-weight:800;letter-spacing:2px;line-height:1}
 .unit[data-label="香博士時間"] .hyl{transform:translateX(6px)}
+
+/* 2026-11-11 孝瓏：簡介的橫線與歌名也貼緊（同片尾曲） */
+.entries li[style*="border-bottom:none"]>div[style*="border-top"]{margin-bottom:2px !important}
