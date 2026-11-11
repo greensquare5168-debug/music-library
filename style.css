@@ -1183,3 +1183,9 @@ body[data-show^="狗狗週記"] .entries li:has(> .role)>a{display:block}
 
 /* 2026-11-11 孝瓏：博士時間四字比香小一號（16px） */
 .unit[data-label="香博士時間"] .hb{font-size:16px !important}
+
+/* 2026-11-11 孝瓏：海產店達人 各角色文字配色（白字彩色描邊；柳丁暱稱黃字棕邊） */
+.unit[data-label^="老闆 柳丁爸爸"]{color:#fff !important;-webkit-text-stroke:4px #1b3a8b !important;paint-order:stroke fill !important}
+.unit[data-label^="老闆 柳丁爸爸"] .r-mom{color:#fff !important;-webkit-text-stroke:4px #c0392b !important}
+.unit[data-label^="老闆 柳丁爸爸"] .r-mgr{color:#fff !important;-webkit-text-stroke:4px #1e8449 !important}
+.unit[data-label^="老闆 柳丁爸爸"] .nick{color:#f2c433 !important;-webkit-text-stroke:4px #7a4f28 !important}
