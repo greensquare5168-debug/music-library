@@ -1111,3 +1111,21 @@ body[data-show^="狗狗週記"] .entries li:has(> .role)>a{display:block}
 
 /* 2026-11-11 孝瓏：片尾曲的橫線與歌名拉近（簡介不受影響） */
 .entries li.r-outro>div[style*="border-top"]{margin-bottom:2px !important}
+
+/* 2026-11-11 孝瓏：香博士時間 字卡樣式（藍天綠地，香字紅且傾斜，博士時間黑字較小） */
+.unit[data-label="香博士時間"]{
+  border:none !important;border-radius:10px !important;
+  padding:10px 14px !important;margin-top:6px;
+  background-color:#4aa3e0 !important;
+  background-image:linear-gradient(180deg,#2f8fd8 0%,#63b8ea 58%,#5cb84f 58%,#3f8f38 100%) !important;
+  color:#111 !important;-webkit-text-stroke:0 !important;font-weight:700 !important;
+  display:flex !important;align-items:center;justify-content:center;
+  min-height:56px;position:relative;overflow:hidden;
+}
+.unit[data-label="香博士時間"] .hyl{display:inline-flex;align-items:center;gap:8px}
+.unit[data-label="香博士時間"] .hx{
+  color:#e02b1d;font-size:34px;font-weight:900;line-height:1;display:inline-block;
+  transform:rotate(-10deg);-webkit-text-stroke:3px #fff;paint-order:stroke fill;
+}
+.unit[data-label="香博士時間"] .hb{color:#111;font-size:19px;font-weight:800;letter-spacing:2px;line-height:1}
+.unit[data-label="香博士時間"] .hyl{transform:translateX(6px)}
