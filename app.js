@@ -352,8 +352,7 @@ function openWin(u){
   window.addEventListener('resize', function(){ if(window.innerWidth>860) close(); });
 })();
 
-/* 音樂圖書館：右上隱藏「語言學習區」（全站；2026-11-11 孝瓏：要分開）
-   知識補給站：只在圖書館內容頁隱藏 */
+/* 音樂圖書館：右上隱藏「語言學習區」「知識補給站」（全站；2026-11-11 孝瓏：分開） */
 (function(){
   var p;
   try { p = decodeURIComponent(location.pathname); } catch(e){ p = location.pathname; }
@@ -363,6 +362,6 @@ function openWin(u){
     try { h = decodeURIComponent(a.getAttribute('href')||''); } catch(e){ h = a.getAttribute('href')||''; }
     var isLang = h.indexOf('multi-language') >= 0 || h.indexOf('語言學習區') >= 0;
     var isKnow = h.indexOf('知識補給站') >= 0;
-    if(isLang || (isKnow && inLib)){ a.style.display = 'none'; }
+    if(isLang || isKnow){ a.style.display = 'none'; }
   });
 })();
