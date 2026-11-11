@@ -1092,3 +1092,8 @@ body[data-show^="狗狗週記"] .entries li:has(> .role)>a{display:block}
 .entries li{padding:0 2px !important;border-bottom:0 !important;line-height:1.7}
 .blankline{height:auto !important;line-height:1.7 !important;margin:0 !important;padding:0 !important}
 .entries li.blankline{height:auto !important;line-height:1.7 !important;padding:0 2px !important}
+
+/* 2026-11-11 孝瓏：行距加大但仍保持一致（文字行與空行同高） */
+.entries li{padding:5px 2px !important;line-height:1.9 !important;border-bottom:0 !important}
+.blankline{height:auto !important;line-height:1.9 !important;padding:5px 0 !important;margin:0 !important}
+.entries li.blankline{height:auto !important;line-height:1.9 !important;padding:5px 2px !important}
