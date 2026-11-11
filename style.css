@@ -1086,3 +1086,4 @@ body[data-show^="狗狗週記"] .entries li:has(> .role)>a{display:block}
 /* 2026-11-11 孝瓏：單元框上下改用實際空白行（可選取、可複製） */
 .unit{margin-top:0 !important;margin-bottom:0 !important}
 .blankline{height:1.7em;line-height:1.7;margin:0;padding:0}
+.entries li.blankline{height:1.7em;line-height:1.7;margin:0;padding:0;border:0}
