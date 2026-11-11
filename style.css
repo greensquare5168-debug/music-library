@@ -1083,8 +1083,3 @@ body[data-show^="狗狗週記"] .entries li:has(> .role)>a{display:block}
   .site-head .head-row{flex-wrap:wrap}
   .topnav{flex-wrap:wrap;justify-content:flex-end}
 }
-
-/* 2026-11-11 孝瓏：全站列表分隔線改為「空行」（不用底線／虛線） */
-.entries li,.brandlist li,.albumlist li{border-bottom:none !important}
-.entries li+li{margin-top:12px}
-.brandlist li+li,.albumlist li+li{margin-top:6px}
