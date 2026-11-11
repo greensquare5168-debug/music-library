@@ -1180,3 +1180,6 @@ body[data-show^="狗狗週記"] .entries li:has(> .role)>a{display:block}
 /* 2026-11-11 孝瓏：香博士時間字級與一般大標題一致（22px） */
 .unit[data-label="香博士時間"] .hx{font-size:22px !important}
 .unit[data-label="香博士時間"] .hb{font-size:22px !important;letter-spacing:normal !important}
+
+/* 2026-11-11 孝瓏：博士時間四字比香小一號（16px） */
+.unit[data-label="香博士時間"] .hb{font-size:16px !important}
