@@ -1231,3 +1231,7 @@ body[data-show="大頭小狀元"][data-season] .unit[data-label="台北市環保
   line-height:1.15 !important;
   margin-left:-6px !important;
 }
+
+/* 2026-11-12 孝瓏：全站大標題（單元標題）不用粗體 */
+.unit, .unit span, .unit .zy, .unit .hb, .unit .hx,
+.unit.bigtitle, .plainlabel{font-weight:400 !important}
