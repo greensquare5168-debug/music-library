@@ -1224,10 +1224,10 @@ body[data-show="大頭小狀元"][data-season] .unit[data-label="台北市環保
   background-color:#111111 !important;
   color:#fff !important;
   font-weight:700 !important;
-  padding:0 6px 0 0 !important;
+  padding:0 6px !important;
   border-radius:0 !important;
   box-shadow:none !important;
   font-size:22px !important;
   line-height:1.15 !important;
-  margin-left:0 !important;
+  margin-left:-6px !important;
 }
