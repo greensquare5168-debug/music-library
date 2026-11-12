@@ -1068,7 +1068,12 @@ body[data-show^="狗狗週記"] .unit[data-label="狗狗從軍記"]{
 body[data-show^="狗狗週記"] .entries li:has(> .role){padding:10px 2px}
 body[data-show^="狗狗週記"] .entries li:has(> .role)>.role{
   display:block;font-weight:700;margin:0 0 8px;padding-bottom:6px;border-bottom:2px solid #b8c7d6}
-body[data-show^="狗狗週記"] .entries li:has(> .role)>a{display:block}
+/* 2026-11-12 孝瓏：狗狗週記 片頭曲／片尾曲 → 一般字級、不粗體，只留一條平常的灰線 */
+body[data-show^="狗狗週記"] .entries li.r-intro>.role,
+body[data-show^="狗狗週記"] .entries li.r-outro>.role{
+  font-weight:400 !important;font-size:inherit !important;margin:0 0 6px !important;
+  padding-bottom:5px !important;border-bottom:1px solid #c3cedb !important}
+body[data-show^="狗狗週記"] .entries li.r-outro>div[style*="border-top"]{display:none !important}
 
 /* 2026-11-10 孝瓏：左欄全站統一 —— 不要 hover 陰影/底色，只標示目前所在頁 */
 .treebox .tree li:hover,.treebox .tnode:hover{background:transparent !important;box-shadow:none !important}
