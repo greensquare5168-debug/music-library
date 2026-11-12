@@ -1214,10 +1214,10 @@ body[data-show^="狗狗週記"] .entries li:has(> .role)>a{display:block}
   display:flex !important;align-items:center !important;
   font-size:22px !important;font-weight:700 !important;color:#fff !important;
   -webkit-text-stroke:0 !important;text-shadow:none !important;
-  margin:26px 0 4px !important;white-space:normal !important;line-height:1.2 !important;
+  margin:-5px 0 4px !important;white-space:normal !important;line-height:1.2 !important;
 }
 
-/* 2026-11-12 孝瓏：清潔隊員長標題的黑色實心框 → 框型改用 WOW信箱（香Q博士）包文字的框樣式，顏色維持黑色 */
+/* 2026-11-12 孝瓏：清潔隊員長標題的黑色實心框 → 框型改用 WOW信箱（香Q博士）包文字的框樣式，顏色維持黑色；上方間距對齊其他大標題（實測差 5px） */
 body[data-show="大頭小狀元"][data-season] .unit[data-label="台北市環保局 內湖區清潔隊 西湖分隊夜間班"] .blk{
   display:inline-block !important;
   background:#111111 !important;
