@@ -1272,3 +1272,7 @@ body[data-show="yoyo童話世界"] .unit.ad{
 
 /* 2026-11-13 孝瓏：全站橫線標題（.unit.ad）行高統一 1.3，字到橫線間距一致 */
 .unit.ad{line-height:1.3 !important}
+
+/* 2026-11-13 孝瓏：全站橫線標題統一（字到線 5px、線到內容 5px，對齊童話世界片尾曲） */
+.unit.ad{padding:2px 0 5px !important;line-height:1.3 !important}
+.unit.ad + .entries{margin-top:-3px !important}
