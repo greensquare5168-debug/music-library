@@ -10,9 +10,11 @@
 .aztoggle .azcur{color:#2f6feb;font-weight:600}
 .aztoggle .arw{display:inline-block;transition:transform .15s;font-size:10px;color:#8a97a8}
 .azfilter.open .aztoggle .arw{transform:rotate(180deg)}
-.azpanel{display:none;flex-wrap:wrap;gap:6px;align-items:center;margin-top:8px;padding:8px;border:1px solid #e3e8ee;border-radius:10px;background:#f8fafc}
+.azpanel{display:none;flex-direction:column;gap:2px;margin-top:8px;padding:6px;border:1px solid #e3e8ee;border-radius:10px;background:#fff;box-shadow:0 6px 18px rgba(20,40,70,.08);width:120px;max-height:260px;overflow:auto;position:absolute;z-index:30}
+.azfilter{position:relative}
 .azfilter.open .azpanel{display:flex}
-.azpanel .azbtn{font:inherit;font-size:13px;line-height:1;min-width:26px;padding:6px 7px;border-radius:8px;border:1px solid #cfd8e3;background:#fff;color:#334;cursor:pointer}
+.azpanel .azbtn{font:inherit;font-size:13px;line-height:1.2;display:block;width:100%;text-align:left;padding:6px 10px;border-radius:6px;border:0;background:transparent;color:#334;cursor:pointer}
+.azpanel .azbtn:hover{background:#eef3fb}
 .azpanel .azbtn:hover{background:#eef3fb}
 .azpanel .azbtn.active{background:#2f6feb;border-color:#2f6feb;color:#fff}
 </style></head><body>
