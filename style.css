@@ -1255,3 +1255,17 @@ body[data-show="yoyo童話世界"] .unit{
   -webkit-text-stroke:0;
   paint-order:normal;
 }
+
+/* 2026-11-13 孝瓏：YOYO童話世界「片頭曲」改成橫線標題（同廣告後片段：置中、無框、下緣一條線） */
+body[data-show="yoyo童話世界"] .unit.ad{
+  display:block;
+  text-align:center;
+  border:0;
+  border-bottom:2px solid #8fa3bd;
+  border-radius:0;
+  background:none;
+  padding:2px 0 8px;
+  font-size:14.5px;
+  color:#2b3648;
+  -webkit-text-stroke:0;
+}
