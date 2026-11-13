@@ -1269,3 +1269,6 @@ body[data-show="yoyo童話世界"] .unit.ad{
   color:#2b3648;
   -webkit-text-stroke:0;
 }
+
+/* 2026-11-13 孝瓏：全站橫線標題（.unit.ad）行高統一 1.3，字到橫線間距一致 */
+.unit.ad{line-height:1.3 !important}
