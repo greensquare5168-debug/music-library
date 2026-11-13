@@ -1243,7 +1243,7 @@ body[data-show="大頭小狀元"][data-season] .unit[data-label="台北市環保
 
 /* 2026-11-13 孝瓏：YOYO童話世界 故事名稱 → 大標題（灰框、一般黑字、不加顏色、不用粗體） */
 body[data-show="yoyo童話世界"] .unit{
-  display:inline-block;
+  display:block;
   margin-top:26px;
   padding:8px 14px;
   border:2px solid #8fa3bd;
