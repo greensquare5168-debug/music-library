@@ -1281,6 +1281,7 @@ body[data-show="yoyo童話世界"] .unit.ad{
 .entries li.blankline{padding:5px 2px !important;line-height:1.9 !important;margin:0 !important;height:auto !important}
 .blankline{padding:5px 0 !important;line-height:1.9 !important;margin:0 !important;height:auto !important}
 
-/* 2026-11-14 孝瓏：區塊間空行上下間距對齊（上 9px／下 -6px，補到與下一段等距） */
-div.blankline{margin-top:9px !important;margin-bottom:-6px !important}
-div.blankline + .unit.ad{margin-top:19px !important}
+/* 2026-11-14 孝瓏：空行前後間距＝一般文字行間距（約 10px） */
+div.blankline{margin-top:0 !important;margin-bottom:-9px !important}
+.blankline + .unit{margin-top:-9px !important}
+.blankline + .unit.ad{margin-top:10px !important}
