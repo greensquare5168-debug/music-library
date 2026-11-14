@@ -1285,3 +1285,9 @@ body[data-show="yoyo童話世界"] .unit.ad{
 div.blankline{margin-top:0 !important;margin-bottom:-9px !important}
 .blankline + .unit{margin-top:-9px !important}
 .blankline + .unit.ad{margin-top:10px !important}
+
+/* 2026-11-14 孝瓏：大標題與一般文字行間距一致（標題框不再額外撐高） */
+.unit{padding:0 14px !important;min-height:0 !important;margin:0 !important}
+.unit.ad{padding:2px 0 5px !important;min-height:0 !important}
+.blankline + .unit{margin-top:0 !important}
+.blankline + .unit.ad{margin-top:0 !important}
