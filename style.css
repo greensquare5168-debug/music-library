@@ -1225,17 +1225,20 @@ body[data-show^="狗狗週記"] .entries li.r-outro>div[style*="border-top"]{dis
 /* 2026-11-12 孝瓏：清潔隊員長標題的黑色實心框 → 框型改用 WOW信箱（香Q博士）包文字的框樣式，顏色維持黑色；上方間距對齊其他大標題（實測差 5px） */
 body[data-show="大頭小狀元"][data-season] .unit[data-label="台北市環保局 內湖區清潔隊 西湖分隊夜間班"] .blk{
   display:inline-block !important;
-  background:#111111 !important;
-  background-color:#111111 !important;
+  background:rgba(0,0,0,0.45) !important;
+  background-color:rgba(0,0,0,0.45) !important;
   color:#fff !important;
-  font-weight:700 !important;
-  padding:0 6px !important;
+  font-weight:400 !important;
+  padding:2px 12px 2px 0 !important;
   border-radius:0 !important;
   box-shadow:none !important;
   font-size:22px !important;
-  line-height:1.15 !important;
-  margin-left:-6px !important;
+  line-height:1.2 !important;
+  margin-left:0 !important;
+  -webkit-text-stroke:0 !important;
 }
+/* 2026-11-14 孝瓏：清潔隊員標題左緣對齊一般文字 */
+.unit[data-label="台北市環保局 內湖區清潔隊 西湖分隊夜間班"]{padding:8px 14px 8px 2px !important}
 
 /* 2026-11-12 孝瓏：全站大標題（單元標題）不用粗體 */
 .unit, .unit span, .unit .zy, .unit .hb, .unit .hx,
@@ -1287,3 +1290,10 @@ div.blankline{margin:0 !important}
 .blankline + .unit.ad{margin-top:8px !important}
 .unit{margin-bottom:-5px !important}
 
+
+/* 2026-11-14 孝瓏：清潔隊員長標題 → 與消防英雄同格式（半透明黑框、尖角、文字左緣對齊一般文字） */
+.unit[data-label="台北市環保局 內湖區清潔隊 西湖分隊夜間班"]{padding-left:0 !important;display:block !important;min-height:0 !important}
+.unit[data-label="台北市環保局 內湖區清潔隊 西湖分隊夜間班"] .blk{
+  margin-left:0 !important;padding:2px 12px 2px 4px !important;display:inline-block !important;
+  background:rgba(0,0,0,0.45) !important;border-radius:0 !important;-webkit-text-stroke:0 !important;color:#fff !important;
+}
