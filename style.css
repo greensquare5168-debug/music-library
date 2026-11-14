@@ -1283,7 +1283,7 @@ body[data-show="yoyo童話世界"] .unit.ad{
 
 /* 2026-11-14 孝瓏：空行前後間距＝一般文字行間距（約 10px） */
 div.blankline{margin:0 !important}
-.blankline + .unit{margin-top:10px !important}
-.blankline + .unit.ad{margin-top:10px !important}
-.unit{margin-bottom:-3px !important}
+.blankline + .unit{margin-top:8px !important}
+.blankline + .unit.ad{margin-top:8px !important}
+.unit{margin-bottom:-5px !important}
 
