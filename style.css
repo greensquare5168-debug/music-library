@@ -102,7 +102,7 @@ footer{padding:20px 0 40px}
 .sresults a:last-child{border-bottom:none}
 .sresults a:hover{background:var(--card2)}
 .entries{list-style:none;margin:0;padding:0}
-.entries li{padding:8px 2px;border-bottom:1px dashed var(--line);line-height:1.7}
+.entries li{padding:8px 2px 0;border-bottom:1px dashed var(--line);line-height:1.7}
 .entries li:last-child{border-bottom:none}
 .winlink{display:inline-block;background:#f0faf3;border:1px solid #cfe9d8;border-radius:8px;padding:2px 10px;font-size:13.5px;color:var(--link)}
 .winlink:hover{background:#e3f5e9;text-decoration:none}
@@ -496,7 +496,7 @@ footer{padding:20px 0 40px}
 .sresults a:last-child{border-bottom:none}
 .sresults a:hover{background:var(--card2)}
 .entries{list-style:none;margin:0;padding:0}
-.entries li{padding:8px 2px;border-bottom:1px dashed var(--line);line-height:1.7}
+.entries li{padding:8px 2px 0;border-bottom:1px dashed var(--line);line-height:1.7}
 .entries li:last-child{border-bottom:none}
 .winlink{display:inline-block;background:#f0faf3;border:1px solid #cfe9d8;border-radius:8px;padding:2px 10px;font-size:13.5px;color:var(--link)}
 .winlink:hover{background:#e3f5e9;text-decoration:none}
