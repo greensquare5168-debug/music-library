@@ -1297,3 +1297,7 @@ div.blankline{margin:0 !important}
   margin-left:0 !important;padding:2px 12px 2px 4px !important;display:inline-block !important;
   background:rgba(0,0,0,0.45) !important;border-radius:0 !important;-webkit-text-stroke:0 !important;color:#fff !important;
 }
+
+/* 2026-11-15 孝瓏：空行與文字／標題框邊緣間距統一（約 0.2cm ≈ 5px） */
+.blankline{margin:0 !important;padding:0 !important}
+.blankline + .unit{margin-top:5px !important}
