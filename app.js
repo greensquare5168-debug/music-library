@@ -365,31 +365,3 @@ function openWin(u){
     if(isLang || isKnow){ a.style.display = 'none'; }
   });
 })();
-
-/* 使用清單括號標記：避免「（」或「）」單獨落在行首/行尾（孝瓏 2026-11-15）
-   → 在括號內側插入 WORD JOINER（U+2060），瀏覽器就不會在括號處斷行 */
-(function(){
-  if(window.__markParenFix) return; window.__markParenFix = 1;
-  var WJ = '\u2060';
-  function fix(t){
-    if(!t || t.indexOf('（') < 0) return t;
-    return t.replace(/（(?!\u2060)/g, '（'+WJ).replace(/([^\u2060])）/g, '$1'+WJ+'）');
-  }
-  function walk(node){
-    if(node.nodeType === 3){
-      var s = node.textContent;
-      if(s.indexOf('（') >= 0){
-        var n = fix(s);
-        if(n !== s) node.textContent = n;
-      }
-    } else if(node.nodeType === 1 && node.tagName !== 'A'){
-      for(var c of Array.from(node.childNodes)) walk(c);
-    }
-  }
-  function run(){
-    document.querySelectorAll('.entries li').forEach(function(li){
-      for(var c of Array.from(li.childNodes)) walk(c);
-    });
-  }
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run); else run();
-})();
