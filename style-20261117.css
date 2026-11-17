@@ -1308,4 +1308,7 @@ div.blankline{margin:0 !important}
 .entries li{padding:5px 2px !important;line-height:1.9 !important}
 
 /* 2026-11-17 孝瓏：使用標記要自然換行（不要整段掉到下一行） */
-.entries li{line-break:anywhere !important;word-break:normal !important;overflow-wrap:anywhere !important}
+/* 2026-11-17 孝瓏：標記接續標題並在「、」自然斷行（不要斷在詞中間） */
+.entries li{line-break:loose !important;word-break:normal !important;overflow-wrap:normal !important}
+/* 2026-11-17 孝瓏：標記只在「、」等標點斷行，不要斷在詞中間 */
+.entries li .lbl{word-break:keep-all !important;line-break:normal !important}
