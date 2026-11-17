@@ -1306,3 +1306,6 @@ div.blankline{margin:0 !important}
 
 /* 2026-11-15 孝瓏：全站使用清單列間距統一（文字↔文字、文字↔空行 約 0.2cm） */
 .entries li{padding:5px 2px !important;line-height:1.9 !important}
+
+/* 2026-11-17 孝瓏：使用標記要自然換行（不要整段掉到下一行） */
+.entries li{line-break:anywhere !important;word-break:normal !important;overflow-wrap:anywhere !important}
