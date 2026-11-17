@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>會員中心｜圖書館音樂研究所</title>
+<link rel="stylesheet" href="style.css">
+<style>
+.demo-bar{background:#fff7e6;border-bottom:1px solid #f3d9a4;color:#8a5a00;font-size:13px;padding:8px 0}
+.demo-bar .wrap{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.member-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.who-chip{display:inline-flex;align-items:center;gap:8px;background:#f0faf3;border:1px solid #cfe9d8;color:#15803d;border-radius:999px;padding:5px 12px;font-size:13px;font-weight:600}
+.btn-sm{display:inline-block;border:1px solid #cfd8e3;background:#fff;border-radius:9px;padding:7px 13px;font:inherit;font-size:13px;color:#334;cursor:pointer;text-decoration:none}
+.btn-sm:hover{background:#f6f8fb;text-decoration:none}
+.btn-sm[disabled]{opacity:.55;cursor:not-allowed}
+.sites{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+.site-card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:8px}
+.site-card h3{margin:0;font-size:16px;display:flex;align-items:center;gap:8px}
+.site-card .desc{color:var(--muted);font-size:13.5px;flex:1;line-height:1.55}
+.state{font-size:12px;border-radius:6px;padding:1px 8px;font-weight:600}
+.state.on{background:#f0faf3;color:#15803d;border:1px solid #cfe9d8}
+.state.soon{background:#fff7ed;color:#b45309;border:1px solid #fcd9a8}
+.tip{background:#f6f8fb;border:1px dashed #cfd8e3;border-radius:10px;padding:11px 13px;font-size:12.5px;color:#5c6675;margin-top:16px;line-height:1.6}
+.kv{display:flex;gap:22px;flex-wrap:wrap;font-size:13.5px;color:var(--muted)}
+.kv b{color:#1f2733}
+@media(max-width:640px){.topnav{flex-wrap:wrap}}
+</style></head>
+<body>
+<div class="demo-bar"><div class="wrap">
+  <span>🧪 <b>示範版</b>：這是「登入後」的會員中心樣板，正式版要接後端才擋得住內容。</span>
+</div></div>
+
+<header class="site-head"><div class="wrap head-row">
+  <div><a class="brand" href="index.html">圖書館音樂研究所</a>
+    <div class="sub">會員中心</div></div>
+  <nav class="topnav">
+    <a class="navbtn" href="罐頭音樂研究所/圖書館音樂/index.html">音樂圖書館</a>
+    <a class="navbtn" href="https://greensquare5168-debug.github.io/multi-language/">語言學習區</a>
+    <a class="navbtn" href="知識補給站/index.html">知識補給站</a>
+    <a class="navbtn" href="使用公司/index.html">使用公司</a>
+    <a class="navbtn on" href="member.html">會員中心</a>
+  </nav>
+</div></header>
+
+<main class="wrap">
+  <div class="album-card">
+    <div class="member-head">
+      <div>
+        <h1 style="margin-bottom:4px">會員中心</h1>
+        <div class="kv">
+          <span>帳號 <b id="who">會員</b></span>
+          <span>方案 <b>示範會員</b></span>
+          <span>效期 <b>未接金流</b></span>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;align-items:center">
+        <a class="btn-sm" href="member.html">重新整理</a>
+        <a class="btn-sm" href="#" id="logout">登出</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="album-card">
+    <h2 style="font-size:18px;margin:0 0 4px">全站通行</h2>
+    <div class="muted" style="margin-bottom:14px">同一個帳號，各區不用再登入一次。</div>
+    <div class="sites">
+      <div class="site-card">
+        <h3>音樂圖書館 <span class="state on">已解鎖</span></h3>
+        <div class="desc">品牌／專輯／曲目、作曲者本名、使用作品對照</div>
+        <a class="btn-sm" href="罐頭音樂研究所/圖書館音樂/index.html">前往</a>
+      </div>
+      <div class="site-card">
+        <h3>語言學習區 <span class="state on">已解鎖</span></h3>
+        <div class="desc">多語言教材對照</div>
+        <a class="btn-sm" href="https://greensquare5168-debug.github.io/multi-language/">前往</a>
+      </div>
+      <div class="site-card">
+        <h3>知識補給站 <span class="state on">已解鎖</span></h3>
+        <div class="desc">產業知識與教材整理</div>
+        <a class="btn-sm" href="知識補給站/index.html">前往</a>
+      </div>
+      <div class="site-card">
+        <h3>使用公司 <span class="state on">已解鎖</span></h3>
+        <div class="desc">各公司使用紀錄</div>
+        <a class="btn-sm" href="使用公司/index.html">前往</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="album-card">
+    <h2 style="font-size:18px;margin:0 0 4px">付費功能（規劃中）</h2>
+    <div class="muted" style="margin-bottom:14px">這些是收費後才開放的東西，先放樣子。</div>
+    <div class="sites">
+      <div class="site-card">
+        <h3>批次匯出 <span class="state soon">示範</span></h3>
+        <div class="desc">勾選曲目 → 匯出 CSV／Excel（授權清冊用）</div>
+        <button class="btn-sm" type="button" disabled>尚未開放</button>
+      </div>
+      <div class="site-card">
+        <h3>授權與使用查詢 <span class="state soon">示範</span></h3>
+        <div class="desc">某節目用過哪些曲子、授權期限與費用估算</div>
+        <button class="btn-sm" type="button" disabled>尚未開放</button>
+      </div>
+      <div class="site-card">
+        <h3>訪客／流量報表 <span class="state soon">示範</span></h3>
+        <div class="desc">每日訪客數、熱門頁面、來源（需接統計服務）</div>
+        <button class="btn-sm" type="button" disabled>尚未開放</button>
+      </div>
+    </div>
+    <div class="tip">
+      要做成真的：① 會員資料庫（帳號／到期日）② 付款（綠界／藍新／Stripe）③ 內容放在「驗證後才拿得到」的位置 ④ 訪客統計接 Cloudflare Web Analytics（免費）。
+    </div>
+  </div>
+</main>
+
+<script>
+(function(){
+  var KEY='ml_session_v1';
+  var s=null;
+  try{ s=JSON.parse(localStorage.getItem(KEY)||'null'); }catch(e){ s=null; }
+  if(!s || !s.email){ location.replace('login.html'); return; }
+  document.getElementById('who').textContent=s.name||s.email;
+  document.getElementById('logout').addEventListener('click',function(e){
+    e.preventDefault(); localStorage.removeItem(KEY); location.href='login.html';
+  });
+})();
+</script>
+</body></html>

@@ -365,3 +365,29 @@ function openWin(u){
     if(isLang || isKnow){ a.style.display = 'none'; }
   });
 })();
+
+/* 全站會員登入入口（2026-11-17 孝瓏：登入不是只有音樂圖書館）
+   在每個頁面的 header 右上角插入「登入／會員」；狀態存在 localStorage（示範版） */
+(function(){
+  var KEY='ml_session_v1';
+  var sc=document.currentScript;
+  var root=(sc&&sc.src)?sc.src.replace(/app\.js.*$/,''):'/';
+  function sess(){ try{ return JSON.parse(localStorage.getItem(KEY)||'null'); }catch(e){ return null; } }
+  function add(){
+    var nav=document.querySelector('header .topnav');
+    if(!nav||nav.querySelector('.authchip')) return;
+    var s=sess();
+    var on=!!(s&&s.email);
+    var a=document.createElement('a');
+    a.className='authchip';
+    a.href=root+(on?'member.html':'login.html');
+    a.textContent=on?('👤 '+(s.name||s.email)):'登入';
+    a.style.cssText='display:inline-flex;align-items:center;gap:6px;text-decoration:none;'
+      +'border:1px solid '+(on?'#cfe9d8':'#cfd8e3')+';background:'+(on?'#f0faf3':'#fff')+';'
+      +'color:'+(on?'#15803d':'#1f2733')+';'+(on?'font-weight:600;':'')
+      +'border-radius:10px;padding:9px 14px;font-size:14px;white-space:nowrap';
+    var sp=nav.querySelector('.navsearch');
+    if(sp) nav.insertBefore(a,sp); else nav.appendChild(a);
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',add); else add();
+})();
