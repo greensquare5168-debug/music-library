@@ -1311,10 +1311,11 @@ div.blankline{margin:0 !important}
 @media (min-width:861px){
   body:has(.ytframe) .site-head,body:has(.srcframe) .site-head{position:sticky;top:0;z-index:70}
   body:has(.ytframe) .crumb,body:has(.srcframe) .crumb{position:sticky;top:var(--head-h,83px);z-index:69;background:var(--bg);padding:6px 0 8px;margin:0}
-  body:has(.ytframe) .album-card>.ytframe{position:sticky;top:calc(var(--head-h,83px) + 44px);z-index:45;
+  body:has(.ytframe) .album-card>.ytframe{position:sticky;top:calc(var(--head-h,83px) + 36px);z-index:45;
     max-height:calc(100vh - var(--head-h,83px) - 210px);box-shadow:0 8px 22px rgba(16,24,40,.22)}
-  body:has(.srcframe) .entries>li:has(>.srcframe){position:sticky;top:calc(var(--head-h,83px) + 44px);z-index:45;
+  body:has(.srcframe) .entries>li:has(>.srcframe){position:sticky;top:calc(var(--head-h,83px) + 36px);z-index:45;
     background:var(--card);box-shadow:0 8px 22px rgba(16,24,40,.22)}
   body:has(.srcframe) .entries>li:has(>.srcframe) .srcframe{max-height:calc(100vh - var(--head-h,83px) - 250px)}
+  body:has(.ytframe) .treebox,body:has(.srcframe) .treebox{top:calc(var(--head-h,83px) + 6px);max-height:calc(100vh - var(--head-h,83px) - 30px)}
 }
 @media (min-width:861px) and (max-width:929px){ html{--head-h:135px} }
