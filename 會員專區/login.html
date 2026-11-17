@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>會員登入｜圖書館音樂研究所</title>
+<link rel="stylesheet" href="../style.css">
+<style>
+/* 登入介面（本頁專用，不動主站 style.css） */
+.demo-bar{background:#fff7e6;border-bottom:1px solid #f3d9a4;color:#8a5a00;font-size:13px;padding:8px 0}
+.demo-bar .wrap{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.demo-bar b{color:#8a5a00}
+.auth-wrap{max-width:430px;margin:34px auto 60px}
+.auth-card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:28px 26px 24px;box-shadow:0 10px 30px rgba(20,40,70,.06)}
+.auth-card h1{font-size:22px;margin:0 0 4px;text-align:center}
+.auth-card .sub{text-align:center;margin-bottom:22px}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px;font-weight:600}
+.inp{position:relative;display:flex;align-items:center}
+.inp input{width:100%;background:#fff;border:1px solid #cfd8e3;border-radius:10px;padding:12px 44px 12px 14px;font:inherit;font-size:15px;color:var(--fg);outline:none;transition:border-color .15s,box-shadow .15s}
+.inp input::placeholder{color:#a7b1c0}
+.inp input:focus{border-color:#2f6feb;box-shadow:0 0 0 3px rgba(47,111,235,.12)}
+.inp .eye{position:absolute;right:6px;border:0;background:transparent;cursor:pointer;font-size:16px;line-height:1;padding:8px 10px;color:#8a97a8;border-radius:8px}
+.inp .eye:hover{background:#f1f5f9;color:#334}
+.row-between{display:flex;justify-content:space-between;align-items:center;margin:2px 0 18px;font-size:13.5px}
+.chk{display:flex;align-items:center;gap:7px;color:var(--muted);cursor:pointer;user-select:none}
+.chk input{width:15px;height:15px;accent-color:#2f6feb;cursor:pointer}
+.btn-main{width:100%;border:0;border-radius:10px;background:#2f6feb;color:#fff;font:inherit;font-size:16px;font-weight:700;padding:13px 16px;cursor:pointer;transition:background .15s,transform .05s}
+.btn-main:hover{background:#255cc7}
+.btn-main:active{transform:translateY(1px)}
+.btn-main:disabled{background:#9db4dd;cursor:not-allowed}
+.msg{display:none;margin:14px 0 0;border-radius:10px;padding:10px 12px;font-size:13.5px;line-height:1.5}
+.msg.err{display:block;background:#fff1f0;border:1px solid #f6c2bd;color:#a4262c}
+.msg.ok{display:block;background:#f0faf3;border:1px solid #cfe9d8;color:#15803d}
+.or{display:flex;align-items:center;gap:10px;color:#9aa6b6;font-size:12.5px;margin:20px 0 14px}
+.or:before,.or:after{content:"";flex:1;height:1px;background:var(--line)}
+.btn-ghost{display:flex;width:100%;align-items:center;justify-content:center;gap:9px;border:1px solid #cfd8e3;background:#fff;border-radius:10px;padding:11px 14px;font:inherit;font-size:14.5px;color:#334;cursor:pointer;text-decoration:none}
+.btn-ghost:hover{background:#f6f8fb;text-decoration:none}
+.gicon{width:18px;height:18px;display:inline-block}
+.foot-links{text-align:center;margin-top:20px;font-size:14px;color:var(--muted)}
+.foot-links a{color:#2f6feb;font-weight:600}
+.hint{margin-top:16px;background:#f6f8fb;border:1px dashed #cfd8e3;border-radius:10px;padding:10px 12px;font-size:12.5px;color:#5c6675;line-height:1.6}
+.hint code{background:#fff;border:1px solid var(--line);border-radius:5px;padding:1px 5px;font-size:12px}
+.signed{display:none;text-align:center}
+.signed .who{font-weight:700;font-size:15px;margin:6px 0 2px}
+@media(max-width:640px){.topnav{flex-wrap:wrap}}
+@media(max-width:520px){.auth-wrap{margin:20px auto 40px}.auth-card{padding:22px 18px}}
+</style></head>
+<body>
+<div class="demo-bar"><div class="wrap">
+  <span>🧪 <b>示範版</b>：這是登入介面的樣板，帳號密碼目前只在瀏覽器比對，<b>還沒有真正的後端驗證</b>（內容仍可被抓）。</span>
+</div></div>
+
+<header class="site-head"><div class="wrap head-row">
+  <div><a class="brand" href="../index.html">圖書館音樂研究所</a>
+    <div class="sub">付費專區 · 會員登入</div>
+  </div>
+  <nav class="topnav">
+    <a class="navbtn" href="../罐頭音樂研究所/圖書館音樂/index.html">音樂圖書館</a>
+    <a class="navbtn" href="https://greensquare5168-debug.github.io/multi-language/">語言學習區</a>
+    <a class="navbtn" href="../知識補給站/index.html">知識補給站</a>
+    <a class="navbtn on" href="./login.html">會員登入</a>
+  </nav>
+</div></header>
+
+<main class="wrap">
+  <div class="auth-wrap">
+    <div class="auth-card">
+      <div id="formView">
+        <h1>會員登入</h1>
+        <div class="sub">登入後即可使用付費專區的完整功能</div>
+
+        <form id="loginForm" novalidate>
+          <div class="field">
+            <label for="email">電子郵件</label>
+            <div class="inp">
+              <input id="email" name="email" type="email" autocomplete="username"
+                     placeholder="you@example.com" required>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="pwd">密碼</label>
+            <div class="inp">
+              <input id="pwd" name="pwd" type="password" autocomplete="current-password"
+                     placeholder="請輸入密碼" required>
+              <button class="eye" type="button" id="eye" aria-label="顯示密碼">👁</button>
+            </div>
+          </div>
+
+          <div class="row-between">
+            <label class="chk"><input type="checkbox" id="remember" checked> 記住我</label>
+            <a href="#" id="forgot">忘記密碼？</a>
+          </div>
+
+          <button class="btn-main" type="submit" id="submitBtn">登入</button>
+          <div class="msg" id="msg" role="alert"></div>
+        </form>
+
+        <div class="or">或</div>
+        <button class="btn-ghost" type="button" id="googleBtn">
+          <svg class="gicon" viewBox="0 0 48 48" aria-hidden="true">
+            <path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9 3.6l6.7-6.7C35.6 2.4 30.3 0 24 0 14.6 0 6.5 5.4 2.6 13.2l7.8 6.1C12.3 13.2 17.7 9.5 24 9.5z"/>
+            <path fill="#4285F4" d="M46.1 24.6c0-1.6-.1-2.8-.4-4.1H24v8.4h12.5c-.3 2.1-1.6 5.2-4.6 7.3l7.6 5.9c4.5-4.1 6.6-10.1 6.6-17.5z"/>
+            <path fill="#FBBC05" d="M10.4 28.7a14.5 14.5 0 0 1 0-9.4l-7.8-6.1a24 24 0 0 0 0 21.6l7.8-6.1z"/>
+            <path fill="#34A853" d="M24 48c6.3 0 11.6-2.1 15.5-5.8l-7.6-5.9c-2.1 1.4-4.8 2.3-7.9 2.3-6.3 0-11.7-3.7-13.6-9.9l-7.8 6.1C6.5 42.6 14.6 48 24 48z"/>
+          </svg>
+          Google 帳號登入
+        </button>
+
+        <div class="foot-links">還沒有帳號？<a href="#" id="signup">註冊會員</a></div>
+
+        <div class="hint">
+          <b>示範帳號</b>：<code>demo@example.com</code> ／ 密碼 <code>demo1234</code><br>
+          正式上線時會改成真正的資料庫驗證（Google 登入、Email 驗證信、會員到期日）。
+        </div>
+      </div>
+
+      <div id="signedView" class="signed">
+        <div style="font-size:34px">✅</div>
+        <div class="who" id="signedWho">已登入</div>
+        <div class="sub" id="signedWhen"></div>
+        <p style="margin-top:18px"><a class="btn-main" style="display:inline-block;text-decoration:none;text-align:center" href="./index.html">進入付費專區</a></p>
+        <div class="foot-links"><a href="#" id="logout2">登出</a></div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+(function(){
+  var KEY='ml_session_v1';
+  var form=document.getElementById('loginForm');
+  var msg=document.getElementById('msg');
+  var btn=document.getElementById('submitBtn');
+  var demo={email:'demo@example.com',pwd:'demo1234',name:'示範會員'};
+
+  function readSession(){
+    try{ return JSON.parse(localStorage.getItem(KEY)||'null'); }catch(e){ return null; }
+  }
+  function writeSession(s){ localStorage.setItem(KEY,JSON.stringify(s)); }
+  function clearSession(){ localStorage.removeItem(KEY); }
+
+  function showMsg(text,kind){
+    msg.className='msg '+(kind||'err');
+    msg.textContent=text;
+  }
+
+  function fmt(ts){
+    var d=new Date(ts);
+    return d.getFullYear()+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+String(d.getDate()).padStart(2,'0')
+      +' '+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
+  }
+
+  function renderSigned(s){
+    document.getElementById('formView').style.display='none';
+    document.getElementById('signedView').style.display='block';
+    document.getElementById('signedWho').textContent=s.name||s.email;
+    document.getElementById('signedWhen').textContent='登入時間 '+fmt(s.ts)+'　·　會員效期：示範（未接金流）';
+  }
+
+  // 已登入 → 直接顯示登入後狀態
+  var s=readSession();
+  if(s && s.email){ renderSigned(s); }
+
+  document.getElementById('eye').addEventListener('click',function(){
+    var p=document.getElementById('pwd');
+    var on=p.type==='password';
+    p.type=on?'text':'password';
+    this.textContent=on?'🙈':'👁';
+    this.setAttribute('aria-label',on?'隱藏密碼':'顯示密碼');
+  });
+
+  form.addEventListener('submit',function(ev){
+    ev.preventDefault();
+    var email=(document.getElementById('email').value||'').trim().toLowerCase();
+    var pwd=document.getElementById('pwd').value||'';
+
+    if(!email){ showMsg('請輸入電子郵件'); document.getElementById('email').focus(); return; }
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ showMsg('電子郵件格式不正確'); return; }
+    if(!pwd){ showMsg('請輸入密碼'); document.getElementById('pwd').focus(); return; }
+
+    btn.disabled=true; btn.textContent='登入中…';
+    setTimeout(function(){
+      if(email===demo.email && pwd===demo.pwd){
+        var session={email:email,name:demo.name,ts:Date.now()};
+        writeSession(session);
+        showMsg('登入成功，正在前往付費專區…','ok');
+        setTimeout(function(){ location.href='./index.html'; },700);
+      }else{
+        btn.disabled=false; btn.textContent='登入';
+        showMsg('電子郵件或密碼不正確，請再確認一次');
+        document.getElementById('pwd').select();
+      }
+    },450);
+  });
+
+  function notReady(what){
+    showMsg(what+'在正式版才會開放（示範版沒有後端）。','ok');
+  }
+  document.getElementById('forgot').addEventListener('click',function(e){ e.preventDefault(); notReady('忘記密碼／寄送重設信'); });
+  document.getElementById('signup').addEventListener('click',function(e){ e.preventDefault(); notReady('註冊會員'); });
+  document.getElementById('googleBtn').addEventListener('click',function(){ notReady('Google 帳號登入'); });
+
+  function doLogout(e){
+    if(e) e.preventDefault();
+    clearSession();
+    document.getElementById('signedView').style.display='none';
+    document.getElementById('formView').style.display='block';
+    document.getElementById('pwd').value='';
+    showMsg('已登出。','ok');
+  }
+  document.getElementById('logout2').addEventListener('click',doLogout);
+})();
+</script>
+</body></html>
