@@ -8,47 +8,53 @@
 .demo-bar{background:#fff7e6;border-bottom:1px solid #f3d9a4;color:#8a5a00;font-size:13px;padding:8px 0}
 .demo-bar .wrap{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .demo-bar b{color:#8a5a00}
-.auth-wrap{max-width:430px;margin:34px auto 60px}
-.auth-card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:28px 26px 24px;box-shadow:0 10px 30px rgba(20,40,70,.06)}
-.auth-card h1{font-size:22px;margin:0 0 4px;text-align:center}
-.auth-card .sub{text-align:center;margin-bottom:22px}
-.scope{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:-10px 0 20px}
+.auth-wrap{max-width:448px;margin:34px auto 60px}
+.auth-card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:26px 26px 22px;box-shadow:0 10px 30px rgba(20,40,70,.06)}
+.tabs{display:flex;gap:6px;background:#f1f5f9;border-radius:11px;padding:4px;margin-bottom:20px}
+.tabs button{flex:1;border:0;background:transparent;border-radius:8px;padding:9px 0;font:inherit;font-size:14px;color:#5c6675;cursor:pointer}
+.tabs button.on{background:#fff;color:#1f2733;font-weight:700;box-shadow:0 1px 4px rgba(20,40,70,.1)}
+.auth-card h1{font-size:21px;margin:0 0 4px;text-align:center}
+.auth-card .sub{text-align:center;margin-bottom:20px}
+.scope{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:-8px 0 20px}
 .scope span{font-size:12px;color:#5c6675;background:#f1f5f9;border:1px solid #e3e8ee;border-radius:999px;padding:2px 9px}
-.field{margin-bottom:14px}
+.field{margin-bottom:13px}
 .field label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px;font-weight:600}
+.field label .opt{font-weight:400;color:#9aa6b6}
 .inp{position:relative;display:flex;align-items:center}
 .inp input{width:100%;background:#fff;border:1px solid #cfd8e3;border-radius:10px;padding:12px 44px 12px 14px;font:inherit;font-size:15px;color:var(--fg);outline:none;transition:border-color .15s,box-shadow .15s}
 .inp input::placeholder{color:#a7b1c0}
 .inp input:focus{border-color:#2f6feb;box-shadow:0 0 0 3px rgba(47,111,235,.12)}
 .inp .eye{position:absolute;right:6px;border:0;background:transparent;cursor:pointer;font-size:16px;line-height:1;padding:8px 10px;color:#8a97a8;border-radius:8px}
 .inp .eye:hover{background:#f1f5f9;color:#334}
-.row-between{display:flex;justify-content:space-between;align-items:center;margin:2px 0 18px;font-size:13.5px}
+.row-between{display:flex;justify-content:space-between;align-items:center;margin:2px 0 16px;font-size:13.5px}
 .chk{display:flex;align-items:center;gap:7px;color:var(--muted);cursor:pointer;user-select:none}
 .chk input{width:15px;height:15px;accent-color:#2f6feb;cursor:pointer}
 .btn-main{width:100%;border:0;border-radius:10px;background:#2f6feb;color:#fff;font:inherit;font-size:16px;font-weight:700;padding:13px 16px;cursor:pointer;transition:background .15s,transform .05s;display:inline-block;text-align:center;text-decoration:none}
-.btn-main:hover{background:#255cc7;text-decoration:none}
+.btn-main:hover{background:#255cc7;text-decoration:none;color:#fff}
 .btn-main:active{transform:translateY(1px)}
 .btn-main:disabled{background:#9db4dd;cursor:not-allowed}
-.msg{display:none;margin:14px 0 0;border-radius:10px;padding:10px 12px;font-size:13.5px;line-height:1.5}
+.msg{display:none;margin:13px 0 0;border-radius:10px;padding:10px 12px;font-size:13.5px;line-height:1.5}
 .msg.err{display:block;background:#fff1f0;border:1px solid #f6c2bd;color:#a4262c}
 .msg.ok{display:block;background:#f0faf3;border:1px solid #cfe9d8;color:#15803d}
-.or{display:flex;align-items:center;gap:10px;color:#9aa6b6;font-size:12.5px;margin:20px 0 14px}
+.or{display:flex;align-items:center;gap:10px;color:#9aa6b6;font-size:12.5px;margin:18px 0 13px}
 .or:before,.or:after{content:"";flex:1;height:1px;background:var(--line)}
 .btn-ghost{display:flex;width:100%;align-items:center;justify-content:center;gap:9px;border:1px solid #cfd8e3;background:#fff;border-radius:10px;padding:11px 14px;font:inherit;font-size:14.5px;color:#334;cursor:pointer;text-decoration:none}
 .btn-ghost:hover{background:#f6f8fb;text-decoration:none}
 .gicon{width:18px;height:18px;display:inline-block}
-.foot-links{text-align:center;margin-top:20px;font-size:14px;color:var(--muted)}
+.foot-links{text-align:center;margin-top:18px;font-size:13.5px;color:var(--muted)}
 .foot-links a{color:#2f6feb;font-weight:600}
-.hint{margin-top:16px;background:#f6f8fb;border:1px dashed #cfd8e3;border-radius:10px;padding:10px 12px;font-size:12.5px;color:#5c6675;line-height:1.6}
+.hint{margin-top:15px;background:#f6f8fb;border:1px dashed #cfd8e3;border-radius:10px;padding:10px 12px;font-size:12.5px;color:#5c6675;line-height:1.6}
 .hint code{background:#fff;border:1px solid var(--line);border-radius:5px;padding:1px 5px;font-size:12px}
 .signed{display:none;text-align:center}
 .signed .who{font-weight:700;font-size:15px;margin:6px 0 2px}
+.agree{font-size:12.5px;color:var(--muted);display:flex;gap:7px;align-items:flex-start;margin:2px 0 14px;line-height:1.5}
+.agree input{margin-top:2px;accent-color:#2f6feb}
 @media(max-width:640px){.topnav{flex-wrap:wrap}}
 @media(max-width:520px){.auth-wrap{margin:20px auto 40px}.auth-card{padding:22px 18px}}
 </style></head>
 <body>
 <div class="demo-bar"><div class="wrap">
-  <span>🧪 <b>示範版</b>：這是全站登入的樣板，帳號密碼目前只在瀏覽器比對，<b>還沒有真正的後端驗證</b>。</span>
+  <span>🧪 <b>示範版</b>：帳號存在你自己的瀏覽器（localStorage），沒有伺服器；換裝置／清資料就會消失。</span>
 </div></div>
 
 <header class="site-head"><div class="wrap head-row">
@@ -68,26 +74,36 @@
   <div class="auth-wrap">
     <div class="auth-card">
       <div id="formView">
-        <h1>會員登入</h1>
-        <div class="sub">一個帳號，通行全站</div>
+        <div class="tabs">
+          <button id="tabLogin" class="on" type="button">登入</button>
+          <button id="tabReg" type="button">註冊</button>
+        </div>
+        <h1 id="cardTitle">會員登入</h1>
+        <div class="sub" id="cardSub">一個帳號，通行全站</div>
         <div class="scope"><span>音樂圖書館</span><span>語言學習區</span><span>知識補給站</span><span>使用公司</span></div>
 
-        <form id="loginForm" novalidate>
+        <form id="authForm" novalidate>
+          <div class="field" id="nameField" style="display:none">
+            <label for="name">暱稱</label>
+            <div class="inp"><input id="name" name="name" type="text" maxlength="16" autocomplete="nickname" placeholder="要怎麼稱呼你？"></div>
+          </div>
+
           <div class="field">
             <label for="email">電子郵件</label>
-            <div class="inp">
-              <input id="email" name="email" type="email" autocomplete="username"
-                     placeholder="you@example.com" required>
-            </div>
+            <div class="inp"><input id="email" name="email" type="email" autocomplete="username" placeholder="you@example.com" required></div>
           </div>
 
           <div class="field">
             <label for="pwd">密碼</label>
             <div class="inp">
-              <input id="pwd" name="pwd" type="password" autocomplete="current-password"
-                     placeholder="請輸入密碼" required>
+              <input id="pwd" name="pwd" type="password" autocomplete="current-password" placeholder="請輸入密碼" required>
               <button class="eye" type="button" id="eye" aria-label="顯示密碼">👁</button>
             </div>
+          </div>
+
+          <div class="field" id="pwd2Field" style="display:none">
+            <label for="pwd2">確認密碼</label>
+            <div class="inp"><input id="pwd2" name="pwd2" type="password" autocomplete="new-password" placeholder="再輸入一次"></div>
           </div>
 
           <div class="row-between">
@@ -109,12 +125,11 @@
           </svg>
           Google 帳號登入
         </button>
-
-        <div class="foot-links">還沒有帳號？<a href="#" id="signup">註冊會員</a></div>
+        <div class="foot-links"><a href="#" id="guestLink">先以訪客身分逛逛</a></div>
 
         <div class="hint">
           <b>示範帳號</b>：<code>demo@example.com</code> ／ 密碼 <code>demo1234</code><br>
-          正式版會改成真正的資料庫驗證（Google 登入、Email 驗證信、會員到期日），一次登入全站通行。
+          正式版會改成資料庫驗證（Google 登入、Email 驗證信、會員到期日），一次登入全站通行。
         </div>
       </div>
 
@@ -131,19 +146,35 @@
 
 <script>
 (function(){
-  var KEY='ml_session_v1';
-  var form=document.getElementById('loginForm');
+  var KEY='ml_session_v1';        // 登入狀態（與 member.html 共用）
+  var AKEY='ml_accounts_v1';      // 帳號資料（示範版存本機）
+
+  var form=document.getElementById('authForm');
   var msg=document.getElementById('msg');
   var btn=document.getElementById('submitBtn');
-  var demo={email:'demo@example.com',pwd:'demo1234',name:'示範會員'};
+  var mode='login';
+  var qs=new URLSearchParams(location.search);
+  var NEXT=qs.get('next')||'';
 
-  function readSession(){ try{ return JSON.parse(localStorage.getItem(KEY)||'null'); }catch(e){ return null; } }
-  function writeSession(s){ localStorage.setItem(KEY,JSON.stringify(s)); }
-  function showMsg(text,kind){ msg.className='msg '+(kind||'err'); msg.textContent=text; }
+  /* 內建示範帳號（不用註冊就能試） */
+  var DEMO={ 'demo@example.com':{ name:'示範會員', pwd:'demo1234' } };
+
+  function readJSON(k,def){ try{ var v=JSON.parse(localStorage.getItem(k)); return v||def; }catch(e){ return def; } }
+  function writeJSON(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} }
+  function accounts(){ return readJSON(AKEY,{}); }
+  function readSession(){ return readJSON(KEY,null); }
+  function writeSession(s){ writeJSON(KEY,s); }
+  function showMsg(t,kind){ msg.className='msg '+(kind||'err'); msg.textContent=t; }
+  function clearMsg(){ msg.className='msg'; msg.textContent=''; }
   function fmt(ts){
     var d=new Date(ts);
     return d.getFullYear()+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+String(d.getDate()).padStart(2,'0')
       +' '+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
+  }
+  function go(){
+    if(NEXT && !/^https?:/i.test(NEXT)){ location.href=NEXT; }
+    else if(NEXT){ location.href=NEXT; }
+    else { location.href='member.html'; }
   }
   function renderSigned(s){
     document.getElementById('formView').style.display='none';
@@ -152,12 +183,31 @@
     document.getElementById('signedWhen').textContent='登入時間 '+fmt(s.ts)+'　·　會員效期：示範（未接金流）';
   }
 
-  var s=readSession();
-  if(s && s.email){ renderSigned(s); }
+  function setMode(m){
+    mode=m;
+    var login=m==='login';
+    document.getElementById('tabLogin').classList.toggle('on',login);
+    document.getElementById('tabReg').classList.toggle('on',!login);
+    document.getElementById('nameField').style.display=login?'none':'block';
+    document.getElementById('pwd2Field').style.display=login?'none':'block';
+    document.getElementById('cardTitle').textContent=login?'會員登入':'註冊會員';
+    document.getElementById('cardSub').textContent=login?'一個帳號，通行全站':'填三個欄位就能開始，不用驗證信';
+    btn.textContent=login?'登入':'建立帳號';
+    document.getElementById('pwd').setAttribute('autocomplete',login?'current-password':'new-password');
+    document.getElementById('pwd').placeholder=login?'請輸入密碼':'設定密碼（至少 6 碼）';
+    document.getElementById('remember').parentNode.style.visibility=login?'visible':'hidden';
+    document.getElementById('forgot').style.visibility=login?'visible':'hidden';
+    clearMsg();
+  }
+  document.getElementById('tabLogin').addEventListener('click',function(){ setMode('login'); });
+  document.getElementById('tabReg').addEventListener('click',function(){ setMode('reg'); });
 
+  /* 密碼顯示切換（兩個密碼欄一起） */
   document.getElementById('eye').addEventListener('click',function(){
-    var p=document.getElementById('pwd'); var on=p.type==='password';
-    p.type=on?'text':'password'; this.textContent=on?'🙈':'👁';
+    var p=document.getElementById('pwd'), p2=document.getElementById('pwd2');
+    var on=p.type==='password';
+    p.type=on?'text':'password'; if(p2) p2.type=p.type;
+    this.textContent=on?'🙈':'👁';
     this.setAttribute('aria-label',on?'隱藏密碼':'顯示密碼');
   });
 
@@ -165,28 +215,58 @@
     ev.preventDefault();
     var email=(document.getElementById('email').value||'').trim().toLowerCase();
     var pwd=document.getElementById('pwd').value||'';
+    var name=(document.getElementById('name').value||'').trim();
+    var pwd2=document.getElementById('pwd2').value||'';
+
     if(!email){ showMsg('請輸入電子郵件'); document.getElementById('email').focus(); return; }
     if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ showMsg('電子郵件格式不正確'); return; }
     if(!pwd){ showMsg('請輸入密碼'); document.getElementById('pwd').focus(); return; }
 
+    if(mode==='reg'){
+      if(pwd.length<6){ showMsg('密碼至少 6 碼'); return; }
+      if(pwd!==pwd2){ showMsg('兩次輸入的密碼不一樣'); return; }
+      var acc=accounts();
+      if(acc[email]||DEMO[email]){ showMsg('這個 Email 已經註冊過了，直接登入即可'); return; }
+      btn.disabled=true; btn.textContent='建立中…';
+      setTimeout(function(){
+        acc=accounts();
+        acc[email]={ name:name||email.split('@')[0], pwd:pwd, ts:Date.now() };
+        writeJSON(AKEY,acc);
+        writeSession({ email:email, name:acc[email].name, ts:Date.now() });
+        showMsg('帳號建立完成，正在進入會員中心…','ok');
+        setTimeout(go,650);
+      },350);
+      return;
+    }
+
     btn.disabled=true; btn.textContent='登入中…';
     setTimeout(function(){
-      if(email===demo.email && pwd===demo.pwd){
-        writeSession({email:email,name:demo.name,ts:Date.now()});
+      var acc=accounts();
+      var rec=acc[email]||DEMO[email];
+      if(rec && rec.pwd===pwd){
+        if(!document.getElementById('remember').checked){ /* 不記住：只留本次 */ }
+        writeSession({ email:email, name:rec.name, ts:Date.now() });
         showMsg('登入成功，正在前往會員中心…','ok');
-        setTimeout(function(){ location.href='member.html'; },700);
+        setTimeout(go,600);
       }else{
         btn.disabled=false; btn.textContent='登入';
         showMsg('電子郵件或密碼不正確，請再確認一次');
         document.getElementById('pwd').select();
       }
-    },450);
+    },350);
   });
 
-  function notReady(what){ showMsg(what+'在正式版才會開放（示範版沒有後端）。','ok'); }
-  document.getElementById('forgot').addEventListener('click',function(e){ e.preventDefault(); notReady('忘記密碼／寄送重設信'); });
-  document.getElementById('signup').addEventListener('click',function(e){ e.preventDefault(); notReady('註冊會員'); });
-  document.getElementById('googleBtn').addEventListener('click',function(){ notReady('Google 帳號登入'); });
+  document.getElementById('forgot').addEventListener('click',function(e){
+    e.preventDefault();
+    showMsg('示範版沒有寄信功能；正式版會寄重設密碼連結到你的信箱。','ok');
+  });
+  document.getElementById('googleBtn').addEventListener('click',function(){
+    showMsg('Google 登入要接後端（Supabase／Firebase）才會通，示範版先不開放。','ok');
+  });
+  document.getElementById('guestLink').addEventListener('click',function(e){
+    e.preventDefault();
+    location.href='罐頭音樂研究所/圖書館音樂/index.html';
+  });
 
   document.getElementById('logout2').addEventListener('click',function(e){
     e.preventDefault();
@@ -196,6 +276,10 @@
     document.getElementById('pwd').value='';
     showMsg('已登出。','ok');
   });
+
+  /* 進頁先判斷：已登入就顯示已登入狀態 */
+  var s=readSession();
+  if(s && (s.email||s.name)){ renderSigned(s); }
 })();
 </script>
 </body></html>
