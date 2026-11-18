@@ -18,6 +18,11 @@
 pre{background:#0f172a;color:#e2e8f0;border-radius:10px;padding:14px;overflow:auto;font-size:12px;line-height:1.55}
 .tip{background:#f6f8fb;border:1px dashed #cfd8e3;border-radius:10px;padding:11px 13px;font-size:12.5px;color:#5c6675;line-height:1.6}
 .locked{max-width:520px;margin:60px auto;text-align:center}
+table.members{width:100%;border-collapse:collapse;font-size:13.5px;margin-top:6px}
+table.members th,table.members td{text-align:left;padding:9px 10px;border-bottom:1px solid #eef2f7}
+table.members th{color:#5c6675;font-weight:600;background:#f8fafc}
+table.members td.mail{font-family:ui-monospace,Menlo,monospace;font-size:12.5px;color:#334}
+.mini{font-size:12px;color:#8a97a8}
 </style></head>
 <body>
 <header class="site-head"><div class="wrap head-row">
@@ -32,6 +37,12 @@ pre{background:#0f172a;color:#e2e8f0;border-radius:10px;padding:14px;overflow:au
 
 <main class="wrap" id="main" style="display:none">
   <div class="crumb"><a href="member.html">會員中心</a> ／ 站主專區</div>
+
+  <div class="card" id="membersCard">
+    <h2>👥 會員名單 <span id="memberCount" class="badge owner">—</span></h2>
+    <p class="desc">所有註冊過的帳號（最新在最上面）。改資料／停用請到 Supabase 後台。</p>
+    <div id="memberBody"><p class="mini">載入中…</p></div>
+  </div>
 
   <div class="card">
     <h2>你好，<span id="who">站主</span> <span class="badge owner" id="badge">站主模式</span></h2>
@@ -112,6 +123,7 @@ if(!OK){
   document.getElementById('locked').style.display='block';
 }else{
   const sb=createClient(SB_URL,SB_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+  window.__sb=sb;
   const { data } = await sb.auth.getSession();
   const s = data && data.session;
   if(!s){ location.replace('login.html?next=admin.html'); }
@@ -120,6 +132,7 @@ if(!OK){
     if(role === 'owner'){
       document.getElementById('main').style.display='block';
       document.getElementById('who').textContent = displayName(s);
+      loadMembers();
       document.getElementById('copySql').addEventListener('click', async ()=>{
         const txt=document.getElementById('sql').textContent;
         try{ await navigator.clipboard.writeText(txt); document.getElementById('copySql').textContent='已複製 ✅'; }
@@ -130,6 +143,30 @@ if(!OK){
       document.getElementById('locked').style.display='block';
     }
   }
+}
+
+async function loadMembers(){
+  const box=document.getElementById('memberBody');
+  const cnt=document.getElementById('memberCount');
+  const { data, error } = await window.__sb.from('profiles')
+      .select('email,name,created_at').order('created_at',{ascending:false});
+  if(error){
+    cnt.textContent='未建立';
+    box.innerHTML='<div class="tip">還沒有「會員名單」資料表。請先到 <a href="setup-members.html">開通設定頁</a>，照上面 4 步做一次（約 1 分鐘），回來重新整理就會有名單。</div>';
+    return;
+  }
+  const rows = data || [];
+  cnt.textContent = rows.length + ' 位';
+  if(!rows.length){ box.innerHTML='<p class="mini">目前還沒有人註冊。</p>'; return; }
+  const esc = t => String(t==null?'':t).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  box.innerHTML = '<table class="members"><thead><tr><th>#</th><th>名字</th><th>Email</th><th>註冊時間</th></tr></thead><tbody>'
+    + rows.map((r,i)=>{
+        const d = r.created_at ? new Date(r.created_at) : null;
+        const pad = n => String(n).padStart(2,'0');
+        const t = d ? d.getFullYear()+'/'+pad(d.getMonth()+1)+'/'+pad(d.getDate())+' '+pad(d.getHours())+':'+pad(d.getMinutes()) : '—';
+        return '<tr><td>'+(i+1)+'</td><td>'+esc(r.name)+'</td><td class="mail">'+esc(r.email)+'</td><td>'+t+'</td></tr>';
+      }).join('')
+    + '</tbody></table>';
 }
 </script>
 </body></html>
