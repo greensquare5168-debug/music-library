@@ -53,8 +53,8 @@
 @media(max-width:520px){.auth-wrap{margin:20px auto 40px}.auth-card{padding:22px 18px}}
 </style></head>
 <body>
-<div class="demo-bar"><div class="wrap">
-  <span>🧪 <b>示範版</b>：帳號存在你自己的瀏覽器（localStorage），沒有伺服器；換裝置／清資料就會消失。</span>
+<div class="demo-bar" id="bar"><div class="wrap">
+  <span id="barText">⏳ 檢查後端連線…</span>
 </div></div>
 
 <header class="site-head"><div class="wrap head-row">
@@ -74,7 +74,7 @@
   <div class="auth-wrap">
     <div class="auth-card">
       <div id="formView">
-        <div class="tabs">
+        <div class="tabs" id="tabsWrap">
           <button id="tabLogin" class="on" type="button">登入</button>
           <button id="tabReg" type="button">註冊</button>
         </div>
@@ -107,7 +107,7 @@
           </div>
 
           <div class="row-between">
-            <label class="chk"><input type="checkbox" id="remember" checked> 記住我</label>
+            <label class="chk" id="rememberWrap"><input type="checkbox" id="remember" checked> 記住我</label>
             <a href="#" id="forgot">忘記密碼？</a>
           </div>
 
@@ -127,9 +127,9 @@
         </button>
         <div class="foot-links"><a href="#" id="guestLink">先以訪客身分逛逛</a></div>
 
-        <div class="hint">
-          <b>示範帳號</b>：<code>demo@example.com</code> ／ 密碼 <code>demo1234</code><br>
-          正式版會改成資料庫驗證（Google 登入、Email 驗證信、會員到期日），一次登入全站通行。
+        <div class="hint" id="hintBox">
+          登入狀態由雲端驗證（Supabase），換手機、換電腦都登得進去。<br>
+          忘記密碼會寄一封重設信到你的信箱。
         </div>
       </div>
 
@@ -144,142 +144,184 @@
   </div>
 </main>
 
-<script>
-(function(){
-  var KEY='ml_session_v1';        // 登入狀態（與 member.html 共用）
-  var AKEY='ml_accounts_v1';      // 帳號資料（示範版存本機）
+<script src="supabase-config.js"></script>
+<script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
-  var form=document.getElementById('authForm');
-  var msg=document.getElementById('msg');
-  var btn=document.getElementById('submitBtn');
-  var mode='login';
-  var qs=new URLSearchParams(location.search);
-  var NEXT=qs.get('next')||'';
+const SB_URL = (window.SUPABASE_URL || '').trim();
+const SB_KEY = (window.SUPABASE_ANON_KEY || '').trim();
+const OK = /^https:\/\/.+\.supabase\.co$/.test(SB_URL) && SB_KEY.length > 20;
 
-  /* 內建示範帳號（不用註冊就能試） */
-  var DEMO={ 'demo@example.com':{ name:'示範會員', pwd:'demo1234' } };
+const sb = OK ? createClient(SB_URL, SB_KEY, { auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true } }) : null;
 
-  function readJSON(k,def){ try{ var v=JSON.parse(localStorage.getItem(k)); return v||def; }catch(e){ return def; } }
-  function writeJSON(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} }
-  function accounts(){ return readJSON(AKEY,{}); }
-  function readSession(){ return readJSON(KEY,null); }
-  function writeSession(s){ writeJSON(KEY,s); }
-  function showMsg(t,kind){ msg.className='msg '+(kind||'err'); msg.textContent=t; }
-  function clearMsg(){ msg.className='msg'; msg.textContent=''; }
-  function fmt(ts){
-    var d=new Date(ts);
-    return d.getFullYear()+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+String(d.getDate()).padStart(2,'0')
-      +' '+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
-  }
-  function go(){
-    if(NEXT && !/^https?:/i.test(NEXT)){ location.href=NEXT; }
-    else if(NEXT){ location.href=NEXT; }
-    else { location.href='member.html'; }
-  }
-  function renderSigned(s){
-    document.getElementById('formView').style.display='none';
-    document.getElementById('signedView').style.display='block';
-    document.getElementById('signedWho').textContent=s.name||s.email;
-    document.getElementById('signedWhen').textContent='登入時間 '+fmt(s.ts)+'　·　會員效期：示範（未接金流）';
-  }
+const $ = id => document.getElementById(id);
+const form = $('authForm'), msg = $('msg'), btn = $('submitBtn');
+const qs = new URLSearchParams(location.search);
+const NEXT = qs.get('next') || 'member.html';
+let mode = 'login';
 
-  function setMode(m){
-    mode=m;
-    var login=m==='login';
-    document.getElementById('tabLogin').classList.toggle('on',login);
-    document.getElementById('tabReg').classList.toggle('on',!login);
-    document.getElementById('nameField').style.display=login?'none':'block';
-    document.getElementById('pwd2Field').style.display=login?'none':'block';
-    document.getElementById('cardTitle').textContent=login?'會員登入':'註冊會員';
-    document.getElementById('cardSub').textContent=login?'一個帳號，通行全站':'填三個欄位就能開始，不用驗證信';
-    btn.textContent=login?'登入':'建立帳號';
-    document.getElementById('pwd').setAttribute('autocomplete',login?'current-password':'new-password');
-    document.getElementById('pwd').placeholder=login?'請輸入密碼':'設定密碼（至少 6 碼）';
-    document.getElementById('remember').parentNode.style.visibility=login?'visible':'hidden';
-    document.getElementById('forgot').style.visibility=login?'visible':'hidden';
-    clearMsg();
-  }
-  document.getElementById('tabLogin').addEventListener('click',function(){ setMode('login'); });
-  document.getElementById('tabReg').addEventListener('click',function(){ setMode('reg'); });
+/* ---------- 訊息 ---------- */
+function showMsg(t, kind){ msg.className = 'msg ' + (kind || 'err'); msg.textContent = t; }
+function clearMsg(){ msg.className = 'msg'; msg.textContent = ''; }
 
-  /* 密碼顯示切換（兩個密碼欄一起） */
-  document.getElementById('eye').addEventListener('click',function(){
-    var p=document.getElementById('pwd'), p2=document.getElementById('pwd2');
-    var on=p.type==='password';
-    p.type=on?'text':'password'; if(p2) p2.type=p.type;
-    this.textContent=on?'🙈':'👁';
-    this.setAttribute('aria-label',on?'隱藏密碼':'顯示密碼');
-  });
+/* ---------- 錯誤翻譯 ---------- */
+function tr(err){
+  const m = (err && (err.message || err.error_description || '')) + '';
+  if (/Invalid login credentials/i.test(m)) return '電子郵件或密碼不正確';
+  if (/Email not confirmed/i.test(m)) return '這個 Email 還沒驗證 —— 請去信箱點確認連結（或請管理者關閉 Confirm email）';
+  if (/User already registered/i.test(m)) return '這個 Email 已經註冊過了，直接登入即可';
+  if (/Password should be at least/i.test(m)) return '密碼太短（至少 6 碼）';
+  if (/rate limit|Too many requests/i.test(m)) return '嘗試次數太多，請等一分鐘再試';
+  if (/Invalid email/i.test(m)) return '電子郵件格式不正確';
+  if (/Failed to fetch|NetworkError/i.test(m)) return '連不上伺服器，請檢查網路後再試';
+  return m || '發生未知錯誤';
+}
 
-  form.addEventListener('submit',function(ev){
-    ev.preventDefault();
-    var email=(document.getElementById('email').value||'').trim().toLowerCase();
-    var pwd=document.getElementById('pwd').value||'';
-    var name=(document.getElementById('name').value||'').trim();
-    var pwd2=document.getElementById('pwd2').value||'';
+/* ---------- 畫面切換 ---------- */
+function setMode(m){
+  mode = m;
+  const login = m === 'login';
+  $('tabLogin').classList.toggle('on', login);
+  $('tabReg').classList.toggle('on', !login);
+  $('nameField').style.display = login ? 'none' : 'block';
+  $('pwd2Field').style.display = login ? 'none' : 'block';
+  $('cardTitle').textContent = login ? '會員登入' : '註冊會員';
+  $('cardSub').textContent = login ? '一個帳號，通行全站' : '填好就能開始，資料存在雲端';
+  btn.textContent = login ? '登入' : '建立帳號';
+  $('pwd').setAttribute('autocomplete', login ? 'current-password' : 'new-password');
+  $('pwd').placeholder = login ? '請輸入密碼' : '設定密碼（至少 6 碼）';
+  $('rememberWrap').style.visibility = login ? 'visible' : 'hidden';
+  $('forgot').style.visibility = login ? 'visible' : 'hidden';
+  clearMsg();
+}
+$('tabLogin').addEventListener('click', () => setMode('login'));
+$('tabReg').addEventListener('click', () => setMode('reg'));
 
-    if(!email){ showMsg('請輸入電子郵件'); document.getElementById('email').focus(); return; }
-    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ showMsg('電子郵件格式不正確'); return; }
-    if(!pwd){ showMsg('請輸入密碼'); document.getElementById('pwd').focus(); return; }
+$('eye').addEventListener('click', function(){
+  const p = $('pwd'), p2 = $('pwd2');
+  const on = p.type === 'password';
+  p.type = on ? 'text' : 'password'; if (p2) p2.type = p.type;
+  this.textContent = on ? '🙈' : '👁';
+  this.setAttribute('aria-label', on ? '隱藏密碼' : '顯示密碼');
+});
 
-    if(mode==='reg'){
-      if(pwd.length<6){ showMsg('密碼至少 6 碼'); return; }
-      if(pwd!==pwd2){ showMsg('兩次輸入的密碼不一樣'); return; }
-      var acc=accounts();
-      if(acc[email]||DEMO[email]){ showMsg('這個 Email 已經註冊過了，直接登入即可'); return; }
-      btn.disabled=true; btn.textContent='建立中…';
-      setTimeout(function(){
-        acc=accounts();
-        acc[email]={ name:name||email.split('@')[0], pwd:pwd, ts:Date.now() };
-        writeJSON(AKEY,acc);
-        writeSession({ email:email, name:acc[email].name, ts:Date.now() });
-        showMsg('帳號建立完成，正在進入會員中心…','ok');
-        setTimeout(go,650);
-      },350);
-      return;
+function fmtTs(ts){
+  const d = new Date(ts);
+  const p = n => String(n).padStart(2, '0');
+  return d.getFullYear() + '/' + p(d.getMonth()+1) + '/' + p(d.getDate()) + ' ' + p(d.getHours()) + ':' + p(d.getMinutes());
+}
+function renderSigned(session){
+  $('formView').style.display = 'none';
+  $('signedView').style.display = 'block';
+  const u = session.user || {};
+  const name = (u.user_metadata && u.user_metadata.name) || u.email || '已登入';
+  $('signedWho').textContent = name;
+  $('signedWhen').textContent = '登入時間 ' + fmtTs(Date.now()) + '　·　帳號 ' + (u.email || '');
+  $('logout2').onclick = async (e) => {
+    e.preventDefault();
+    if (sb) await sb.auth.signOut();
+    location.href = 'login.html';
+  };
+}
+function go(){ location.href = NEXT; }
+
+/* ---------- 表單送出 ---------- */
+form.addEventListener('submit', async (ev) => {
+  ev.preventDefault();
+  if (!OK){ showMsg('後端還沒設定，請先填 supabase-config.js（或請管理者設定）'); return; }
+  const email = ($('email').value || '').trim().toLowerCase();
+  const pwd = $('pwd').value || '';
+  const name = ($('name').value || '').trim();
+  const pwd2 = $('pwd2').value || '';
+
+  if (!email) return showMsg('請輸入電子郵件');
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return showMsg('電子郵件格式不正確');
+  if (!pwd) return showMsg('請輸入密碼');
+  if (mode === 'reg' && pwd.length < 6) return showMsg('密碼至少 6 碼');
+  if (mode === 'reg' && pwd !== pwd2) return showMsg('兩次輸入的密碼不一樣');
+
+  btn.disabled = true;
+  btn.textContent = mode === 'login' ? '登入中…' : '建立中…';
+  clearMsg();
+
+  try{
+    if (mode === 'login'){
+      const { error } = await sb.auth.signInWithPassword({ email, password: pwd });
+      if (error) throw error;
+      showMsg('登入成功，正在進入…', 'ok');
+      setTimeout(go, 500);
+    } else {
+      const { data, error } = await sb.auth.signUp({ email, password: pwd, options: { data: { name: name || email.split('@')[0] } } });
+      if (error) throw error;
+      if (data.session){ showMsg('帳號建立完成，正在進入…', 'ok'); setTimeout(go, 500); }
+      else { showMsg('已寄出驗證信 —— 請到信箱點確認連結後再登入', 'ok'); btn.disabled = false; btn.textContent = '建立帳號'; }
     }
+  }catch(err){
+    showMsg(tr(err));
+    btn.disabled = false; btn.textContent = mode === 'login' ? '登入' : '建立帳號';
+  }
+});
 
-    btn.disabled=true; btn.textContent='登入中…';
-    setTimeout(function(){
-      var acc=accounts();
-      var rec=acc[email]||DEMO[email];
-      if(rec && rec.pwd===pwd){
-        if(!document.getElementById('remember').checked){ /* 不記住：只留本次 */ }
-        writeSession({ email:email, name:rec.name, ts:Date.now() });
-        showMsg('登入成功，正在前往會員中心…','ok');
-        setTimeout(go,600);
-      }else{
-        btn.disabled=false; btn.textContent='登入';
-        showMsg('電子郵件或密碼不正確，請再確認一次');
-        document.getElementById('pwd').select();
-      }
-    },350);
-  });
+/* 忘記密碼（寄重設信） */
+$('forgot').addEventListener('click', async (e) => {
+  e.preventDefault();
+  if (!OK) return showMsg('後端還沒設定');
+  const email = ($('email').value || '').trim().toLowerCase();
+  if (!email) return showMsg('先在上面填你的電子郵件，再按忘記密碼');
+  const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo: location.origin + location.pathname });
+  if (error) return showMsg(tr(error));
+  showMsg('重設信已寄出，請到信箱點連結（10 分鐘內有效）', 'ok');
+});
 
-  document.getElementById('forgot').addEventListener('click',function(e){
-    e.preventDefault();
-    showMsg('示範版沒有寄信功能；正式版會寄重設密碼連結到你的信箱。','ok');
-  });
-  document.getElementById('googleBtn').addEventListener('click',function(){
-    showMsg('Google 登入要接後端（Supabase／Firebase）才會通，示範版先不開放。','ok');
-  });
-  document.getElementById('guestLink').addEventListener('click',function(e){
-    e.preventDefault();
-    location.href='罐頭音樂研究所/圖書館音樂/index.html';
-  });
+/* 重設密碼（從信件點回來的畫面） */
+async function maybeRecovery(){
+  if (!OK) return;
+  if (!/[?#&]type=recovery/.test(location.hash + location.search)) return;
+  $('formView').style.display = 'block';
+  $('signedView').style.display = 'none';
+  $('tabsWrap').style.display = 'none';
+  $('cardTitle').textContent = '設定新密碼';
+  $('cardSub').textContent = '請輸入新密碼（至少 6 碼）';
+  $('nameField').style.display = 'none';
+  $('pwd2Field').style.display = 'block';
+  $('email').closest('.field').style.display = 'none';
+  $('pwd').placeholder = '新密碼';
+  $('rememberWrap').style.display = 'none';
+  $('forgot').style.display = 'none';
+  form.dataset.recovery = '1';
+  btn.textContent = '更新密碼';
+  form.onsubmit = null;
+  btn.onclick = async (ev) => {
+    ev.preventDefault();
+    const pwd = $('pwd').value, pwd2 = $('pwd2').value;
+    if (pwd.length < 6) return showMsg('密碼至少 6 碼');
+    if (pwd !== pwd2) return showMsg('兩次輸入的密碼不一樣');
+    const { error } = await sb.auth.updateUser({ password: pwd });
+    if (error) return showMsg(tr(error));
+    showMsg('密碼已更新，正在進入…', 'ok');
+    setTimeout(go, 600);
+  };
+}
 
-  document.getElementById('logout2').addEventListener('click',function(e){
-    e.preventDefault();
-    localStorage.removeItem(KEY);
-    document.getElementById('signedView').style.display='none';
-    document.getElementById('formView').style.display='block';
-    document.getElementById('pwd').value='';
-    showMsg('已登出。','ok');
-  });
-
-  /* 進頁先判斷：已登入就顯示已登入狀態 */
-  var s=readSession();
-  if(s && (s.email||s.name)){ renderSigned(s); }
+/* ---------- 啟動 ---------- */
+(async function boot(){
+  const bar = $('barText');
+  if (!OK){
+    bar.innerHTML = '⚠️ <b>後端尚未設定</b>：登入需要一組 Supabase 免費專案（網址＋公開金鑰），設定後就能真的註冊與登入。';
+    btn.disabled = true;
+    showMsg('目前無法登入 —— 尚未連上後端資料庫');
+    return;
+  }
+  bar.innerHTML = '🔒 <b>正式登入</b>：帳號由雲端驗證（Supabase），換裝置也登得進去。';
+  try{
+    const { data } = await sb.auth.getSession();
+    if (data && data.session) { renderSigned(data.session); }
+    else { setMode('login'); }
+    sb.auth.onAuthStateChange((evt, session) => { if (evt === 'SIGNED_IN' && session) renderSigned(session); });
+    await maybeRecovery();
+  }catch(e){
+    bar.innerHTML = '⚠️ 連不上後端：' + tr(e);
+  }
 })();
 </script>
 </body></html>

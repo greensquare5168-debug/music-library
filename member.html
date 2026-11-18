@@ -111,16 +111,29 @@
   </div>
 </main>
 
-<script>
-(function(){
-  var KEY='ml_session_v1';
-  var s=null;
-  try{ s=JSON.parse(localStorage.getItem(KEY)||'null'); }catch(e){ s=null; }
-  if(!s || !s.email){ location.replace('login.html'); return; }
-  document.getElementById('who').textContent=s.name||s.email;
-  document.getElementById('logout').addEventListener('click',function(e){
-    e.preventDefault(); localStorage.removeItem(KEY); location.href='login.html';
-  });
-})();
+<script src="supabase-config.js"></script>
+<script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+const SB_URL=(window.SUPABASE_URL||'').trim();
+const SB_KEY=(window.SUPABASE_ANON_KEY||'').trim();
+const OK=/^https:\/\/.+\.supabase\.co$/.test(SB_URL) && SB_KEY.length>20;
+if(!OK){
+  document.getElementById('who').textContent='（後端未設定）';
+  const n=document.getElementById('logout');
+  n.textContent='回登入頁';
+  n.onclick=function(e){ e.preventDefault(); location.href='login.html'; };
+}else{
+  const sb=createClient(SB_URL,SB_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+  const { data } = await sb.auth.getSession();
+  const s = data && data.session;
+  if(!s){ location.replace('login.html'); }
+  else{
+    const u=s.user||{};
+    document.getElementById('who').textContent=(u.user_metadata&&u.user_metadata.name)||u.email||'會員';
+    document.getElementById('logout').addEventListener('click', async function(e){
+      e.preventDefault(); await sb.auth.signOut(); location.href='login.html';
+    });
+  }
+}
 </script>
 </body></html>
