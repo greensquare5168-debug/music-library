@@ -45,7 +45,7 @@
         <h1 style="margin-bottom:4px">會員中心</h1>
         <div class="kv">
           <span>帳號 <b id="who">會員</b></span>
-          <span>方案 <b>示範會員</b></span>
+          <span>身分 <b id="roleBadge">—</b></span>
           <span>效期 <b>未接金流</b></span>
         </div>
       </div>
@@ -83,6 +83,32 @@
     </div>
   </div>
 
+  <div class="album-card" id="ownerBox" style="display:none;border-color:#f3d9a4;background:#fffdf7">
+    <h2 style="font-size:18px;margin:0 0 4px">🔑 站主工具</h2>
+    <div class="muted" style="margin-bottom:14px">只有站主帳號看得到這一區。</div>
+    <div class="sites">
+      <div class="site-card">
+        <h3>會員名單 <span class="state on">可看</span></h3>
+        <div class="desc">目前有幾個會員、誰在什麼時候註冊（在 Supabase 後台看）</div>
+        <a class="btn-sm" href="https://supabase.com/dashboard/project/lgsijyfahyoceicqehwf/auth/users" target="_blank" rel="noopener">開啟名單</a>
+      </div>
+      <div class="site-card">
+        <h3>訪客統計 <span class="state soon">待接</span></h3>
+        <div class="desc">每日訪客、熱門頁面（要接 Cloudflare Web Analytics，免費）</div>
+        <button class="btn-sm" type="button" disabled>尚未開放</button>
+      </div>
+      <div class="site-card">
+        <h3>內容管理 <span class="state soon">待接</span></h3>
+        <div class="desc">直接在網站上改內容（要先把資料搬進 Supabase）</div>
+        <a class="btn-sm" href="admin.html">站主專區</a>
+      </div>
+    </div>
+    <div class="tip">
+      ⚠️ 這一區只是「介面上」的區分。真正不能公開的資料，要在 Supabase 設 RLS 規則，
+      否則別人改一下網頁就能看到。做法寫在 <a href="admin.html">站主專區</a> 最下面。
+    </div>
+  </div>
+
   <div class="album-card">
     <h2 style="font-size:18px;margin:0 0 4px">付費功能（規劃中）</h2>
     <div class="muted" style="margin-bottom:14px">這些是收費後才開放的東西，先放樣子。</div>
@@ -112,6 +138,7 @@
 <script src="supabase-config.js"></script>
 <script type="module">
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+import { roleOf, ROLE_TEXT, displayName } from './role.js';
 const SB_URL=(window.SUPABASE_URL||'').trim();
 const SB_KEY=(window.SUPABASE_ANON_KEY||'').trim();
 const OK=/^https:\/\/.+\.supabase\.co$/.test(SB_URL) && SB_KEY.length>20;
@@ -127,7 +154,18 @@ if(!OK){
   if(!s){ location.replace('login.html'); }
   else{
     const u=s.user||{};
-    document.getElementById('who').textContent=(u.user_metadata&&u.user_metadata.name)||u.email||'會員';
+    document.getElementById('who').textContent=displayName(s);
+    const role=roleOf(s);
+    const badge=document.getElementById('roleBadge');
+    badge.textContent=ROLE_TEXT[role];
+    badge.style.color = role==='owner' ? '#b45309' : '#5c6675';
+    if(role==='owner'){
+      const box=document.getElementById('ownerBox');
+      if(box) box.style.display='block';
+      document.title='會員中心（站主模式）｜圖書館音樂研究所';
+    }else{
+      document.title='會員中心（瀏覽模式）｜圖書館音樂研究所';
+    }
     document.getElementById('logout').addEventListener('click', async function(e){
       e.preventDefault(); await sb.auth.signOut(); location.href='login.html';
     });
