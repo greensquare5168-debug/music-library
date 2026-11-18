@@ -53,9 +53,7 @@
 @media(max-width:520px){.auth-wrap{margin:20px auto 40px}.auth-card{padding:22px 18px}}
 </style></head>
 <body>
-<div class="demo-bar" id="bar"><div class="wrap">
-  <span id="barText">⏳ 檢查後端連線…</span>
-</div></div>
+
 
 <header class="site-head"><div class="wrap head-row">
   <div><a class="brand" href="index.html">圖書館音樂研究所</a>
@@ -305,14 +303,11 @@ async function maybeRecovery(){
 
 /* ---------- 啟動 ---------- */
 (async function boot(){
-  const bar = $('barText');
   if (!OK){
-    bar.innerHTML = '⚠️ <b>後端尚未設定</b>：登入需要一組 Supabase 免費專案（網址＋公開金鑰），設定後就能真的註冊與登入。';
     btn.disabled = true;
     showMsg('目前無法登入 —— 尚未連上後端資料庫');
     return;
   }
-  bar.innerHTML = '🔒 <b>正式登入</b>：帳號由雲端驗證（Supabase），換裝置也登得進去。';
   try{
     const { data } = await sb.auth.getSession();
     if (data && data.session) { renderSigned(data.session); }
@@ -320,7 +315,7 @@ async function maybeRecovery(){
     sb.auth.onAuthStateChange((evt, session) => { if (evt === 'SIGNED_IN' && session) renderSigned(session); });
     await maybeRecovery();
   }catch(e){
-    bar.innerHTML = '⚠️ 連不上後端：' + tr(e);
+    showMsg('連不上後端：' + tr(e));
   }
 })();
 </script>
