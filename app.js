@@ -391,3 +391,15 @@ function openWin(u){
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',add); else add();
 })();
+
+/* ---------- 站主聊天框（2026-11-18）：只有「已登入 Supabase」的訪客才載入 ---------- */
+(function () {
+  try {
+    var has = false;
+    for (var i = 0; i < localStorage.length; i++) {
+      var k = localStorage.key(i) || '';
+      if (k.indexOf('sb-') === 0 && k.slice(-11) === '-auth-token') { has = true; break; }
+    }
+    if (has) import('/music-library/chat-owner.js').catch(function () {});
+  } catch (e) {}
+})();
