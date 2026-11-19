@@ -1347,3 +1347,6 @@ body[data-show="大頭小狀元"][data-season] .unit[data-label="台北市環保
   margin-left:-4px !important;padding:2px 12px 2px 4px !important;display:inline-block !important;
   background:rgba(0,0,0,0.45) !important;border-radius:0 !important;-webkit-text-stroke:0 !important;color:#fff !important;
 }
+
+/* 2026-11-19 孝瓏：清潔隊員長標題 → 下方第一首音樂的距離對齊其他大標題（其他標題是 -5px，此標題原本 4px） */
+body[data-show="大頭小狀元"][data-season] .unit[data-label="台北市環保局 內湖區清潔隊 西湖分隊夜間班"]{margin-bottom:-5px !important}
