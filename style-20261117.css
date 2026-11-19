@@ -1316,4 +1316,4 @@ div.blankline{margin:0 !important}
 /* 2026-11-19 孝瓏：童話世界「廣告後片段」橫線 → 上面空行距 0.2cm；橫線下若是大標題框，不可壓在線上，往下留一般文字間距 */
 body[data-show="yoyo童話世界"] .entries + .unit.ad{margin-top:0.2cm !important}
 body[data-show="yoyo童話世界"] .unit.ad:has(+ .unit){margin-bottom:0 !important}
-body[data-show="yoyo童話世界"] .unit.ad + .unit{margin-top:10px !important}
+body[data-show="yoyo童話世界"] .unit.ad + .unit{margin-top:3px !important}
