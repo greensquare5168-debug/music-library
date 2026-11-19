@@ -1319,3 +1319,17 @@ body[data-show="yoyo童話世界"] .unit.ad:has(+ .unit){margin-bottom:0 !import
 body[data-show="yoyo童話世界"] .unit.ad + .unit{margin-top:3px !important}
 /* 2026-11-19 孝瓏：大標題框下面的小標題框（哥哥姐姐）不可壓在框線上，留 12px */
 body[data-show="yoyo童話世界"] .unit:not(.ad) + .unit.ad{margin-top:12px !important}
+/* 2026-11-19 孝瓏：童話世界「小標題框」（如 哥哥姐姐）＝大標題框的縮小版，框線同色 */
+body[data-show="yoyo童話世界"] .unit.sm{
+  display:inline-block !important;
+  margin:12px 0 0 !important;
+  padding:3px 10px !important;
+  border:2px solid #8fa3bd !important;
+  border-radius:7px !important;
+  background:#ffffff !important;
+  font-size:15px !important;
+  line-height:1.4 !important;
+  color:#1f2733 !important;
+}
+body[data-show="yoyo童話世界"] .unit.sm + .entries{margin-top:8px !important}
+body[data-show="yoyo童話世界"] .unit:not(.ad) + .unit.sm{margin-top:12px !important}
