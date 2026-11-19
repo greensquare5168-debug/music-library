@@ -1321,7 +1321,9 @@ body[data-show="yoyo童話世界"] .unit.ad + .unit{margin-top:3px !important}
 body[data-show="yoyo童話世界"] .unit:not(.ad) + .unit.ad{margin-top:12px !important}
 /* 2026-11-19 孝瓏：童話世界「小標題框」（如 哥哥姐姐）＝大標題框的縮小版，框線同色 */
 body[data-show="yoyo童話世界"] .unit.sm{
-  display:inline-block !important;
+  display:block !important;
+  width:auto !important;
+  box-sizing:border-box !important;
   margin:12px 0 0 !important;
   padding:3px 10px !important;
   border:2px solid #8fa3bd !important;
