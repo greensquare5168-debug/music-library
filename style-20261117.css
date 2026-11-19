@@ -1340,3 +1340,10 @@ body[data-show="yoyo童話世界"] .unit:not(.ad) + .unit.sm{margin-top:12px !im
 body[data-show="yoyo童話世界"] .entries + .unit.sm{margin-top:12px !important}
 /* 2026-11-19 孝瓏：小標題框上方若是音樂（且有正常空行）→ 框與空行間距同 3px */
 body[data-show="yoyo童話世界"] .entries:has(> li.blankline:last-child) + .unit.sm{margin-top:3px !important}
+
+/* 2026-11-19 孝瓏：清潔隊員長標題 → 文字左緣對齊其他大標題（統一 14px；黑框往左伸出 4px 當內距） */
+body[data-show="大頭小狀元"][data-season] .unit[data-label="台北市環保局 內湖區清潔隊 西湖分隊夜間班"]{padding-left:14px !important}
+body[data-show="大頭小狀元"][data-season] .unit[data-label="台北市環保局 內湖區清潔隊 西湖分隊夜間班"] .blk{
+  margin-left:-4px !important;padding:2px 12px 2px 4px !important;display:inline-block !important;
+  background:rgba(0,0,0,0.45) !important;border-radius:0 !important;-webkit-text-stroke:0 !important;color:#fff !important;
+}
