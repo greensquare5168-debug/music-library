@@ -1396,3 +1396,43 @@ body[data-show] .blankline + .entries,
 body[data-show] .blankline + ul{margin-top:0 !important}
 body[data-show] .unit.sm:has(+ .blankline),
 body[data-show] .unit:has(+ .blankline){margin-bottom:.2cm !important}
+
+/* ===== 2026-11-20 15:40 孝瓏：全站空行與上下文字／框的間距統一 0.2cm =====
+   空行 padding 5px（上下）本身已佔掉部分視覺空白 → margin 補足到 0.2cm。
+   相鄰元素的 margin 一律歸零，避免疊加變成 0.3cm。 */
+html body .blankline,
+html body .entries li.blankline,
+html body div.blankline{
+  padding:5px 0 !important;
+  margin-top:calc(.2cm - 5px) !important;
+  margin-bottom:calc(.2cm - 5px) !important;
+}
+/* 空行後面：文字清單／標題框 → 外距歸零（間距由空行 margin 決定） */
+html body .blankline + .unit,
+html body .blankline + .unit.sm,
+html body .blankline + .unit.ad,
+html body .blankline + .entries,
+html body .blankline + ul,
+html body .blankline + li,
+html body .blankline + .r-outro,
+html body .blankline + h1,
+html body .blankline + h2,
+html body .blankline + h3,
+body[data-show] div.blankline + .unit.sm,
+body[data-show] .blankline + .unit.sm,
+body[data-show] .blankline + .unit.ad,
+body[data-show] .blankline + .unit,
+body[data-show] .blankline + .entries,
+body[data-show] .blankline + ul{margin-top:0 !important}
+/* 空行前面：文字清單／標題框 → 外距歸零 */
+html body .unit:has(+ .blankline),
+html body .unit.sm:has(+ .blankline),
+html body .unit.ad:has(+ .blankline),
+html body .entries:has(+ .blankline),
+html body ul:has(+ .blankline),
+html body li:has(+ .blankline),
+html body h1:has(+ .blankline),
+html body h2:has(+ .blankline),
+html body h3:has(+ .blankline),
+body[data-show] .unit.sm:has(+ .blankline),
+body[data-show] .unit:has(+ .blankline){margin-bottom:0 !important}
