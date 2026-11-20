@@ -1452,3 +1452,7 @@ html body .blankline:has(+ li){margin-bottom:calc(.2cm - 8.2px) !important}
 /* li 型空行（巧連智等）：特異性要提高才蓋得過 html body .entries li.blankline */
 html body .entries > li.blankline{margin-top:calc(.2cm - 8.2px) !important}
 html body .entries > li.blankline:has(+ li){margin-bottom:calc(.2cm - 8.2px) !important}
+/* 標題（h1/h2/h3）→ 空行：標題行高留白是「負」的（字底超出行盒），要補回來才是看得見的 0.2cm */
+html body h1 + .blankline,
+html body h2 + .blankline,
+html body h3 + .blankline{margin-top:5.86px !important}
