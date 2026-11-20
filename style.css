@@ -1313,3 +1313,28 @@ div.blankline{margin:0 !important}
 .entries li{line-break:loose !important;word-break:normal !important;overflow-wrap:normal !important}
 /* 2026-11-17 孝瓏：標記只在「、」等標點斷行，不要斷在詞中間 */
 .entries li .lbl{word-break:keep-all !important;line-break:normal !important}
+
+/* 2026-11-20 孝瓏（13:29 定案）：空行＝一般文字高度（不可壓縮）；空行與上下文字的「間距」＝0.2cm
+   ⚠️ 13:07 曾誤做成「空行高度 0.2cm」→ 全站空行看起來消失（已還原 c69e88c） */
+.blankline,
+.entries li.blankline,
+div.blankline{
+  height:auto !important; min-height:0 !important; max-height:none !important;
+  line-height:1.9 !important; font-size:inherit !important;
+  padding:5px 0 !important; border:0 !important;
+  margin-top:.2cm !important; margin-bottom:.2cm !important;
+}
+.blankline + .unit,
+.blankline + .unit.ad,
+.blankline + .unit.sm,
+.blankline + .entries,
+.blankline + ul,
+.blankline + div{margin-top:0 !important}
+.unit:has(+ .blankline),
+.unit.ad:has(+ .blankline),
+ul:has(+ .blankline),
+.entries:has(+ .blankline){margin-bottom:0 !important}
+.entries + .blankline,
+ul + .blankline,
+.unit + .blankline,
+li + .blankline{margin-top:.2cm !important}

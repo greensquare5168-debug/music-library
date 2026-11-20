@@ -1352,3 +1352,28 @@ body[data-show="大頭小狀元"][data-season] .unit[data-label="台北市環保
 
 /* 2026-11-19 孝瓏：清潔隊員長標題 → 下方第一首音樂的距離對齊其他大標題（其他標題是 -5px，此標題原本 4px） */
 body[data-show="大頭小狀元"][data-season] .unit[data-label="台北市環保局 內湖區清潔隊 西湖分隊夜間班"]{margin-bottom:-5px !important}
+
+/* 2026-11-20 孝瓏（13:29 定案）：空行＝一般文字高度（不可壓縮）；空行與上下文字的「間距」＝0.2cm
+   ⚠️ 13:07 曾誤做成「空行高度 0.2cm」→ 全站空行看起來消失（已還原 c69e88c） */
+.blankline,
+.entries li.blankline,
+div.blankline{
+  height:auto !important; min-height:0 !important; max-height:none !important;
+  line-height:1.9 !important; font-size:inherit !important;
+  padding:5px 0 !important; border:0 !important;
+  margin-top:.2cm !important; margin-bottom:.2cm !important;
+}
+.blankline + .unit,
+.blankline + .unit.ad,
+.blankline + .unit.sm,
+.blankline + .entries,
+.blankline + ul,
+.blankline + div{margin-top:0 !important}
+.unit:has(+ .blankline),
+.unit.ad:has(+ .blankline),
+ul:has(+ .blankline),
+.entries:has(+ .blankline){margin-bottom:0 !important}
+.entries + .blankline,
+ul + .blankline,
+.unit + .blankline,
+li + .blankline{margin-top:.2cm !important}
