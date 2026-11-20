@@ -1352,3 +1352,22 @@ body[data-show="大頭小狀元"][data-season] .unit[data-label="台北市環保
 
 /* 2026-11-19 孝瓏：清潔隊員長標題 → 下方第一首音樂的距離對齊其他大標題（其他標題是 -5px，此標題原本 4px） */
 body[data-show="大頭小狀元"][data-season] .unit[data-label="台北市環保局 內湖區清潔隊 西湖分隊夜間班"]{margin-bottom:-5px !important}
+
+/* 2026-11-20 孝瓏：空行高度與前後間距一律 0.2cm（全站統一，不再隨字級/行高變化）
+   第二個故事最後一個「哥哥姐姐」框之後只留一個空行，不可再疊第二個（片尾曲本身已有一個） */
+.blankline,
+.entries li.blankline,
+div.blankline{
+  height:.2cm !important; min-height:0 !important; max-height:.2cm !important;
+  line-height:.2cm !important; font-size:0 !important;
+  margin:0 !important; padding:0 !important; border:0 !important;
+  display:block !important; overflow:hidden !important;
+}
+.blankline + .unit,
+.blankline + .unit.ad,
+.blankline + .unit.sm,
+.blankline + .entries,
+.blankline + ul{margin-top:0 !important}
+.entries + .blankline,
+ul + .blankline,
+.unit + .blankline{margin-top:0 !important}

@@ -1313,3 +1313,22 @@ div.blankline{margin:0 !important}
 .entries li{line-break:loose !important;word-break:normal !important;overflow-wrap:normal !important}
 /* 2026-11-17 孝瓏：標記只在「、」等標點斷行，不要斷在詞中間 */
 .entries li .lbl{word-break:keep-all !important;line-break:normal !important}
+
+/* 2026-11-20 孝瓏：空行高度與前後間距一律 0.2cm（全站統一，不再隨字級/行高變化）
+   第二個故事最後一個「哥哥姐姐」框之後只留一個空行，不可再疊第二個（片尾曲本身已有一個） */
+.blankline,
+.entries li.blankline,
+div.blankline{
+  height:.2cm !important; min-height:0 !important; max-height:.2cm !important;
+  line-height:.2cm !important; font-size:0 !important;
+  margin:0 !important; padding:0 !important; border:0 !important;
+  display:block !important; overflow:hidden !important;
+}
+.blankline + .unit,
+.blankline + .unit.ad,
+.blankline + .unit.sm,
+.blankline + .entries,
+.blankline + ul{margin-top:0 !important}
+.entries + .blankline,
+ul + .blankline,
+.unit + .blankline{margin-top:0 !important}
