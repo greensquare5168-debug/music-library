@@ -1436,3 +1436,19 @@ html body h2:has(+ .blankline),
 html body h3:has(+ .blankline),
 body[data-show] .unit.sm:has(+ .blankline),
 body[data-show] .unit:has(+ .blankline){margin-bottom:0 !important}
+
+/* ===== 2026-11-20 16:05 孝瓏：空行↔文字「看得見的空白」統一 0.2cm =====
+   原本 5px padding + 2.56px margin = 7.56px，但文字行高本身還有約 3.2px 留白
+   → 肉眼／截圖量到 10.77px（0.28cm）。這裡把文字側外距扣掉這段留白，
+   讓實際看到的空白 = 0.2cm；框（.unit 系列）仍維持「框邊緣到空行 0.2cm」。 */
+html body .entries + .blankline,
+html body ul + .blankline,
+html body li + .blankline,
+html body .r-intro + .blankline,
+html body .r-outro + .blankline{margin-top:calc(.2cm - 8.2px) !important}
+html body .blankline:has(+ .entries),
+html body .blankline:has(+ ul),
+html body .blankline:has(+ li){margin-bottom:calc(.2cm - 8.2px) !important}
+/* li 型空行（巧連智等）：特異性要提高才蓋得過 html body .entries li.blankline */
+html body .entries > li.blankline{margin-top:calc(.2cm - 8.2px) !important}
+html body .entries > li.blankline:has(+ li){margin-bottom:calc(.2cm - 8.2px) !important}
