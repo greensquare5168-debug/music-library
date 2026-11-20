@@ -1361,7 +1361,8 @@ div.blankline{
   height:auto !important; min-height:0 !important; max-height:none !important;
   line-height:1.9 !important; font-size:inherit !important;
   padding:5px 0 !important; border:0 !important;
-  margin-top:.2cm !important; margin-bottom:.2cm !important;
+  /* 孝瓏量的「間距」＝看得見的空白＝padding(5px)＋margin，故 margin 只補到 0.2cm 為止 */
+  margin-top:calc(.2cm - 5px) !important; margin-bottom:calc(.2cm - 5px) !important;
 }
 .blankline + .unit,
 .blankline + .unit.ad,
@@ -1376,4 +1377,18 @@ ul:has(+ .blankline),
 .entries + .blankline,
 ul + .blankline,
 .unit + .blankline,
-li + .blankline{margin-top:.2cm !important}
+li + .blankline{margin-top:calc(.2cm - 5px) !important}
+
+/* 2026-11-20 13:38 孝瓏量到 0.3cm（＝padding 5px + margin）→ margin 改 calc(.2cm - 5px)；
+   另需蓋掉童話世界舊的 3px／8px 規則（特異性較高，故用 body[data-show] 提高） */
+body[data-show] .blankline + .unit,
+body[data-show] .blankline + .unit.ad,
+body[data-show] .blankline + .unit.sm,
+body[data-show] div.blankline + .unit.sm,
+body[data-show] .blankline + .entries,
+body[data-show] .blankline + ul{margin-top:0 !important}
+
+/* 2026-11-20 13:40 空行上方間距也要 0.2cm：空行前一元素（標題/清單/單元）外距歸零，避免外距疊加 */
+.album-card > *:has(+ .blankline),
+.entries > *:has(+ .blankline),
+h1:has(+ .blankline), h2:has(+ .blankline), h3:has(+ .blankline){margin-bottom:0 !important}
