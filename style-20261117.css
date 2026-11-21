@@ -1458,4 +1458,4 @@ html body h2 + .blankline,
 html body h3 + .blankline{margin-top:5.86px !important}
 
 /* 健康即時通：強哥小叮嚀 → 大標題框（藍字＋白描邊，色取自節目畫面｜孝瓏 2026-11-21） */
-body[data-show="健康即時通"][data-season] .unit[data-label^="強哥小叮嚀"]{display:block;margin-top:26px;padding:8px 14px;border:3px solid #e6c555;border-radius:12px;font-size:28px;line-height:1.3;font-weight:700;color:#3c80ba;-webkit-text-stroke:0;text-shadow:1.5px 0 0 #fff,-1.5px 0 0 #fff,0 1.5px 0 #fff,0 -1.5px 0 #fff,0 2px 3px rgba(0,0,0,.16);background:#ffffff}
+body[data-show="健康即時通"][data-season] .unit[data-label^="強哥小叮嚀"]{display:block;margin-top:26px;padding:8px 14px;border:3px solid #e6c555;border-radius:12px;font-size:28px;line-height:1.3;font-weight:700;color:#3c80ba;-webkit-text-stroke:0;text-shadow:1.8px 0 0 #fff,-1.8px 0 0 #fff,0 1.8px 0 #fff,0 -1.8px 0 #fff,1.3px 1.3px 0 #fff,-1.3px 1.3px 0 #fff,1.3px -1.3px 0 #fff,-1.3px -1.3px 0 #fff,0 0 3px #fff;background:#dce1e3}
