@@ -97,6 +97,61 @@ function fitWin(){
   }
   document.addEventListener('DOMContentLoaded',boot);
   window.addEventListener('load',boot);
+
+  // ── 2026-11-21 修正：來源網站「有自己捲軸的區塊」會把滾輪事件吃光，頁面上攔不到 ──
+  // 做法：在窗口外面蓋一層透明「捲動罩」，滑鼠在窗口上時一律由我方接管滾輪/拖曳，
+  //       要點播放器時點罩子 = 穿過同一點到 iframe（同一位置元素，座標一致 → 點擊命中同一目標）
+  // 關鍵：罩子只有在 iframe 跨網域無法讀取時才加（同源照舊直接作用）
+  function overbox(){
+    var ws=document.querySelectorAll('.srcwin');
+    for(var i=0;i<ws.length;i++){
+      var w=ws[i]; if(w.getAttribute('data-ov')) continue;
+      var f=w.getElementsByTagName('iframe')[0]; if(!f) continue;
+      var box=document.createElement('div');
+      box.className='srcov';   // 一律加罩（跨網域時頁面上的 wheel 攔不到，只有罩子可靠）
+      box.style.cssText='position:absolute;left:0;top:0;right:0;bottom:0;z-index:5;background:transparent;cursor:grab';
+      w.appendChild(box);
+      w.setAttribute('data-ov','1');
+      w._wheel=function(e){
+        var d=e.deltaY;
+        if(e.deltaMode===1) d*=20; else if(e.deltaMode===2) d*=w.clientHeight;
+        var step=Math.max(-240, Math.min(240, d*0.6));
+        shift(w, step);
+        e.preventDefault(); e.stopPropagation();
+      };
+      box.addEventListener('wheel', w._wheel, {passive:false});
+      (function(w,box){
+        var down=false,lastY=0,moved=0;
+        box.addEventListener('mousedown', function(e){
+          if(e.button!==0) return;
+          down=true; lastY=e.clientY; moved=0; box.style.cursor='grabbing'; e.preventDefault();
+        });
+        window.addEventListener('mousemove', function(e){
+          if(!down) return;
+          moved+=Math.abs(e.clientY-lastY);
+          shift(w, lastY-e.clientY); lastY=e.clientY; e.preventDefault();
+        });
+        window.addEventListener('mouseup', function(e){
+          if(!down) return; down=false; box.style.cursor='grab';
+          if(moved<4) relay(w,box,e);       // 沒拖動 = 視為點擊 → 穿到 iframe 同一點
+        });
+      })(w,box);
+    }
+  }
+  // 點擊穿透：把「窗口內座標」原封不動轉發給 iframe 內同一位置的元素
+  function relay(w,box,e){
+    var f=w.getElementsByTagName('iframe')[0];
+    var r=w.getBoundingClientRect();
+    var s=parseFloat(w.getAttribute('data-scale'))||1;
+    var off=parseFloat(w.getAttribute('data-off'))||0;
+    var x=(e.clientX-r.left)/s, y=(e.clientY-r.top)/s + off;
+    var d=null; try{ d=f.contentDocument; }catch(err){ d=null; }
+    if(!d) return;
+    var t=d.elementFromPoint(x,y);
+    if(t && t.click){ try{ t.click(); }catch(err){} }
+  }
+  document.addEventListener('DOMContentLoaded',overbox);
+  window.addEventListener('load',overbox);
 })();
 document.addEventListener('DOMContentLoaded',fitWin);
 window.addEventListener('load',fitWin);
