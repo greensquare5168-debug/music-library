@@ -27,6 +27,27 @@ function fitSrc(){
 document.addEventListener('DOMContentLoaded',fitSrc);
 window.addEventListener('load',fitSrc);
 window.addEventListener('resize',fitSrc);
+function fitWin(){
+  // 來源網站「窗口」：固定設計寬度 1200 內部渲染，再等比縮放 + 垂直裁切到指定區段
+  // 用法：<div class="srcwin" data-design="1200" data-offset="340" data-fh="2400">
+  var ws=document.querySelectorAll('.srcwin');
+  for(var i=0;i<ws.length;i++){
+    var w=ws[i], f=w.getElementsByTagName('iframe')[0];
+    if(!f) continue;
+    var cw=w.clientWidth; if(!cw) continue;
+    var design=parseFloat(w.getAttribute('data-design'))||1200;
+    var off=parseFloat(w.getAttribute('data-offset'))||0;
+    var fh=parseFloat(w.getAttribute('data-fh'))||2400;
+    var s=cw/design;
+    f.style.width=design+'px';
+    f.style.height=fh+'px';
+    f.style.transformOrigin='top left';
+    f.style.transform='translateY('+(-off*s)+'px) scale('+s+')';
+  }
+}
+document.addEventListener('DOMContentLoaded',fitWin);
+window.addEventListener('load',fitWin);
+window.addEventListener('resize',fitWin);
 function openWin(u){
   try{
     var w=Math.min(1200,Math.round(screen.availWidth*0.8));
