@@ -28,16 +28,25 @@ document.addEventListener('DOMContentLoaded',fitSrc);
 window.addEventListener('load',fitSrc);
 window.addEventListener('resize',fitSrc);
 function fitWin(){
-  // 來源網站「窗口」：固定設計寬度 1200 內部渲染，再等比縮放 + 垂直裁切到指定區段
+  // 來源網站「窗口」：固定設計寬度 1200 內部渲染，再等比縮放 + 垂直裁切到起始區段
   // 用法：<div class="srcwin" data-design="1200" data-offset="340" data-fh="2400">
+  // 2026-11-21 孝瓏：「跳轉之後，還能再滑動」→ 窗口內可再上下滑動看更多內容
   var ws=document.querySelectorAll('.srcwin');
   for(var i=0;i<ws.length;i++){
     var w=ws[i], f=w.getElementsByTagName('iframe')[0];
     if(!f) continue;
     var cw=w.clientWidth; if(!cw) continue;
+    var view=w.clientHeight; if(!view) continue;
     var design=parseFloat(w.getAttribute('data-design'))||1200;
     var off=parseFloat(w.getAttribute('data-offset'))||0;
     var fh=parseFloat(w.getAttribute('data-fh'))||2400;
+    // 可滑動範圍：起始位置 off → 最多滑到 iframe 底部（留一屏可視高度）
+    var maxOff=Math.max(0, fh-view/(cw/design));
+    if(off>maxOff) off=maxOff;
+    w.setAttribute('data-off', off);
+    w.setAttribute('data-maxoff', maxOff);
+    w.setAttribute('data-scale', cw/design);
+    if(!w.getAttribute('tabindex')) w.setAttribute('tabindex','0');
     var s=cw/design;
     f.style.width=design+'px';
     f.style.height=fh+'px';
@@ -45,6 +54,50 @@ function fitWin(){
     f.style.transform='translateY('+(-off*s)+'px) scale('+s+')';
   }
 }
+// 窗口滾動：滑鼠滾輪 / 拖曳 / 方向鍵 → 在窗口範圍內上下移動 iframe（頁面捲動不受影響
+(function(){
+  function shift(w,dy){
+    var s=parseFloat(w.getAttribute('data-scale'))||1;
+    var off=parseFloat(w.getAttribute('data-off'))||0;
+    var maxOff=parseFloat(w.getAttribute('data-maxoff'))||0;
+    var next=Math.min(maxOff, Math.max(0, off + dy/s));
+    if(next===off) return false;
+    w.setAttribute('data-off', next);
+    var f=w.getElementsByTagName('iframe')[0];
+    if(f) f.style.transform='translateY('+(-next*s)+'px) scale('+s+')';
+    return true;
+  }
+  function bind(w){
+    if(w.getAttribute('data-wbind')) return;
+    w.setAttribute('data-wbind','1');
+    // 一次滾輪只移動「滾輪量 × 0.6」（除以縮放比換算成來源頁像素），
+    // 並限制單次上限，避免一次滑到底（2026-11-21 實測：deltaY 400 會直接跳到最底）
+    w.addEventListener('wheel', function(e){
+      var d=e.deltaY;
+      if(e.deltaMode===1) d*=20; else if(e.deltaMode===2) d*=w.clientHeight;
+      var step=Math.max(-240, Math.min(240, d*0.6));
+      if(shift(w, step)) e.preventDefault();
+    }, {passive:false});
+    var down=false, lastY=0;
+    w.addEventListener('mousedown', function(e){ down=true; lastY=e.clientY; w.style.cursor='grabbing'; });
+    w._mousemove=function(e){ if(!down) return; shift(w, lastY-e.clientY); lastY=e.clientY; };
+    w._mouseup=function(){ if(down){ down=false; w.style.cursor=''; } };
+    window.addEventListener('mousemove', w._mousemove);
+    window.addEventListener('mouseup', w._mouseup);
+    w.addEventListener('keydown', function(e){
+      if(e.key==='ArrowDown'){ if(shift(w,120)) e.preventDefault(); }
+      else if(e.key==='ArrowUp'){ if(shift(w,-120)) e.preventDefault(); }
+      else if(e.key==='PageDown'){ if(shift(w,w.clientHeight)) e.preventDefault(); }
+      else if(e.key==='PageUp'){ if(shift(w,-w.clientHeight)) e.preventDefault(); }
+    });
+  }
+  function boot(){
+    var ws=document.querySelectorAll('.srcwin');
+    for(var i=0;i<ws.length;i++) bind(ws[i]);
+  }
+  document.addEventListener('DOMContentLoaded',boot);
+  window.addEventListener('load',boot);
+})();
 document.addEventListener('DOMContentLoaded',fitWin);
 window.addEventListener('load',fitWin);
 window.addEventListener('resize',fitWin);
