@@ -119,36 +119,33 @@ function fitWin(){
         shift(w, step);
         e.preventDefault(); e.stopPropagation();
       };
-      box.addEventListener('wheel', w._wheel, {passive:false});
       (function(w,box){
+        // 2026-11-22 孝瓏：罩子上的點擊會被擋住 iframe 自己的滑鼠事件（游標變手但點不動）→ 一律穿透
+        // 做法：罩子本身 pointer-events:none（滑鼠事件直接落到 iframe），滾輪改在「外層」攔截；
+        //      拖曳＝在窗口內按住移動時暫時把罩子打開（吃掉拖曳）→ 放開後立刻收回，iframe 不受影響
+        box.style.pointerEvents='none';
+        w.style.touchAction='pan-y';
+        w.addEventListener('wheel', w._wheel, {passive:false});
         var down=false,lastY=0,moved=0;
-        box.addEventListener('mousedown', function(e){
-          if(e.button!==0) return;
-          down=true; lastY=e.clientY; moved=0; box.style.cursor='grabbing'; e.preventDefault();
-        });
-        window.addEventListener('mousemove', function(e){
+        function grab(e){
           if(!down) return;
           moved+=Math.abs(e.clientY-lastY);
           shift(w, lastY-e.clientY); lastY=e.clientY; e.preventDefault();
-        });
-        window.addEventListener('mouseup', function(e){
-          if(!down) return; down=false; box.style.cursor='grab';
-          if(moved<4) relay(w,box,e);       // 沒拖動 = 視為點擊 → 穿到 iframe 同一點
+        }
+        function rel(e){
+          if(!down) return; down=false;
+          window.removeEventListener('mousemove', grab); window.removeEventListener('mouseup', rel);
+        }
+        // 只有「按住後移動」才視為拖曳：mousedown 不攔，讓 iframe 自己處理點擊/播放
+        w.addEventListener('mousedown', function(e){
+          if(e.button!==0) return;
+          if(e.target && e.target.tagName==='IFRAME'){
+            lastY=e.clientY; moved=0; down=true;
+            window.addEventListener('mousemove', grab); window.addEventListener('mouseup', rel);
+          }
         });
       })(w,box);
     }
-  }
-  // 點擊穿透：把「窗口內座標」原封不動轉發給 iframe 內同一位置的元素
-  function relay(w,box,e){
-    var f=w.getElementsByTagName('iframe')[0];
-    var r=w.getBoundingClientRect();
-    var s=parseFloat(w.getAttribute('data-scale'))||1;
-    var off=parseFloat(w.getAttribute('data-off'))||0;
-    var x=(e.clientX-r.left)/s, y=(e.clientY-r.top)/s + off;
-    var d=null; try{ d=f.contentDocument; }catch(err){ d=null; }
-    if(!d) return;
-    var t=d.elementFromPoint(x,y);
-    if(t && t.click){ try{ t.click(); }catch(err){} }
   }
   document.addEventListener('DOMContentLoaded',overbox);
   window.addEventListener('load',overbox);
