@@ -1268,6 +1268,18 @@ body[data-show="yoyo童話世界"] .unit{
   paint-order:normal;
 }
 
+/* 2026-11-22 孝瓏：YOYO童話世界「哥哥姐姐」要小標題框（16px 細框），不可被大標題規則放大 */
+body[data-show="yoyo童話世界"] .unit.sm{
+  padding:4px 14px;
+  font-size:16px;
+  line-height:24px;
+  color:#2b3648;
+  font-weight:700;
+  border:2px solid #8fa3bd;
+  border-radius:9px;
+  background:#ffffff;
+}
+
 /* 2026-11-13 孝瓏：YOYO童話世界「片頭曲」改成橫線標題（同廣告後片段：置中、無框、下緣一條線） */
 body[data-show="yoyo童話世界"] .unit.ad{
   display:block;
