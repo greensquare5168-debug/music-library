@@ -1467,3 +1467,7 @@ body[data-show="yoyo童話世界"] .unit.sm:not(.ad){
 body[data-show="yoyo童話世界"] .unit.sm:not(.ad){
   margin-bottom:.2cm !important;
 }
+
+/* 2026-11-22 孝瓏：大標題框 → 緊接的小標題框（第一組）間距全站統一 12px（＝大框 top 22.7px、小框 12px 後視覺一致）
+   原本只有巧連智各頁在 <style> 內補這條（孝瓏截圖 遊戲1 與 遊戲2 間距不一致就是這個原因） */
+html body .album-card>.unit[style*="font-size:22px"]+.unit.sm{margin-top:12px !important}
