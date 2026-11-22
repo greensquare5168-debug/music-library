@@ -1454,3 +1454,16 @@ body[data-show="健康即時通"] .unit[data-label="健康特派員"]{
 
 /* 曲目頁標題下的作者小字（2026-11-22 孝瓏：作者與曲名分行，不可同一行） */
 .album-card .albumartist{font-size:14px;color:#6b7a8d;margin:-2px 0 14px;letter-spacing:.3px}
+
+/* 2026-11-22 孝瓏：YOYO童話世界 大標題框 → 下方小標題框（哥哥姐姐）間距＝7px
+   原本靠 .unit 的 margin-top:26px 撐開，但全站 .blankline+.unit{margin-top:0} 與
+   .unit{margin-bottom:-5px} 抵銷後變成 -5px（框疊在一起）。
+   修法：只在「大框後面緊接小框」時補 margin-top:12px（12 - 5 = 7px） */
+body[data-show="yoyo童話世界"] .unit.sm:not(.ad){
+  margin-top:12px !important;
+}
+
+/* 2026-11-22 孝瓏：小標題框（哥哥姐姐）→ 下面曲目清單 間距回復（原本被 .unit{margin-bottom:-5px} 變成 -5px 疊住） */
+body[data-show="yoyo童話世界"] .unit.sm:not(.ad){
+  margin-bottom:.2cm !important;
+}
