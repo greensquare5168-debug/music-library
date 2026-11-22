@@ -1439,3 +1439,6 @@ body[data-show="健康即時通"] .unit[data-label="健康特派員"]{
   text-shadow:none !important;
   box-sizing:border-box !important;
 }
+
+/* 曲目頁標題下的作者小字（2026-11-22 孝瓏：作者與曲名分行，不可同一行） */
+.album-card .albumartist{font-size:14px;color:#6b7a8d;margin:-2px 0 14px;letter-spacing:.3px}
