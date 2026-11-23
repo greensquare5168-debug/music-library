@@ -8,8 +8,10 @@
 .unit.ad[data-label="廣告後片段"]{padding:0 14px 5px !important;font-size:22px !important;line-height:1.15 !important}
 html body .unit.ad[data-label="廣告後片段"] + ul.entries{margin-top:-9px !important}
 html body .unit.ad[data-label="廣告後片段"] + ul.entries > li:first-child{padding-top:0 !important}
-.unit[data-label="健康特派員"] + ul.entries > li:first-child{margin-top:-9px !important}
-html body .unit[data-label="健康特派員"] + ul.entries > li:first-child{padding-top:0 !important}
+
+/* 健康特派員：首曲間距比照其他標題框（li padding 5px） */
+body[data-show="健康即時通"] .unit[data-label="健康特派員"]{margin-bottom:-5px !important}
+
 </style>
 </head><body data-show="健康即時通" data-season="健康即時通-第12集-妥瑞症">
 <header class="site-head"><div class="wrap head-row">
