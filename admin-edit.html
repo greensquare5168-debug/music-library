@@ -33,7 +33,7 @@ label{font-size:13px;color:#5c6675;display:block;margin-bottom:5px}
 <body>
 <header>
   <h1>✏️ 站主編輯器</h1>
-  <span class="muted">只在這台機器上跑（127.0.0.1）· 存檔會自動 commit</span>
+  <span class="muted">只在這台機器（U4）上跑 · 存檔會自動 commit</span>
 </header>
 <div class="wrap">
 
@@ -101,6 +101,12 @@ async function api(path, body){
 $('go').addEventListener('click', search);
 $('q').addEventListener('keydown', e => { if(e.key === 'Enter') search(); });
 
+// 從網站鉛筆帶過來的 ?page=<相對路徑> → 直接開那一頁
+(function(){
+  const rel = new URLSearchParams(location.search).get('page');
+  if(rel) openPage(rel);
+})();
+
 async function search(){
   const q = $('q').value.trim();
   if(!q) return;
@@ -130,6 +136,7 @@ async function openPage(rel){
     renderUsage(d.usage);
     $('mark').checked = d.usage.length > 0;
     $('editor').scrollIntoView({behavior:'smooth'});
+    try{ history.replaceState(null,'','?page='+encodeURIComponent(rel)); }catch(e){}
   }catch(e){ msg('載入失敗：' + e.message, false); }
 }
 
