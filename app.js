@@ -529,3 +529,62 @@ function openWin(u){
     if (has) import('/music-library/chat-owner.js').catch(function () {});
   } catch (e) {}
 })();
+
+/* ---------- 站主鉛筆：只有「站主本人」看得到（2026-11-23 孝瓏要求） ----------
+   目的：每一頁右上角加一個 ✏️，點下去直接跳到 GitHub 該頁 index.html 的編輯畫面。
+   - 判斷依據：瀏覽器裡有 Supabase 登入態（login.html 登入後會留下 sb-*-auth-token）
+   - 訪客（沒登入）完全看不到，不會有亂點進入 GitHub 的問題
+   - 真心話：GitHub 那邊本來就只有站主帳號能存檔；別人點進去看到 404 / 唯讀，也改不動
+*/
+(function(){
+  var PENCIL_KEY='u4_pencil_v1';
+  function sbEmail(){
+    try{
+      for(var i=0;i<localStorage.length;i++){
+        var k=localStorage.key(i)||'';
+        if(k.indexOf('sb-')===0 && k.slice(-11)==='-auth-token'){
+          var o=JSON.parse(localStorage.getItem(k)||'null');
+          var u=o&&(o.user||(o.currentSession&&o.currentSession.user));
+          if(u&&u.email) return String(u.email).toLowerCase();
+        }
+      }
+    }catch(e){}
+    return '';
+  }
+  function pagePath(){
+    // 以 app.js 的位置推算站台根目錄，再取得目前頁面的相對路徑
+    var sc=document.currentScript;
+    var arr=(sc&&sc.src)?new URL(sc.src).pathname.split('/'):[];
+    var root=arr.length?arr.slice(0,arr.length-1).join('/')+'/':'/music-library/';
+    var here=location.pathname;
+    var rel=(here.indexOf(root)===0)?here.slice(root.length):here.replace(/^\//,'');
+    if(rel===''||rel.slice(-1)==='/') rel+='index.html';
+    return rel;
+  }
+  function editUrl(){
+    return 'https://github.com/greensquare5168-debug/music-library/edit/master/'+pagePath();
+  }
+  function add(){
+    var email=sbEmail();
+    if(!email) return;                       // 訪客：不加
+    if(document.querySelector('.pencil-edit')) return;
+    var nav=document.querySelector('header .topnav');
+    if(!nav) nav=document.querySelector('header');
+    if(!nav) return;
+    var a=document.createElement('a');
+    a.className='pencil-edit';
+    a.href=editUrl();
+    a.target='_blank';
+    a.rel='noopener';
+    a.title='編輯這一頁（GitHub）';
+    a.textContent='✏️';
+    a.style.cssText='display:inline-flex;align-items:center;justify-content:center;'
+      +'width:34px;height:34px;border-radius:10px;border:1px solid #cfd8e3;background:#fff;'
+      +'text-decoration:none;font-size:16px;line-height:1;margin-left:6px';
+    a.onmouseover=function(){a.style.background='#eef3fb';};
+    a.onmouseout=function(){a.style.background='#fff';};
+    var sp=nav.querySelector('.navsearch');
+    if(sp) nav.insertBefore(a,sp); else nav.appendChild(a);
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',add); else add();
+})();
