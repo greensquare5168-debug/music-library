@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>站主編輯器｜圖書館音樂研究所</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,"Noto Sans TC",sans-serif;background:#f6f8fb;color:#1f2733}
+header{background:#fff;border-bottom:1px solid #e3e8ee;padding:12px 20px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+h1{font-size:17px;margin:0}
+.wrap{max-width:1000px;margin:0 auto;padding:20px}
+.card{background:#fff;border:1px solid #e3e8ee;border-radius:14px;padding:18px;margin-bottom:16px}
+h2{font-size:15px;margin:0 0 12px;color:#334}
+input[type=text],input[type=search]{font:inherit;padding:9px 12px;border:1px solid #cfd8e3;border-radius:9px;width:100%}
+button{font:inherit;padding:9px 16px;border-radius:9px;border:1px solid #2f6feb;background:#2f6feb;color:#fff;cursor:pointer}
+button.ghost{background:#fff;color:#334;border-color:#cfd8e3}
+.row{display:flex;gap:10px;align-items:center;margin-bottom:10px;flex-wrap:wrap}
+label{font-size:13px;color:#5c6675;display:block;margin-bottom:5px}
+.hit{padding:10px 12px;border:1px solid #e3e8ee;border-radius:10px;margin-bottom:8px;cursor:pointer;background:#fff}
+.hit:hover{background:#eef3fb;border-color:#2f6feb}
+.hit .t{font-weight:600;font-size:14px}
+.hit .m{font-size:12.5px;color:#6b7280;margin-top:3px}
+.usage{display:flex;gap:8px;align-items:flex-start;padding:9px;border:1px solid #e3e8ee;border-radius:10px;margin-bottom:8px;background:#fbfcfe}
+.usage input[type=text]{font-size:13px}
+.usage .del{background:#fff;color:#b42318;border-color:#f3c0bb;padding:7px 11px;white-space:nowrap}
+.msg{margin-top:12px;font-size:13.5px;padding:10px 12px;border-radius:9px;display:none}
+.msg.ok{display:block;background:#eaf7ef;color:#12894a;border:1px solid #bfe6cd}
+.msg.err{display:block;background:#fdf0ef;color:#b42318;border:1px solid #f3c0bb}
+.muted{color:#6b7280;font-size:12.5px}
+.switch{display:inline-flex;align-items:center;gap:8px;font-size:14px}
+.chk{width:20px;height:20px}
+.pill{display:inline-block;background:#eef3fb;color:#2f6feb;border-radius:999px;padding:2px 10px;font-size:12px;margin-left:8px}
+</style></head>
+<body>
+<header>
+  <h1>✏️ 站主編輯器</h1>
+  <span class="muted">只在這台機器上跑（127.0.0.1）· 存檔會自動 commit</span>
+</header>
+<div class="wrap">
+
+  <div class="card">
+    <h2>① 找曲目</h2>
+    <div class="row">
+      <input id="q" type="search" placeholder="打曲名（中文／英文都可以，例：Nocturne、小紅帽）">
+      <button id="go">搜尋</button>
+    </div>
+    <div id="hits"></div>
+  </div>
+
+  <div class="card" id="editor" style="display:none">
+    <h2>② 編輯 <span class="pill" id="cur"></span></h2>
+
+    <label>曲名</label>
+    <input id="title" type="text">
+    <div style="height:10px"></div>
+    <label>作者</label>
+    <input id="artist" type="text">
+    <div style="height:12px"></div>
+    <button id="saveTitle">儲存曲名／作者</button>
+
+    <hr style="border:0;border-top:1px solid #eef2f7;margin:20px 0">
+
+    <h2>使用作品 <span class="muted" id="nuse"></span></h2>
+    <div id="usages"></div>
+    <button class="ghost" id="addUsage">＋ 加一筆</button>
+    <div style="height:12px"></div>
+    <button id="saveUsage">儲存使用作品（自動照網站排法排序）</button>
+
+    <hr style="border:0;border-top:1px solid #eef2f7;margin:20px 0">
+
+    <h2>專輯頁這首的 ✓</h2>
+    <label class="switch"><input type="checkbox" id="mark" class="chk"> 這首有使用作品（打勾）</label>
+    <div style="height:10px"></div>
+    <button id="saveMark">儲存 ✓ 狀態</button>
+
+    <div class="msg" id="msg"></div>
+  </div>
+
+  <div class="card muted" style="font-size:12.5px;line-height:1.8">
+    ⓘ 存檔只改這台機器上的檔案並 commit。<b>要上線</b>請在終端機執行：<br>
+    <code>cd ~/clawd/projects/罐頭音樂/網站demo2 &amp;&amp; bin/publish.sh "說明"</code><br>
+    （或跟我說「發佈」，我幫你推上去）
+  </div>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+let CUR = null;
+
+function msg(t, ok){
+  const m = $('msg'); m.textContent = t; m.className = 'msg ' + (ok ? 'ok' : 'err');
+  clearTimeout(msg._t); msg._t = setTimeout(()=>{ m.className='msg'; }, 8000);
+}
+
+async function api(path, body){
+  const r = await fetch(path, body ? {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body)} : {});
+  const d = await r.json();
+  if(!r.ok || d.ok === false) throw new Error(d.error || ('HTTP ' + r.status));
+  return d;
+}
+
+$('go').addEventListener('click', search);
+$('q').addEventListener('keydown', e => { if(e.key === 'Enter') search(); });
+
+async function search(){
+  const q = $('q').value.trim();
+  if(!q) return;
+  $('hits').innerHTML = '<p class="muted">搜尋中…</p>';
+  try{
+    const d = await api('/api/search?q=' + encodeURIComponent(q));
+    if(!d.hits.length){ $('hits').innerHTML = '<p class="muted">找不到曲目（只搜得到「曲目頁」）</p>'; return; }
+    $('hits').innerHTML = d.hits.map(h =>
+      `<div class="hit" data-rel="${h.rel.replace(/"/g,'&quot;')}">
+         <div class="t">${h.title}</div>
+         <div class="m">${h.artist} · 目前 ${h.n_usage} 筆使用作品</div>
+       </div>`).join('');
+    [...document.querySelectorAll('.hit')].forEach(el => {
+      el.addEventListener('click', () => openPage(el.dataset.rel));
+    });
+  }catch(e){ $('hits').innerHTML = '<p class="muted">搜尋失敗：' + e.message + '</p>'; }
+}
+
+async function openPage(rel){
+  try{
+    const d = await api('/api/info?rel=' + encodeURIComponent(rel));
+    CUR = d;
+    $('editor').style.display = 'block';
+    $('cur').textContent = rel.split('/').slice(-2)[0];
+    $('title').value = d.title;
+    $('artist').value = d.artist;
+    renderUsage(d.usage);
+    $('mark').checked = d.usage.length > 0;
+    $('editor').scrollIntoView({behavior:'smooth'});
+  }catch(e){ msg('載入失敗：' + e.message, false); }
+}
+
+function renderUsage(list){
+  $('nuse').textContent = '（' + list.length + ' 筆）';
+  $('usages').innerHTML = list.map((u,i) =>
+    `<div class="usage">
+      <div style="flex:1">
+        <label>作品標題（連結文字）</label>
+        <input type="text" data-i="${i}" data-f="title" value="${(u.title||'').replace(/"/g,'&quot;')}">
+        <div style="height:6px"></div>
+        <label>連結網址（單集網址，/music-library/…）</label>
+        <input type="text" data-i="${i}" data-f="href" value="${(u.href||'').replace(/"/g,'&quot;')}">
+        <div style="height:6px"></div>
+        <label>括號標記（可留空，例：兔子公主 哥哥姐姐）</label>
+        <input type="text" data-i="${i}" data-f="label" value="${(u.label||'').replace(/"/g,'&quot;')}">
+      </div>
+      <button class="del" data-del="${i}">刪除</button>
+    </div>`).join('');
+  [...document.querySelectorAll('#usages input')].forEach(inp => {
+    inp.addEventListener('input', () => {
+      const i = +inp.dataset.i, f = inp.dataset.f;
+      CUR.usage[i][f] = inp.value;
+    });
+  });
+  [...document.querySelectorAll('#usages .del')].forEach(b => {
+    b.addEventListener('click', () => { CUR.usage.splice(+b.dataset.del,1); renderUsage(CUR.usage); });
+  });
+}
+
+$('addUsage').addEventListener('click', () => {
+  CUR.usage.push({href:'', title:'', label:''});
+  renderUsage(CUR.usage);
+});
+
+$('saveTitle').addEventListener('click', async () => {
+  try{
+    const d = await api('/api/save_title', {rel:CUR.rel, title:$('title').value.trim(), artist:$('artist').value.trim()});
+    msg('✅ 已儲存曲名／作者（commit ' + (d.commit||'—') + '）', true);
+  }catch(e){ msg('儲存失敗：' + e.message, false); }
+});
+
+$('saveUsage').addEventListener('click', async () => {
+  const items = CUR.usage.filter(u => u.href.trim() && u.title.trim());
+  if(items.length !== CUR.usage.length && !confirm('有 ' + (CUR.usage.length-items.length) + ' 筆沒填連結或標題，會被略過。要繼續嗎？')) return;
+  try{
+    const d = await api('/api/save_usage', {rel:CUR.rel, items});
+    msg('✅ 已儲存使用作品（' + items.length + ' 筆，commit ' + (d.commit||'—') + '）', true);
+    openPage(CUR.rel);
+  }catch(e){ msg('儲存失敗：' + e.message, false); }
+});
+
+$('saveMark').addEventListener('click', async () => {
+  try{
+    const d = await api('/api/save_mark', {rel:CUR.rel, checked:$('mark').checked});
+    msg('✅ ' + (d.note || ('已更新 ✓ 狀態（commit ' + (d.commit||'—') + '）')), true);
+  }catch(e){ msg('存檔失敗：' + e.message, false); }
+});
+</script>
+</body></html>
