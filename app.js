@@ -531,13 +531,17 @@ function openWin(u){
 })();
 
 /* ---------- 站主鉛筆：只有「站主本人」看得到（2026-11-23 孝瓏要求） ----------
-   目的：每一頁右上角加一個 ✏️，點下去直接跳到 GitHub 該頁 index.html 的編輯畫面。
+/* ---------- 站主鉛筆：只有「站主本人」看得到（2026-11-24 孝瓏：要在目前頁直接改） ----------
+   目的：每一頁右上角加一個 ✏️，點下去就在「這一頁」切換成編輯模式。
    - 判斷依據：瀏覽器裡有 Supabase 登入態（login.html 登入後會留下 sb-*-auth-token）
-   - 訪客（沒登入）完全看不到，不會有亂點進入 GitHub 的問題
-   - 真心話：GitHub 那邊本來就只有站主帳號能存檔；別人點進去看到 404 / 唯讀，也改不動
+   - 訪客（沒登入）完全看不到
+   - 2026-11-24：改成「同頁就地編輯」，不換頁、不搜尋、不跳本機後端
 */
 (function(){
-  var PENCIL_KEY='u4_pencil_v1';
+  var TOKEN_KEY='u4_gh_token_v1';
+  var OWNER_EMAILS=['greensquare5168@gmail.com'];
+  var OWNER='greensquare5168-debug', REPO='music-library', BRANCH='master';
+
   function sbEmail(){
     try{
       for(var i=0;i<localStorage.length;i++){
@@ -551,117 +555,377 @@ function openWin(u){
     }catch(e){}
     return '';
   }
-  function pagePath(){
-    // 以 app.js 的位置推算站台根目錄，再取得目前頁面的相對路徑
+  function isOwner(){ var e=sbEmail(); return !!e && OWNER_EMAILS.indexOf(e)>=0; }
+
+  function siteRoot(){
     var sc=document.currentScript;
-    var arr=(sc&&sc.src)?new URL(sc.src).pathname.split('/'):[];
-    var root=arr.length?arr.slice(0,arr.length-1).join('/')+'/':'/music-library/';
-    var here=location.pathname;
+    return (sc&&sc.src)?new URL(sc.src).pathname.replace(/[^/]*$/,''):'/music-library/';
+  }
+  function pagePath(){
+    var root=siteRoot(), here=location.pathname;
     var rel=(here.indexOf(root)===0)?here.slice(root.length):here.replace(/^\//,'');
     if(rel===''||rel.slice(-1)==='/') rel+='index.html';
     return rel;
   }
-  // 2026-11-24 改：站主點鉛筆 → 站內編輯模式（/edit.html），不用本機後端、不用終端機
-  function editUrl(){
-    var root=location.pathname;
-    // 以 app.js 的位置推算站台根（例 /music-library/）
-    var sc=document.currentScript;
-    var r=(sc&&sc.src)?new URL(sc.src).pathname.replace(/[^/]*$/,''):'/music-library/';
-    return r+'edit.html?page='+encodeURIComponent(pagePath());
+  function repoPath(){
+    var p=pagePath();
+    return p.replace(/^music-library\//,'');
   }
-  function add(){
-    var nav=document.querySelector('header .topnav');
-    if(!nav||nav.querySelector('.authchip')) return;
-    var s=sess();
-    var on=!!(s&&s.email);
-    var a=document.createElement('a');
-    a.className='authchip';
-    a.href=root+(on?'member.html':'login.html');
-    a.textContent=on?('👤 '+(s.name||s.email)):'登入';
-    a.style.cssText='display:inline-flex;align-items:center;gap:6px;text-decoration:none;'
-      +'border:1px solid '+(on?'#cfe9d8':'#cfd8e3')+';background:'+(on?'#f0faf3':'#fff')+';'
-      +'color:'+(on?'#15803d':'#1f2733')+';'+(on?'font-weight:600;':'')
-      +'border-radius:10px;padding:9px 14px;font-size:14px;white-space:nowrap';
-    var sp=nav.querySelector('.navsearch');
-    if(sp) nav.insertBefore(a,sp); else nav.appendChild(a);
-  }
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',add); else add();
-})();
 
-/* ---------- 站主聊天框（2026-11-18）：只有「已登入 Supabase」的訪客才載入 ---------- */
-(function () {
-  try {
-    var has = false;
-    for (var i = 0; i < localStorage.length; i++) {
-      var k = localStorage.key(i) || '';
-      if (k.indexOf('sb-') === 0 && k.slice(-11) === '-auth-token') { has = true; break; }
-    }
-    if (has) import('/music-library/chat-owner.js').catch(function () {});
-  } catch (e) {}
-})();
+  /* ---------- GitHub API ---------- */
+  function token(){ try{ return localStorage.getItem(TOKEN_KEY)||''; }catch(e){ return ''; } }
+  function askToken(){
+    var t=prompt(
+      '第一次使用要貼一次 GitHub token（只存在這台電腦的瀏覽器，不會上傳到任何地方）\n\n'
+      +'取得：GitHub → 右上頭像 → Settings → Developer settings\n'
+      +'→ Personal access tokens → Fine-grained tokens → Generate new token\n'
+      +'→ Repository access 選 Only select repositories → 勾 music-library\n'
+      +'→ Permissions：Contents 設 Read and write → 產生後貼上這裡\n\n'
+      +'（不貼就只能看不能存檔）','');
+    if(t&&t.trim()){ localStorage.setItem(TOKEN_KEY,t.trim()); return true; }
+    return false;
+  }
+  function headers(){
+    return {'Authorization':'Bearer '+token(),'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'};
+  }
+  function b64enc(str){
+    var bytes=new TextEncoder().encode(str), bin='';
+    for(var i=0;i<bytes.length;i++) bin+=String.fromCharCode(bytes[i]);
+    return btoa(bin);
+  }
+  function b64dec(b64){
+    var bin=atob(String(b64||'').replace(/\s/g,''));
+    var bytes=Uint8Array.from(bin,function(c){return c.charCodeAt(0);});
+    return new TextDecoder().decode(bytes);
+  }
+  function ghGet(path){
+    return fetch('https://api.github.com/repos/'+OWNER+'/'+REPO+'/contents/'+encodeURI(path)+'?ref='+BRANCH+'&t='+Date.now(),{headers:headers()})
+      .then(function(r){
+        if(r.status===401||r.status===403) throw new Error('token 失效或沒權限（HTTP '+r.status+'）');
+        if(r.status===404) throw new Error('檔案不存在：'+path);
+        if(!r.ok) throw new Error('讀取失敗 HTTP '+r.status);
+        return r.json();
+      })
+      .then(function(d){ return {sha:d.sha, text:b64dec(d.content)}; });
+  }
+  function ghPut(path, text, message, sha){
+    var body={message:message, content:b64enc(text), branch:BRANCH};
+    if(sha) body.sha=sha;
+    return fetch('https://api.github.com/repos/'+OWNER+'/'+REPO+'/contents/'+encodeURI(path),{
+      method:'PUT', headers:Object.assign({'Content-Type':'application/json'},headers()), body:JSON.stringify(body)
+    }).then(function(r){
+      return r.json().catch(function(){return {};}).then(function(d){
+        if(!r.ok) throw new Error('存檔失敗 HTTP '+r.status+'：'+(d.message||''));
+        return (d.commit&&d.commit.sha)?d.commit.sha.slice(0,7):'';
+      });
+    });
+  }
 
-/* ---------- 站主鉛筆：只有「站主本人」看得到（2026-11-23 孝瓏要求） ----------
-   目的：每一頁右上角加一個 ✏️，點下去直接跳到 GitHub 該頁 index.html 的編輯畫面。
-   - 判斷依據：瀏覽器裡有 Supabase 登入態（login.html 登入後會留下 sb-*-auth-token）
-   - 訪客（沒登入）完全看不到，不會有亂點進入 GitHub 的問題
-   - 真心話：GitHub 那邊本來就只有站主帳號能存檔；別人點進去看到 404 / 唯讀，也改不動
-*/
-(function(){
-  var PENCIL_KEY='u4_pencil_v1';
-  function sbEmail(){
-    try{
-      for(var i=0;i<localStorage.length;i++){
-        var k=localStorage.key(i)||'';
-        if(k.indexOf('sb-')===0 && k.slice(-11)==='-auth-token'){
-          var o=JSON.parse(localStorage.getItem(k)||'null');
-          var u=o&&(o.user||(o.currentSession&&o.currentSession.user));
-          if(u&&u.email) return String(u.email).toLowerCase();
-        }
-      }
-    }catch(e){}
-    return '';
-  }
-  function pagePath(){
-    // 以 app.js 的位置推算站台根目錄，再取得目前頁面的相對路徑
-    var sc=document.currentScript;
-    var arr=(sc&&sc.src)?new URL(sc.src).pathname.split('/'):[];
-    var root=arr.length?arr.slice(0,arr.length-1).join('/')+'/':'/music-library/';
-    var here=location.pathname;
-    var rel=(here.indexOf(root)===0)?here.slice(root.length):here.replace(/^\//,'');
-    if(rel===''||rel.slice(-1)==='/') rel+='index.html';
-    return rel;
-  }
-  // 2026-11-23 改：站主點鉛筆 → 開本機編輯器表單（不進 GitHub 看程式碼）
-  // 編輯器位址（區網／Tailscale 都可連）；?page=<相對路徑>
-  function editorBase(){
-    if(/^(127\.0\.0\.1|localhost|192\.168\.|100\.|10\.)/.test(location.hostname)){
-      return location.protocol+'//'+location.hostname+':8899/admin-edit.html';
+  /* ---------- HTML 工具 ---------- */
+  function unesc(x){ return String(x).replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&#39;/g,"'").replace(/&amp;/g,'&'); }
+  function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  function escT(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  var RE_UL=/<ul class="entries">([\s\S]*?)<\/ul>/g;
+  var EMPTY_TIP='<p class="muted">（尚未發現使用作品）</p>';
+
+  function parseDoc(html){
+    var blocks=[], m;
+    RE_UL.lastIndex=0;
+    while((m=RE_UL.exec(html))) blocks.push({index:m.index,end:m.index+m[0].length,inner:m[1]});
+    var usage=[];
+    if(blocks.length){
+      var inner=blocks[blocks.length-1].inner;
+      var items=inner.match(/<li[^>]*>[\s\S]*?<\/li>/g)||[];
+      usage=items.filter(function(it){ return !/srccap|srcframe|ytframe|blankline/.test(it); }).map(function(it){
+        var a=it.match(/<a href="([^"]*)"[^>]*>([\s\S]*?)<\/a>/);
+        var lbl=it.match(/<span class="lbl">([\s\S]*?)<\/span>/);
+        return {
+          href:a?unesc(a[1]):'',
+          title:a?unesc(a[2].replace(/<[^>]+>/g,'').trim()):unesc(it.replace(/<[^>]+>/g,'').trim()),
+          label:lbl?unesc(lbl[1].replace(/<[^>]+>/g,'').trim()):''
+        };
+      });
     }
-    try{ if(localStorage.getItem('u4_editor_base')) return localStorage.getItem('u4_editor_base'); }catch(e){}
-    return 'http://192.168.3.41:8899/admin-edit.html';
+    var t=html.match(/<h1>([\s\S]*?)<\/h1>/), ar=html.match(/<div class="albumartist">([\s\S]*?)<\/div>/);
+    return {
+      title:t?unesc(t[1].replace(/<[^>]+>/g,'').trim()):'',
+      artist:ar?unesc(ar[1].replace(/<[^>]+>/g,'').trim()):'',
+      usage:usage
+    };
   }
-  function editUrl(){
-    return editorBase()+'?page='+encodeURIComponent(pagePath());
+  function buildItem(u){
+    var lbl=u.label?'<span class="lbl">'+escT(u.label)+'</span>':'';
+    return '<li><a href="'+esc(u.href)+'">'+escT(u.title)+'</a>'+lbl+'</li>';
   }
+  function applyEdits(html, data, usage){
+    html=html.replace(/<h1>[\s\S]*?<\/h1>/,'<h1>'+escT(data.title)+'</h1>');
+    html=html.replace(/<div class="albumartist">[\s\S]*?<\/div>/,'<div class="albumartist">'+escT(data.artist)+'</div>');
+    html=html.replace(/<title>[\s\S]*?<\/title>/,'<title>'+escT(data.title)+' - '+escT(data.artist)+'｜圖書館音樂研究所</title>');
+    var blocks=[], m; RE_UL.lastIndex=0;
+    while((m=RE_UL.exec(html))) blocks.push({index:m.index,end:m.index+m[0].length,inner:m[1]});
+    if(blocks.length){
+      var last=blocks[blocks.length-1];
+      var keep=(last.inner.match(/<li[^>]*>[\s\S]*?<\/li>/g)||[]).filter(function(it){
+        return /srccap|srcframe|ytframe|blankline/.test(it);
+      });
+      var next='<ul class="entries">\n'+keep.concat(usage.map(buildItem)).join('\n')+'\n</ul>';
+      html=html.slice(0,last.index)+next+html.slice(last.end);
+    }else{
+      var ul=usage.length?('<ul class="entries">\n'+usage.map(buildItem).join('\n')+'\n</ul>'):'';
+      html=html.replace(/(<div class="albumartist">[\s\S]*?<\/div>)/,'$1'+ul);
+    }
+    if(usage.length){
+      html=html.replace(EMPTY_TIP,'');
+      html=html.split('（尚未發現使用作品）').join('');
+    }else if(html.indexOf('尚未發現使用作品')<0){
+      if(html.indexOf('</ul>')>=0) html=html.replace(/<\/ul>(?!([\s\S]*<\/ul>))/,'</ul>'+EMPTY_TIP);
+      else html=html.replace(/(<div class="albumartist">[\s\S]*?<\/div>)/,'$1'+EMPTY_TIP);
+    }
+    return html;
+  }
+
+  /* ---------- 排序（照網站排法） ---------- */
+  var RANK=null, RANK_P=null;
+  function loadRank(){
+    if(RANK) return Promise.resolve(RANK);
+    if(RANK_P) return RANK_P;
+    RANK_P=fetch(siteRoot()+'site-rank.json?v=20261124')
+      .then(function(r){ return r.ok?r.json():{}; })
+      .then(function(j){ RANK=j||{}; return RANK; })
+      .catch(function(){ RANK={}; return RANK; });
+    return RANK_P;
+  }
+  function rankKey(href){
+    if(!href||href.indexOf('http')===0||href.indexOf('mailto:')===0) return '';
+    var p=href.split('#')[0].split('?')[0];
+    if(p.indexOf('/music-library/')===0) p=p.slice('/music-library/'.length);
+    else if(p.charAt(0)==='/') return '';
+    try{ p=decodeURIComponent(p); }catch(e){}
+    var parts=p.replace(/\\/g,'/').split('/').filter(function(x){return x!==''&&x!=='.';}), out=[];
+    for(var i=0;i<parts.length;i++){ if(parts[i]==='..') out.pop(); else out.push(parts[i]); }
+    var q=out.join('/');
+    if(q.slice(-5)!=='.html') q=q.replace(/\/$/,'')+'/index.html';
+    return q;
+  }
+  function sortUsage(items){
+    var r=RANK||{};
+    var d=items.map(function(it,i){
+      var k=rankKey(it.href), n=(k&&r[k]!=null)?r[k]:1e9;
+      return {it:it,n:n,i:i};
+    });
+    d.sort(function(a,b){ return (a.n-b.n)||(a.i-b.i); });
+    return d.map(function(x){ return x.it; });
+  }
+
+  /* ---------- 專輯頁 ✓ ---------- */
+  function saveAlbumMark(rel, checked){
+    var dirs=rel.split('/');
+    var trackDir=dirs[dirs.length-2];
+    var albumPath=dirs.slice(0,dirs.length-1).concat(['index.html']).join('/');
+    return ghGet(albumPath).then(function(f){
+      var re=new RegExp('(<li><a class="row"[^>]*href="[^"]*/'+trackDir.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'/">)([\\s\\S]*?)(</a></li>)');
+      var m=f.text.match(re);
+      if(!m) return '';
+      var row=m[2];
+      var YES='<span class="mark" title="有發現使用作品" style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;padding:0;line-height:1;font-size:11px;background:#eaf7ef;color:#12894a;border:1px solid #bfe6cd">✓</span>';
+      var NO='<span class="mark mark-x" title="尚未發現使用作品" style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;padding:0;line-height:1;font-size:11px;background:#f6f8fb;color:#c0c8d4;border:1px solid #e3e8ee">✕</span>';
+      var row2=checked?row.replace(/<span class="mark mark-x"[^>]*>✕<\/span>/,YES):row.replace(/<span class="mark"[^>]*>✓<\/span>/,NO);
+      if(row2===row) return '';
+      var next=f.text.slice(0,m.index)+m[1]+row2+m[3]+f.text.slice(m.index+m[0].length);
+      return ghPut(albumPath,next,'編輯模式：'+(checked?'打勾 ':'取消打勾 ')+trackDir,f.sha);
+    }).catch(function(){ return ''; });
+  }
+
+  /* ---------- 就地編輯面板 ---------- */
+  var CUR=null, DIRTY=false, PANEL=null;
+
+  function css(){
+    if(document.getElementById('u4-edit-css')) return;
+    var s=document.createElement('style'); s.id='u4-edit-css';
+    s.textContent=''
+      +'#u4-panel{position:fixed;inset:0;background:rgba(15,23,42,.35);z-index:99999;display:flex;align-items:flex-start;justify-content:center;padding:24px;overflow:auto}'
+      +'#u4-panel .box{background:#fff;border-radius:16px;max-width:860px;width:100%;box-shadow:0 20px 50px rgba(15,23,42,.25);overflow:hidden}'
+      +'#u4-panel .hd{padding:14px 20px;border-bottom:1px solid #e3e8ee;display:flex;align-items:center;gap:10px;background:#fff;position:sticky;top:0;z-index:2}'
+      +'#u4-panel .hd h3{font-size:16px;margin:0}'
+      +'#u4-panel .bd{padding:18px 20px 24px}'
+      +'#u4-panel label{font-size:13px;color:#5c6675;display:block;margin:14px 0 5px}'
+      +'#u4-panel input[type=text]{font:inherit;padding:9px 12px;border:1px solid #cfd8e3;border-radius:9px;width:100%;box-sizing:border-box}'
+      +'#u4-panel .u{display:flex;gap:8px;align-items:flex-start;border:1px solid #e3e8ee;border-radius:10px;padding:10px;margin-bottom:10px;background:#fbfcfe}'
+      +'#u4-panel .u .ord{font-size:12px;color:#8a97a8;min-width:20px;text-align:center;padding-top:12px}'
+      +'#u4-panel .u .f{flex:1}'
+      +'#u4-panel .u .f label{margin-top:6px}'
+      +'#u4-panel button{font:inherit;padding:9px 16px;border-radius:9px;border:1px solid #2f6feb;background:#2f6feb;color:#fff;cursor:pointer}'
+      +'#u4-panel button.gh{background:#fff;color:#334;border-color:#cfd8e3}'
+      +'#u4-panel button.del{background:#fff;color:#b42318;border-color:#f3c0bb;padding:7px 11px;white-space:nowrap}'
+      +'#u4-panel button:disabled{opacity:.5;cursor:not-allowed}'
+      +'#u4-panel .ft{padding:14px 20px;border-top:1px solid #e3e8ee;display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:#fbfcfe;position:sticky;bottom:0}'
+      +'#u4-panel .m{font-size:13px;padding:9px 12px;border-radius:9px;display:none;margin-top:12px}'
+      +'#u4-panel .m.ok{display:block;background:#eaf7ef;color:#12894a;border:1px solid #bfe6cd}'
+      +'#u4-panel .m.err{display:block;background:#fdf0ef;color:#b42318;border:1px solid #f3c0bb}'
+      +'#u4-panel .mut{color:#6b7280;font-size:12.5px}'
+      +'#u4-panel .sw{display:inline-flex;align-items:center;gap:8px;font-size:14px;margin-top:14px}'
+      +'#u4-panel .sw input{width:20px;height:20px}'
+      +'#u4-panel hr{border:0;border-top:1px solid #eef2f7;margin:18px 0}';
+    document.head.appendChild(s);
+  }
+  function setDirty(v){
+    DIRTY=v;
+    var d=document.getElementById('u4-dirty');
+    if(d) d.textContent=v?'（有未存的修改）':'';
+  }
+  function panelMsg(t,ok,ms){
+    var m=document.getElementById('u4-msg');
+    if(!m) return;
+    m.textContent=t; m.className='m '+(ok?'ok':'err');
+    clearTimeout(panelMsg._t);
+    panelMsg._t=setTimeout(function(){ m.className='m'; }, ms||9000);
+  }
+
+  function openPanel(){
+    if(PANEL) return;
+    if(!token() && !askToken()){ alert('沒有 token 不能存檔，已取消。'); return; }
+    if(!isOwner()){ alert('只有站主帳號可以編輯。請先登入。'); return; }
+    css();
+    var wrap=document.createElement('div'); wrap.id='u4-panel';
+    wrap.innerHTML=''
+      +'<div class="box">'
+      +'  <div class="hd"><h3>✏️ 編輯這一頁</h3><span class="mut" id="u4-dirty"></span>'
+      +'    <button class="gh" id="u4-close" style="margin-left:auto;padding:6px 12px;font-size:13px">關閉</button></div>'
+      +'  <div class="bd">'
+      +'    <label>曲名</label><input type="text" id="u4-title">'
+      +'    <label>作者</label><input type="text" id="u4-artist">'
+      +'    <hr>'
+      +'    <div style="display:flex;align-items:center;gap:10px"><b style="font-size:14px">使用作品</b><span class="mut" id="u4-nuse"></span></div>'
+      +'    <p class="mut" style="margin:6px 0 10px">存檔時自動照網站排法排序，你不用自己排。</p>'
+      +'    <div id="u4-list"></div>'
+      +'    <button class="gh" id="u4-add">＋ 加一筆</button>'
+      +'    <hr>'
+      +'    <label class="sw"><input type="checkbox" id="u4-mark"> 專輯列表要顯示 ✓</label>'
+      +'    <div class="m" id="u4-msg"></div>'
+      +'  </div>'
+      +'  <div class="ft">'
+      +'    <button id="u4-save">💾 存檔並上線</button>'
+      +'    <span class="mut" id="u4-stat"></span>'
+      +'  </div>'
+      +'</div>';
+    document.body.appendChild(wrap);
+    PANEL=wrap;
+    document.documentElement.style.overflow='hidden';
+
+    document.getElementById('u4-close').onclick=function(){
+      if(DIRTY && !confirm('有未存的修改，關掉會消失。確定嗎？')) return;
+      closePanel();
+    };
+    document.getElementById('u4-add').onclick=function(){
+      CUR.usage.push({href:'',title:'',label:''});
+      setDirty(true); renderList();
+    };
+    document.getElementById('u4-title').oninput=function(){ setDirty(true); };
+    document.getElementById('u4-artist').oninput=function(){ setDirty(true); };
+    document.getElementById('u4-mark').onchange=function(){ setDirty(true); };
+    document.getElementById('u4-save').onclick=doSave;
+
+    loadPanel();
+  }
+  function closePanel(){
+    if(PANEL){ PANEL.remove(); PANEL=null; }
+    document.documentElement.style.overflow='';
+    CUR=null; setDirty(false);
+  }
+
+  function loadPanel(){
+    var rel=repoPath();
+    panelMsg('讀取中…',true,60000);
+    loadRank().then(function(){ return ghGet(rel); }).then(function(f){
+      var d=parseDoc(f.text);
+      CUR={rel:rel, sha:f.sha, raw:f.text, usage:d.usage};
+      document.getElementById('u4-title').value=d.title;
+      document.getElementById('u4-artist').value=d.artist;
+      document.getElementById('u4-mark').checked=d.usage.length>0;
+      renderList();
+      setDirty(false);
+      panelMsg('', true, 1);
+      // 清除提示
+      var m=document.getElementById('u4-msg'); if(m) m.className='m';
+    }).catch(function(e){
+      panelMsg('讀取失敗：'+e.message,false,30000);
+    });
+  }
+
+  function renderList(){
+    var list=sortUsage(CUR.usage);
+    CUR.usage=list;
+    document.getElementById('u4-nuse').textContent='（'+list.length+' 筆）';
+    document.getElementById('u4-list').innerHTML=list.map(function(u,i){
+      return '<div class="u"><div class="ord">'+(i+1)+'</div><div class="f">'
+        +'<label>作品標題（顯示的文字）</label><input type="text" data-i="'+i+'" data-f="title" value="'+esc(u.title||'')+'">'
+        +'<label>連結（單集網址，/music-library/… 開頭）</label><input type="text" data-i="'+i+'" data-f="href" value="'+esc(u.href||'')+'">'
+        +'<label>括號標記（可留空，例：兔子公主 哥哥姐姐）</label><input type="text" data-i="'+i+'" data-f="label" value="'+esc(u.label||'')+'">'
+        +'</div><button class="del" data-del="'+i+'">刪除</button></div>';
+    }).join('');
+    var inputs=document.getElementById('u4-list').querySelectorAll('input');
+    for(var i=0;i<inputs.length;i++){
+      inputs[i].oninput=function(){
+        CUR.usage[+this.dataset.i][this.dataset.f]=this.value;
+        setDirty(true);
+      };
+    }
+    var dels=document.getElementById('u4-list').querySelectorAll('.del');
+    for(var j=0;j<dels.length;j++){
+      dels[j].onclick=function(){
+        CUR.usage.splice(+this.dataset.del,1);
+        setDirty(true); renderList();
+      };
+    }
+  }
+
+  function doSave(){
+    if(!CUR) return;
+    var title=document.getElementById('u4-title').value.trim();
+    var artist=document.getElementById('u4-artist').value.trim();
+    if(!title){ panelMsg('曲名不能空白',false); return; }
+    var items=CUR.usage.filter(function(u){ return (u.href||'').trim() && (u.title||'').trim(); });
+    var dropped=CUR.usage.length-items.length;
+    if(dropped>0 && !confirm('有 '+dropped+' 筆沒填連結或標題，會被略過。要繼續嗎？')) return;
+
+    var btn=document.getElementById('u4-save'), stat=document.getElementById('u4-stat');
+    btn.disabled=true; stat.textContent='存檔中…';
+    var next=applyEdits(CUR.raw,{title:title,artist:artist},sortUsage(items));
+    ghPut(CUR.rel,next,'編輯模式：'+title+'（曲名／作者／使用作品）',CUR.sha).then(function(c1){
+      return saveAlbumMark(CUR.rel, document.getElementById('u4-mark').checked).then(function(c2){
+        return ghGet(CUR.rel).then(function(f){
+          CUR.sha=f.sha; CUR.raw=f.text;
+          setDirty(false);
+          // 就地更新頁面上的曲名／作者，讓使用者馬上看到
+          var h1=document.querySelector('.album-card h1'); if(h1) h1.textContent=title;
+          var ar=document.querySelector('.album-card .albumartist'); if(ar) ar.textContent=artist;
+          panelMsg('✅ 已上線（版本 '+(c1||'—')+(c2?'／專輯 ✓ '+c2:'')+'）· 約 2 分鐘後網站更新',true,20000);
+          stat.textContent='';
+        });
+      });
+    }).catch(function(e){
+      panelMsg('存檔失敗：'+e.message,false,30000);
+      stat.textContent='';
+    }).then(function(){ btn.disabled=false; });
+  }
+
+  /* ---------- 鉛筆按鈕 ---------- */
   function add(){
-    var email=sbEmail();
-    if(!email) return;                       // 訪客：不加
+    if(!isOwner()) return;
     if(document.querySelector('.pencil-edit')) return;
-    var nav=document.querySelector('header .topnav');
-    if(!nav) nav=document.querySelector('header');
+    var nav=document.querySelector('header .topnav')||document.querySelector('header');
     if(!nav) return;
     var a=document.createElement('a');
     a.className='pencil-edit';
-    a.href=editUrl();
-    a.target='_blank';
-    a.rel='noopener';
+    a.href='#';
     a.title='✏️ 編輯這一頁';
     a.textContent='✏️';
     a.style.cssText='display:inline-flex;align-items:center;justify-content:center;'
       +'width:34px;height:34px;border-radius:10px;border:1px solid #cfd8e3;background:#fff;'
-      +'text-decoration:none;font-size:16px;line-height:1;margin-left:6px';
+      +'text-decoration:none;font-size:16px;line-height:1;margin-left:6px;cursor:pointer';
     a.onmouseover=function(){a.style.background='#eef3fb';};
     a.onmouseout=function(){a.style.background='#fff';};
+    a.onclick=function(e){ e.preventDefault(); openPanel(); };
     var sp=nav.querySelector('.navsearch');
     if(sp) nav.insertBefore(a,sp); else nav.appendChild(a);
   }
