@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>編輯模式｜圖書館音樂研究所</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,"Noto Sans TC",sans-serif;background:#f6f8fb;color:#1f2733}
+header{background:#fff;border-bottom:1px solid #e3e8ee;padding:12px 20px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;position:sticky;top:0;z-index:9}
+h1{font-size:17px;margin:0}
+.wrap{max-width:1000px;margin:0 auto;padding:20px}
+.card{background:#fff;border:1px solid #e3e8ee;border-radius:14px;padding:18px;margin-bottom:16px}
+h2{font-size:15px;margin:0 0 12px;color:#334}
+input[type=text],input[type=search],textarea{font:inherit;padding:9px 12px;border:1px solid #cfd8e3;border-radius:9px;width:100%}
+textarea{min-height:120px;font-family:ui-monospace,Menlo,monospace;font-size:12.5px}
+button{font:inherit;padding:9px 16px;border-radius:9px;border:1px solid #2f6feb;background:#2f6feb;color:#fff;cursor:pointer}
+button.ghost{background:#fff;color:#334;border-color:#cfd8e3}
+button:disabled{opacity:.5;cursor:not-allowed}
+.row{display:flex;gap:10px;align-items:center;margin-bottom:10px;flex-wrap:wrap}
+label{font-size:13px;color:#5c6675;display:block;margin-bottom:5px}
+.hit{padding:10px 12px;border:1px solid #e3e8ee;border-radius:10px;margin-bottom:8px;cursor:pointer;background:#fff}
+.hit:hover{background:#eef3fb;border-color:#2f6feb}
+.hit .t{font-weight:600;font-size:14px}
+.hit .m{font-size:12.5px;color:#6b7280;margin-top:3px}
+.usage{display:flex;gap:8px;align-items:flex-start;padding:9px;border:1px solid #e3e8ee;border-radius:10px;margin-bottom:8px;background:#fbfcfe}
+.usage .del{background:#fff;color:#b42318;border-color:#f3c0bb;padding:7px 11px;white-space:nowrap}
+.usage .ord{font-size:12px;color:#8a97a8;min-width:22px;text-align:center;padding-top:10px}
+.msg{margin-top:12px;font-size:13.5px;padding:10px 12px;border-radius:9px;display:none}
+.msg.ok{display:block;background:#eaf7ef;color:#12894a;border:1px solid #bfe6cd}
+.msg.err{display:block;background:#fdf0ef;color:#b42318;border:1px solid #f3c0bb}
+.muted{color:#6b7280;font-size:12.5px}
+.switch{display:inline-flex;align-items:center;gap:8px;font-size:14px}
+.chk{width:20px;height:20px}
+.pill{display:inline-block;background:#eef3fb;color:#2f6feb;border-radius:999px;padding:2px 10px;font-size:12px;margin-left:8px}
+.tip{background:#fffbeb;border:1px solid #fde68a;color:#92400e;border-radius:10px;padding:11px 13px;font-size:13px;line-height:1.7;margin-bottom:16px}
+.tip b{color:#78350f}
+.gate{max-width:560px;margin:60px auto;background:#fff;border:1px solid #e3e8ee;border-radius:14px;padding:24px}
+.gate h2{margin-bottom:6px}
+code{background:#f1f5f9;padding:1px 5px;border-radius:4px;font-size:12.5px}
+.dirty{color:#b45309;font-size:12.5px;margin-left:8px}
+</style></head>
+<body>
+<header>
+  <h1>✏️ 編輯模式</h1>
+  <span class="muted">改完按「存檔並上線」→ 約 2 分鐘後網站更新</span>
+  <span id="who" class="muted" style="margin-left:auto"></span>
+  <button class="ghost" id="logout" style="display:none;padding:6px 12px;font-size:13px">登出</button>
+</header>
+
+<div class="wrap">
+
+  <div id="gate" class="gate" style="display:none">
+    <h2>🔑 先登入</h2>
+    <p class="muted">編輯模式只開放給站主帳號。請先到 <a href="login.html">會員中心登入</a>，再回來這一頁。</p>
+    <p><a class="button" href="login.html" style="display:inline-block;background:#2f6feb;color:#fff;padding:9px 16px;border-radius:9px;text-decoration:none">前往登入</a></p>
+  </div>
+
+  <div id="app" style="display:none">
+
+    <div class="tip">
+      <b>三分鐘上手：</b>① 搜曲名（或直接從曲目頁按 ✏️ 跳進來）→ ② 改文字／加減使用作品 → ③ 按存檔。
+      存一次就是一個版本，改壞了跟我說，我可以退回上一版。
+    </div>
+
+    <div class="card">
+      <h2>① 找曲目</h2>
+      <div class="row">
+        <input id="q" type="search" placeholder="打曲名（中文／英文都可以，例：Nocturne、小紅帽）">
+        <button id="go">搜尋</button>
+      </div>
+      <div id="hits"></div>
+    </div>
+
+    <div class="card" id="editor" style="display:none">
+      <h2>② 編輯 <span class="pill" id="cur"></span><span class="dirty" id="dirty"></span></h2>
+
+      <label>曲名</label>
+      <input id="title" type="text">
+      <div style="height:10px"></div>
+      <label>作者</label>
+      <input id="artist" type="text">
+
+      <hr style="border:0;border-top:1px solid #eef2f7;margin:20px 0">
+
+      <h2>使用作品 <span class="muted" id="nuse"></span></h2>
+      <p class="muted" style="margin:0 0 10px">存檔時會<b>自動照網站排法排序</b>，你不用自己排。</p>
+      <div id="usages"></div>
+      <button class="ghost" id="addUsage">＋ 加一筆</button>
+
+      <hr style="border:0;border-top:1px solid #eef2f7;margin:20px 0">
+
+      <h2>專輯頁這首的 ✓</h2>
+      <label class="switch"><input type="checkbox" id="mark" class="chk"> 專輯列表要顯示 ✓（打勾）</label>
+
+      <div style="height:16px"></div>
+      <button id="saveAll">💾 存檔並上線</button>
+      <span class="muted" style="margin-left:10px" id="stat"></span>
+
+      <div class="msg" id="msg"></div>
+    </div>
+
+    <div class="card" id="adv" style="display:none">
+      <h2>🔧 進階：直接改這一頁的原始碼</h2>
+      <p class="muted" style="margin:0 0 10px">只有你確定要改版面時才用。上面兩個區塊已經涵蓋 95% 的日常修改。</p>
+      <textarea id="raw"></textarea>
+      <div style="height:10px"></div>
+      <button class="ghost" id="saveRaw">存原始碼並上線</button>
+    </div>
+  </div>
+</div>
+
+<script src="supabase-config.js"></script>
+<script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+import { OWNER_EMAILS } from './role.js';
+
+/* ---------------- 設定 ---------------- */
+const OWNER = 'greensquare5168-debug';
+const REPO  = 'music-library';
+const BRANCH= 'master';
+// 用 GitHub Pages 網址反推站台根路徑（例 /music-library/）
+const ROOT = location.pathname.replace(/edit\.html$/, '');
+const TOKEN_KEY = 'u4_gh_token_v1';
+
+const $ = id => document.getElementById(id);
+const SB_URL = window.SUPABASE_URL, SB_KEY = window.SUPABASE_ANON_KEY;
+const sb = (SB_URL && SB_KEY) ? createClient(SB_URL, SB_KEY) : null;
+
+let SESSION = null, CUR = null, DIRTY = false;
+
+function msg(t, ok, ms){
+  const m = $('msg'); m.textContent = t; m.className = 'msg ' + (ok ? 'ok' : 'err');
+  clearTimeout(msg._t); msg._t = setTimeout(()=>{ m.className='msg'; }, ms || 9000);
+}
+function setDirty(v){ DIRTY = v; $('dirty').textContent = v ? '（有未存的修改）' : ''; }
+
+/* ---------------- 登入判斷 ---------------- */
+async function boot(){
+  let email = '';
+  if (sb){
+    const { data } = await sb.auth.getSession();
+    SESSION = data && data.session;
+    email = ((SESSION && SESSION.user && SESSION.user.email) || '').toLowerCase();
+  }
+  const isOwner = email && OWNER_EMAILS.map(e=>e.toLowerCase()).includes(email);
+  if (!isOwner){
+    $('gate').style.display = 'block';
+    return;
+  }
+  $('app').style.display = 'block';
+  $('who').textContent = email;
+  $('logout').style.display = 'inline-block';
+  $('logout').onclick = async () => { if(sb){ await sb.auth.signOut(); } location.href = 'index.html'; };
+
+  if (!getToken()) { askToken(); }
+  const rel = new URLSearchParams(location.search).get('page');
+  if (rel) openPage(rel);
+}
+
+/* ---------------- GitHub token ---------------- */
+function getToken(){ try{ return localStorage.getItem(TOKEN_KEY) || ''; }catch(e){ return ''; } }
+function askToken(){
+  const t = prompt(
+    '第一次使用要貼一次 GitHub token（只存在這台電腦的瀏覽器，不會上傳到任何地方）\n\n'
+    + '取得方法：GitHub → 右上頭像 → Settings → Developer settings\n'
+    + '→ Personal access tokens → Fine-grained tokens → Generate new token\n'
+    + '→ Repository access 選 Only select repositories → 勾 music-library\n'
+    + '→ Permissions：Contents 設 Read and write → 產生後複製貼上這裡\n\n'
+    + '（貼錯或不貼 → 就只能看不能存檔）', '');
+  if (t && t.trim()) { localStorage.setItem(TOKEN_KEY, t.trim()); msg('✅ token 已記住（只在這台瀏覽器）', true); }
+}
+
+/* ---------------- GitHub API ---------------- */
+function ghHeaders(){
+  const t = getToken();
+  return {
+    'Authorization': 'Bearer ' + t,
+    'Accept': 'application/vnd.github+json',
+    'X-GitHub-Api-Version': '2022-11-28'
+  };
+}
+function apiPath(rel){
+  // rel = '罐頭音樂研究所/…/index.html' → repo 內路徑（本站根 = repo 根）
+  return rel.replace(/^\/+/, '').replace(/^music-library\//, '');
+}
+function b64encode(str){
+  const bytes = new TextEncoder().encode(str);
+  let bin = ''; bytes.forEach(b => bin += String.fromCharCode(b));
+  return btoa(bin);
+}
+function b64decode(b64){
+  const bin = atob(b64.replace(/\s/g,''));
+  const bytes = Uint8Array.from(bin, c => c.charCodeAt(0));
+  return new TextDecoder().decode(bytes);
+}
+async function ghGetFile(path){
+  const url = `https://api.github.com/repos/${OWNER}/${REPO}/contents/${encodeURI(path)}?ref=${BRANCH}`;
+  const r = await fetch(url, {headers: ghHeaders()});
+  if (r.status === 404) throw new Error('檔案不存在：' + path);
+  if (!r.ok) throw new Error('讀取失敗 HTTP ' + r.status + (r.status===401?'（token 失效或沒權限）':''));
+  const d = await r.json();
+  return { sha: d.sha, text: b64decode(d.content || '') };
+}
+async function ghPutFile(path, text, message, sha){
+  const url = `https://api.github.com/repos/${OWNER}/${REPO}/contents/${encodeURI(path)}`;
+  const body = { message, content: b64encode(text), branch: BRANCH };
+  if (sha) body.sha = sha;
+  const r = await fetch(url, {method:'PUT', headers: {...ghHeaders(), 'Content-Type':'application/json'}, body: JSON.stringify(body)});
+  const d = await r.json().catch(()=>({}));
+  if (!r.ok) throw new Error('存檔失敗 HTTP ' + r.status + '：' + (d.message || ''));
+  return d.commit && d.commit.sha ? d.commit.sha.slice(0,7) : '';
+}
+
+/* ---------------- 排序表（照網站排法） ---------------- */
+let RANK = null, RANK_LOADING = null;
+function loadRank(){
+  if (RANK) return Promise.resolve(RANK);
+  if (RANK_LOADING) return RANK_LOADING;
+  RANK_LOADING = (async () => {
+    try{
+      const r = await fetch(ROOT + 'site-rank.json?v=20261124');
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      RANK = await r.json();
+    }catch(e){
+      RANK = {};
+    }
+    return RANK;
+  })();
+  return RANK_LOADING;
+}
+function rankKey(href){
+  if (!href || href.startsWith('http') || href.startsWith('mailto:')) return '';
+  let p = href.split('#')[0].split('?')[0];
+  if (p.startsWith('/music-library/')) p = p.slice('/music-library/'.length);
+  else if (p.startsWith('/')) return '';
+  p = decodeURIComponent(p).replace(/\\/g,'/');
+  const parts = p.split('/').filter(x => x !== '' && x !== '.');
+  const out = [];
+  for (const seg of parts){ if (seg === '..') out.pop(); else out.push(seg); }
+  let q = out.join('/');
+  if (!q.endsWith('.html')) q = q.replace(/\/$/,'') + '/index.html';
+  return q;
+}
+function sortUsage(items){
+  const r = RANK || {};
+  const decorated = items.map((it, i) => {
+    const k = rankKey(it.href);
+    const n = (k && r[k] != null) ? r[k] : 1e9;
+    return {it, n, i};
+  });
+  decorated.sort((a,b) => (a.n - b.n) || (a.i - b.i));
+  return decorated.map(d => d.it);
+}
+
+/* ---------------- 解析／組裝頁面 ---------------- */
+const RE_UL = /<ul class="entries">([\s\S]*?)<\/ul>/g;
+const EMPTY_TIP = '<p class="muted">（尚未發現使用作品）</p>';
+
+function parsePage(html){
+  const blocks = [...html.matchAll(RE_UL)];
+  if (!blocks.length) throw new Error('這頁沒有曲目資料區塊（可能不是曲目頁）');
+  // 最後一個 entries ＝ 使用作品；前面的是封面／來源網站
+  const inner = blocks[blocks.length - 1][1];
+  const items = (inner.match(/<li[^>]*>[\s\S]*?<\/li>/g) || []);
+  const usage = items
+    .filter(it => !/srccap|srcframe|ytframe|blankline/.test(it))
+    .map(it => {
+      const a = it.match(/<a href="([^"]*)"[^>]*>([\s\S]*?)<\/a>/);
+      const lbl = it.match(/<span class="lbl">([\s\S]*?)<\/span>/);
+      return {
+        href: a ? unesc(a[1]) : '',
+        title: a ? unesc(a[2].replace(/<[^>]+>/g,'').trim()) : unesc(it.replace(/<[^>]+>/g,'').trim()),
+        label: lbl ? unesc(lbl[1].replace(/<[^>]+>/g,'').trim()) : ''
+      };
+    });
+  const t = html.match(/<h1>([\s\S]*?)<\/h1>/);
+  const ar = html.match(/<div class="albumartist">([\s\S]*?)<\/div>/);
+  return {
+    title: t ? unesc(t[1].replace(/<[^>]+>/g,'').trim()) : '',
+    artist: ar ? unesc(ar[1].replace(/<[^>]+>/g,'').trim()) : '',
+    usage
+  };
+}
+function unesc(x){
+  return String(x).replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&#39;/g,"'").replace(/&amp;/g,'&');
+}
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function escText(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function buildItem(u){
+  const lbl = u.label ? '<span class="lbl">' + escText(u.label) + '</span>' : '';
+  return '<li><a href="' + esc(u.href) + '">' + escText(u.title) + '</a>' + lbl + '</li>';
+}
+function applyEdits(html, data, usage){
+  // 曲名／作者
+  html = html.replace(/<h1>[\s\S]*?<\/h1>/, '<h1>' + escText(data.title) + '</h1>');
+  html = html.replace(/<div class="albumartist">[\s\S]*?<\/div>/, '<div class="albumartist">' + escText(data.artist) + '</div>');
+  // <title>
+  html = html.replace(/<title>[\s\S]*?<\/title>/, '<title>' + escText(data.title) + ' - ' + escText(data.artist) + '｜圖書館音樂研究所</title>');
+
+  // 使用作品：定位「最後一個」entries，沒有就新建
+  const blocks = [...html.matchAll(RE_UL)];
+  const body = usage.map(buildItem).join('\n');
+  if (blocks.length){
+    const last = blocks[blocks.length - 1];
+    // 保留非使用項（來源 iframe 等）
+    const keep = (last[1].match(/<li[^>]*>[\s\S]*?<\/li>/g) || [])
+      .filter(it => /srccap|srcframe|ytframe|blankline/.test(it));
+    const next = '<ul class="entries">\n' + keep.concat(usage.map(buildItem)).join('\n') + '\n</ul>';
+    html = html.slice(0, last.index) + next + html.slice(last.index + last[0].length);
+  } else {
+    // 完全沒有 entries：插在 albumartist 後面
+    const ul = usage.length ? '<ul class="entries">\n' + body + '\n</ul>' : '';
+    html = html.replace(/(<div class="albumartist">[\s\S]*?<\/div>)/, '$1' + ul);
+  }
+  // 空的提示文字：有使用作品就移除；沒有就補上（放在 album-card 內、con 前面）
+  if (usage.length) {
+    html = html.replace(EMPTY_TIP, '');
+    html = html.split('（尚未發現使用作品）').join('');
+  } else if (!html.includes('尚未發現使用作品')) {
+    if (html.includes('</ul>')) {
+      html = html.replace(/<\/ul>(?!([\s\S]*<\/ul>))/, '</ul>' + EMPTY_TIP);
+    } else {
+      html = html.replace(/(<div class="albumartist">[\s\S]*?<\/div>)/, '$1' + EMPTY_TIP);
+    }
+  }
+  return html;
+}
+
+/* ---------------- 專輯頁 ✓ ---------------- */
+async function saveAlbumMark(trackRel, checked){
+  // trackRel = 罐頭音樂研究所/…/album/track-slug/index.html
+  const trackDir = trackRel.replace(/\/index\.html$/,'').split('/').pop();
+  const albumPath = trackRel.replace(/\/[^/]+\/index\.html$/,'/index.html');
+  const { sha, text } = await ghGetFile(albumPath);
+  const re = new RegExp('(<li><a class="row"[^>]*href="[^"]*/' + trackDir.replace(/[.*+?^${}()|[\]\\]/g,'\\$&') + '/">)([\\s\\S]*?)(</a></li>)');
+  const m = text.match(re);
+  if (!m) throw new Error('專輯頁找不到這首的列');
+  const row = m[2];
+  const YES = '<span class="mark" title="有發現使用作品" style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;padding:0;line-height:1;font-size:11px;background:#eaf7ef;color:#12894a;border:1px solid #bfe6cd">✓</span>';
+  const NO  = '<span class="mark mark-x" title="尚未發現使用作品" style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;padding:0;line-height:1;font-size:11px;background:#f6f8fb;color:#c0c8d4;border:1px solid #e3e8ee">✕</span>';
+  let row2;
+  if (checked) row2 = row.replace(/<span class="mark mark-x"[^>]*>✕<\/span>/, YES);
+  else row2 = row.replace(/<span class="mark"[^>]*>✓<\/span>/, NO);
+  if (row2 === row) return '';   // 已是目標值
+  const next = text.slice(0, m.index) + m[1] + row2 + m[3] + text.slice(m.index + m[0].length);
+  return await ghPutFile(albumPath, next, '編輯模式：' + (checked?'打勾 ':'取消打勾 ') + trackDir, sha);
+}
+
+/* ---------------- 搜尋（沿用站上既有索引） ---------------- */
+let INDEX = null;
+async function loadIndex(){
+  if (INDEX) return INDEX;
+  const r = await fetch(ROOT + 'search-index.json?v=20261124');
+  INDEX = await r.json();
+  return INDEX;
+}
+async function search(){
+  const q = $('q').value.trim().toLowerCase();
+  if (!q) return;
+  $('hits').innerHTML = '<p class="muted">搜尋中…</p>';
+  try{
+    const idx = await loadIndex();
+    const hits = [];
+    for (const it of idx){
+      const t = it.t || '';
+      if (!t.toLowerCase().includes(q)) continue;
+      let p = decodeURIComponent((it.p || '').split('?')[0].split('#')[0]);
+      p = p.replace(/^\.\.\//,'');
+      if (p.startsWith('music-library/')) p = p.slice('music-library/'.length);
+      if (!p) continue;
+      if (!p.endsWith('index.html')) p = p.replace(/\/$/,'') + '/index.html';
+      if (!p.startsWith('罐頭音樂研究所/')) continue;
+      hits.push({rel: p, title: t});
+      if (hits.length >= 40) break;
+    }
+    if (!hits.length){
+      $('hits').innerHTML = '<p class="muted">找不到（如果這是曲目頁，請直接在那一頁按 ✏️）</p>';
+      return;
+    }
+    $('hits').innerHTML = hits.map(h =>
+      `<div class="hit" data-rel="${esc(h.rel)}"><div class="t">${esc(h.title)}</div>
+       <div class="m">${esc(h.rel.split('/').slice(-2)[0])}</div></div>`).join('');
+    [...document.querySelectorAll('.hit')].forEach(el => {
+      el.onclick = () => openPage(el.dataset.rel);
+    });
+  }catch(e){
+    $('hits').innerHTML = '<p class="muted">搜尋失敗：' + esc(e.message) + '</p>';
+  }
+}
+
+/* ---------------- 開頁 ---------------- */
+async function openPage(rel){
+  if (DIRTY && !confirm('目前有未存的修改，確定要換頁嗎？（修改會消失）')) return;
+  $('editor').style.display = 'none';
+  $('adv').style.display = 'none';
+  try{
+    await loadRank();
+    const { sha, text } = await ghGetFile(apiPath(rel));
+    const d = parsePage(text);
+    CUR = {rel, path: apiPath(rel), sha, raw: text, usage: d.usage};
+    $('editor').style.display = 'block';
+    $('cur').textContent = rel.split('/').slice(-2)[0];
+    $('title').value = d.title;
+    $('artist').value = d.artist;
+    $('mark').checked = d.usage.length > 0;
+    renderUsage();
+    $('raw').value = text;
+    $('adv').style.display = 'block';
+    setDirty(false);
+    $('editor').scrollIntoView({behavior:'smooth', block:'start'});
+    try{ history.replaceState(null, '', '?page=' + encodeURIComponent(rel)); }catch(e){}
+  }catch(e){
+    msg('載入失敗：' + e.message, false, 15000);
+  }
+}
+
+function renderUsage(){
+  const list = sortUsage(CUR.usage);
+  CUR.usage = list;
+  $('nuse').textContent = '（' + list.length + ' 筆）';
+  $('usages').innerHTML = list.map((u, i) =>
+    `<div class="usage">
+      <div class="ord">${i+1}</div>
+      <div style="flex:1">
+        <label>作品標題（顯示的文字）</label>
+        <input type="text" data-i="${i}" data-f="title" value="${esc(u.title||'')}">
+        <div style="height:6px"></div>
+        <label>連結（單集網址，/music-library/… 開頭）</label>
+        <input type="text" data-i="${i}" data-f="href" value="${esc(u.href||'')}">
+        <div style="height:6px"></div>
+        <label>括號標記（可留空，例：兔子公主 哥哥姐姐）</label>
+        <input type="text" data-i="${i}" data-f="label" value="${esc(u.label||'')}">
+      </div>
+      <button class="del" data-del="${i}">刪除</button>
+    </div>`).join('');
+  [...document.querySelectorAll('#usages input')].forEach(inp => {
+    inp.addEventListener('input', () => {
+      CUR.usage[+inp.dataset.i][inp.dataset.f] = inp.value;
+      setDirty(true);
+    });
+  });
+  [...document.querySelectorAll('#usages .del')].forEach(b => {
+    b.addEventListener('click', () => {
+      CUR.usage.splice(+b.dataset.del, 1);
+      setDirty(true);
+      renderUsage();
+    });
+  });
+}
+
+/* ---------------- 事件 ---------------- */
+$('go').onclick = search;
+$('q').addEventListener('keydown', e => { if (e.key === 'Enter') search(); });
+$('title').addEventListener('input', () => setDirty(true));
+$('artist').addEventListener('input', () => setDirty(true));
+$('mark').addEventListener('change', () => setDirty(true));
+$('raw').addEventListener('input', () => setDirty(true));
+$('addUsage').onclick = () => {
+  if (!CUR) return;
+  CUR.usage.push({href:'', title:'', label:''});
+  setDirty(true);
+  renderUsage();
+};
+
+$('saveAll').onclick = async () => {
+  if (!CUR) return;
+  if (!getToken()){ askToken(); if (!getToken()) return; }
+  const title = $('title').value.trim();
+  const artist = $('artist').value.trim();
+  if (!title) { msg('曲名不能空白', false); return; }
+  const items = CUR.usage.filter(u => (u.href||'').trim() && (u.title||'').trim());
+  const dropped = CUR.usage.length - items.length;
+  if (dropped > 0 && !confirm('有 ' + dropped + ' 筆沒填連結或標題，會被略過。要繼續嗎？')) return;
+
+  $('saveAll').disabled = true;
+  $('stat').textContent = '存檔中…';
+  try{
+    const next = applyEdits(CUR.raw, {title, artist}, sortUsage(items));
+    const c1 = await ghPutFile(CUR.path, next, '編輯模式：' + title + '（曲名／作者／使用作品）', CUR.sha);
+    let c2 = '';
+    try{ c2 = await saveAlbumMark(CUR.rel, $('mark').checked); }catch(e){ /* 專輯頁打勾失敗不擋主存檔 */ }
+    // 重新取 sha（避免下次衝突）
+    const fresh = await ghGetFile(CUR.path);
+    CUR.sha = fresh.sha; CUR.raw = fresh.text;
+    setDirty(false);
+    msg('✅ 已上線（版本 ' + (c1||'—') + (c2?'／專輯 ✓ '+c2:'') + '）· 約 2 分鐘後網站就會更新', true, 15000);
+    $('stat').textContent = '';
+  }catch(e){
+    msg('存檔失敗：' + e.message, false, 20000);
+    $('stat').textContent = '';
+  }finally{
+    $('saveAll').disabled = false;
+  }
+};
+
+$('saveRaw').onclick = async () => {
+  if (!CUR) return;
+  if (!confirm('直接覆蓋這一頁的原始碼並上線？')) return;
+  if (!getToken()){ askToken(); if (!getToken()) return; }
+  $('saveRaw').disabled = true;
+  try{
+    const c = await ghPutFile(CUR.path, $('raw').value, '編輯模式：手改原始碼 ' + CUR.rel.split('/').slice(-2)[0], CUR.sha);
+    const fresh = await ghGetFile(CUR.path);
+    CUR.sha = fresh.sha; CUR.raw = fresh.text;
+    setDirty(false);
+    msg('✅ 已上線（版本 ' + (c||'—') + '）', true, 15000);
+  }catch(e){ msg('存檔失敗：' + e.message, false, 20000); }
+  finally{ $('saveRaw').disabled = false; }
+};
+
+window.addEventListener('beforeunload', e => {
+  if (DIRTY){ e.preventDefault(); e.returnValue = ''; }
+});
+
+boot();
+</script>
+</body></html>

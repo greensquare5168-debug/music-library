@@ -561,6 +561,76 @@ function openWin(u){
     if(rel===''||rel.slice(-1)==='/') rel+='index.html';
     return rel;
   }
+  // 2026-11-24 改：站主點鉛筆 → 站內編輯模式（/edit.html），不用本機後端、不用終端機
+  function editUrl(){
+    var root=location.pathname;
+    // 以 app.js 的位置推算站台根（例 /music-library/）
+    var sc=document.currentScript;
+    var r=(sc&&sc.src)?new URL(sc.src).pathname.replace(/[^/]*$/,''):'/music-library/';
+    return r+'edit.html?page='+encodeURIComponent(pagePath());
+  }
+  function add(){
+    var nav=document.querySelector('header .topnav');
+    if(!nav||nav.querySelector('.authchip')) return;
+    var s=sess();
+    var on=!!(s&&s.email);
+    var a=document.createElement('a');
+    a.className='authchip';
+    a.href=root+(on?'member.html':'login.html');
+    a.textContent=on?('👤 '+(s.name||s.email)):'登入';
+    a.style.cssText='display:inline-flex;align-items:center;gap:6px;text-decoration:none;'
+      +'border:1px solid '+(on?'#cfe9d8':'#cfd8e3')+';background:'+(on?'#f0faf3':'#fff')+';'
+      +'color:'+(on?'#15803d':'#1f2733')+';'+(on?'font-weight:600;':'')
+      +'border-radius:10px;padding:9px 14px;font-size:14px;white-space:nowrap';
+    var sp=nav.querySelector('.navsearch');
+    if(sp) nav.insertBefore(a,sp); else nav.appendChild(a);
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',add); else add();
+})();
+
+/* ---------- 站主聊天框（2026-11-18）：只有「已登入 Supabase」的訪客才載入 ---------- */
+(function () {
+  try {
+    var has = false;
+    for (var i = 0; i < localStorage.length; i++) {
+      var k = localStorage.key(i) || '';
+      if (k.indexOf('sb-') === 0 && k.slice(-11) === '-auth-token') { has = true; break; }
+    }
+    if (has) import('/music-library/chat-owner.js').catch(function () {});
+  } catch (e) {}
+})();
+
+/* ---------- 站主鉛筆：只有「站主本人」看得到（2026-11-23 孝瓏要求） ----------
+   目的：每一頁右上角加一個 ✏️，點下去直接跳到 GitHub 該頁 index.html 的編輯畫面。
+   - 判斷依據：瀏覽器裡有 Supabase 登入態（login.html 登入後會留下 sb-*-auth-token）
+   - 訪客（沒登入）完全看不到，不會有亂點進入 GitHub 的問題
+   - 真心話：GitHub 那邊本來就只有站主帳號能存檔；別人點進去看到 404 / 唯讀，也改不動
+*/
+(function(){
+  var PENCIL_KEY='u4_pencil_v1';
+  function sbEmail(){
+    try{
+      for(var i=0;i<localStorage.length;i++){
+        var k=localStorage.key(i)||'';
+        if(k.indexOf('sb-')===0 && k.slice(-11)==='-auth-token'){
+          var o=JSON.parse(localStorage.getItem(k)||'null');
+          var u=o&&(o.user||(o.currentSession&&o.currentSession.user));
+          if(u&&u.email) return String(u.email).toLowerCase();
+        }
+      }
+    }catch(e){}
+    return '';
+  }
+  function pagePath(){
+    // 以 app.js 的位置推算站台根目錄，再取得目前頁面的相對路徑
+    var sc=document.currentScript;
+    var arr=(sc&&sc.src)?new URL(sc.src).pathname.split('/'):[];
+    var root=arr.length?arr.slice(0,arr.length-1).join('/')+'/':'/music-library/';
+    var here=location.pathname;
+    var rel=(here.indexOf(root)===0)?here.slice(root.length):here.replace(/^\//,'');
+    if(rel===''||rel.slice(-1)==='/') rel+='index.html';
+    return rel;
+  }
   // 2026-11-23 改：站主點鉛筆 → 開本機編輯器表單（不進 GitHub 看程式碼）
   // 編輯器位址（區網／Tailscale 都可連）；?page=<相對路徑>
   function editorBase(){
@@ -585,7 +655,7 @@ function openWin(u){
     a.href=editUrl();
     a.target='_blank';
     a.rel='noopener';
-    a.title='編輯這一頁（GitHub）';
+    a.title='✏️ 編輯這一頁';
     a.textContent='✏️';
     a.style.cssText='display:inline-flex;align-items:center;justify-content:center;'
       +'width:34px;height:34px;border-radius:10px;border:1px solid #cfd8e3;background:#fff;'
