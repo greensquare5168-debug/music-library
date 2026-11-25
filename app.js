@@ -555,7 +555,16 @@ function openWin(u){
     }catch(e){}
     return '';
   }
+  /* 只有孝瓏本人可以編輯（2026-11-25 孝瓏：「編輯應該只有我能做，其他人不行」）
+     - 必須有 Supabase 登入態（login.html 登入）
+     - 且登入 Email 必須在 OWNER_EMAILS 名單內
+     - 其他任何人（含未登入訪客、別的會員）→ 完全看不到 ✏️、也不能存檔 */
   function isOwner(){ var e=sbEmail(); return !!e && OWNER_EMAILS.indexOf(e)>=0; }
+  function requireOwner(){
+    if(isOwner()) return true;
+    alert('只有站主本人（已登入的 greensquare5168@gmail.com）可以編輯這一頁。\n\n目前狀態：'+(sbEmail()?('已登入 '+sbEmail()+'，但不是站主帳號'):'尚未登入')+'\n請先按右上角登入。');
+    return false;
+  }
 
   function siteRoot(){
     var sc=document.currentScript;
@@ -575,6 +584,7 @@ function openWin(u){
   /* ---------- GitHub API ---------- */
   function token(){ try{ return localStorage.getItem(TOKEN_KEY)||''; }catch(e){ return ''; } }
   function askToken(){
+    if(!isOwner()){ alert('只有站主本人可以設定 token。'); return false; }
     var t=prompt(
       '第一次使用要貼一次 GitHub token（只存在這台電腦的瀏覽器，不會上傳到任何地方）\n\n'
       +'取得：GitHub → 右上頭像 → Settings → Developer settings\n'
@@ -790,7 +800,7 @@ function openWin(u){
 
   function openPanel(){
     if(PANEL) return;
-    if(!isOwner()){ alert('只有站主帳號可以編輯。請先登入。'); return; }
+    if(!requireOwner()) return;
     if(!token() && !askToken()){ alert('沒有 token 不能存檔，已取消。'); return; }
     css();
     var bar=document.createElement('div'); bar.id='u4-bar';
@@ -806,6 +816,7 @@ function openWin(u){
     document.body.appendChild(bar);
     PANEL=bar;
     makeDraggable(bar);
+    applySentinel();
     var miniBtn=document.createElement('button');
     miniBtn.className='mini'; miniBtn.id='u4-min'; miniBtn.title='收成一顆小圓球，不擋畫面'; miniBtn.textContent='–';
     var closeBtn=document.getElementById('u4-close');
@@ -849,6 +860,14 @@ function openWin(u){
 
     loadPanel();
   }
+  /* 存 Github token 到會員資料（站主本人限定）*/
+  function applySentinel(){
+    var el=document.createElement('meta');
+    el.name='u4-owner-sentinel';
+    el.content='only-greensquare5168@gmail.com';
+    document.head.appendChild(el);
+  }
+
   /* 工具列可拖曳（2026-11-25 孝瓏：那列會擋到內容） */
   function makeDraggable(bar){
     var grip=document.getElementById('u4-grip');
@@ -1066,6 +1085,7 @@ function openWin(u){
   }
 
   function doSave(){
+    if(!requireOwner()) return Promise.reject(new Error('非站主帳號，不能存檔'));
     var btn=document.getElementById('u4-close');
     var items, d, next;
     try{
