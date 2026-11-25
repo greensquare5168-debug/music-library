@@ -1142,6 +1142,8 @@ function openWin(u){
       document.body.appendChild(TOOLS);
       TOOLS.addEventListener('click',function(e){ e.stopPropagation(); });
       TOOLS.addEventListener('mousedown',function(e){ e.stopPropagation(); });
+      /* 2026-11-25 19:43：從選單下拉時不要讓選取範圍被清掉 */
+      TOOLS.addEventListener('mouseup',function(e){ e.stopPropagation(); });
     }
     var kind=layoutKind(el);
     var name=kind==='yt'?'播放框':(kind==='src'?'來源框':(kind==='img'?'圖片框':(kind==='block'?'使用作品清單':'作品列')));
@@ -1389,15 +1391,26 @@ function openWin(u){
     TOOLS.style.left=Math.max(6, Math.round(r.left))+'px';
     TOOLS.style.top=Math.max(6, Math.round(r.top-TOOLS.offsetHeight-8))+'px';
   }
-  /* 點選框 → 出工具列；點空白 → 收起 */
+  /* 點選框 → 出工具列；點空白 → 收起
+     2026-11-25 19:43 孝瓏：「選取文字時選擇標題會消失」
+     → 如果這次是「拖曳選取文字」（mouseup 時有非空選取範圍）就不要收起工具列，
+        工具列只跟著「點框」切換，不會因為選字而消失 */
   document.addEventListener('click', function(e){
     if(!LAYOUT_ON || !PANEL) return;
     if(TOOLS && TOOLS.contains(e.target)) return;
     if(e.target.closest && e.target.closest('#u4-bar')) return;
+    var sl=window.getSelection && window.getSelection();
+    if(sl && !sl.isCollapsed && sl.rangeCount && String(sl).trim()) return;  // 正在選字 → 工具列保留
     var el=layoutTargetOf(e.target);
     if(!el){ layoutHide(); return; }
     if(el===SEL) return;
     layoutShow(el);
+  }, true);
+  /* 選取文字（拖曳或 double-click）時，若工具列已開著 → 不要收 */
+  document.addEventListener('mouseup', function(e){
+    if(!LAYOUT_ON || !TOOLS) return;
+    var sl=window.getSelection && window.getSelection();
+    if(sl && !sl.isCollapsed && String(sl).trim()) e.stopPropagation();
   }, true);
 
   /* 工具列可拖曳（2026-11-25 孝瓏：那列會擋到內容） */
