@@ -1260,21 +1260,12 @@ function openWin(u){
   function layoutFontTo(el, px){
     if(!el) return;
     var next=Math.min(48, Math.max(10, Math.round(px||15)));
+    /* 2026-11-25 19:04 孝瓏：「沒選取時全都不要變，有選取時只有選取的變」
+       → 沒有選取就不做任何事（不再整列／整框一起變） */
     if(applyFontToSelection(next)){
       var info0=TOOLS&&TOOLS.querySelector('.u4-fs'); if(info0) info0.value=String(next);
-      return;
     }
-    if(el.tagName==='LI'){ el.setAttribute('data-u4-fs', next); el.style.fontSize=next+'px';
-      Array.prototype.forEach.call(el.querySelectorAll('a,.lbl'),function(x){ x.style.fontSize=next+'px'; });
-    } else if(el.tagName==='UL'){
-      el.setAttribute('data-u4-fs', next); el.style.fontSize=next+'px';
-      Array.prototype.forEach.call(el.querySelectorAll('li,a,.lbl'),function(x){ x.style.fontSize=next+'px'; });
-    } else {
-      el.setAttribute('data-u4-fs', next); el.style.fontSize=next+'px';
-    }
-    var info=TOOLS&&TOOLS.querySelector('.u4-fs'); if(info && info.value!==String(next)) info.value=String(next);
-    setDirty(true);
-    try{ layoutReposition(); }catch(e){}
+    return;
   }
 
   function layoutResize(el,kind,dx,dy){
