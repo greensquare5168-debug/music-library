@@ -1014,11 +1014,13 @@ function openWin(u){
   function layoutTargetOf(t){
     if(!t || !t.closest) return null;
     var card=t.closest('.album-card'); if(!card) return null;
-    var el=t.closest('.ytframe, .srcframe, .srcimg, .srcwin, ul.entries > li');
+    /* 2026-11-25 孝瓏：「行不要加，大框才要」→ 點作品行不彈工具列，只有整個大框才彈 */
+    var el=t.closest('.ytframe, .srcframe, .srcimg, .srcwin, ul.entries');
     if(!el) return null;
-    return el;   // 空框、播放框的 li 也都可以選（2026-11-25 孝瓏：點不到無字的空框）
+    return el;
   }
   function layoutKind(el){
+    if(el.tagName==='UL') return 'block';
     if(el.tagName==='LI') return el.querySelector('.ytframe')?'yt':(el.querySelector('.srcframe')?'src':'row');
     if(el.classList.contains('ytframe')) return 'yt';
     if(el.classList.contains('srcframe')) return 'src';
@@ -1039,7 +1041,7 @@ function openWin(u){
       TOOLS.addEventListener('mousedown',function(e){ e.stopPropagation(); });
     }
     var kind=layoutKind(el);
-    var name=kind==='yt'?'播放框':(kind==='src'?'來源框':(kind==='img'?'圖片框':'作品列'));
+    var name=kind==='yt'?'播放框':(kind==='src'?'來源框':(kind==='img'?'圖片框':(kind==='block'?'使用作品清單':'作品列')));
     var r=el.getBoundingClientRect();
     var info=(Math.round(r.width*10)/10)+'×'+(Math.round(r.height*10)/10);
     var html='<span style="color:#9ca3af;font-size:11px">'+name+'</span>'
@@ -1068,8 +1070,8 @@ function openWin(u){
     wide.title='切換寬度';
     wide.style.cssText='font:12px/1 system-ui;padding:5px 7px;border:0;border-radius:6px;background:#374151;color:#fff;cursor:pointer';
     wide.onclick=function(e){ e.preventDefault(); e.stopPropagation(); layoutResize(el,kind,1,0); };
-    TOOLS.appendChild(del);
-    if(kind!=='row'){ TOOLS.appendChild(minus); TOOLS.appendChild(plus); TOOLS.appendChild(wide); }
+    if(kind!=='block') TOOLS.appendChild(del);   // 大框不給刪（避免整份清單被誤刪）
+    if(kind!=='row' && kind!=='block'){ TOOLS.appendChild(minus); TOOLS.appendChild(plus); TOOLS.appendChild(wide); }
     el.style.outline='none';
     el.style.boxShadow='none';
     layoutReposition();
