@@ -522,7 +522,12 @@ function openWin(u){
   }
   function add(){
     var nav=document.querySelector('header .topnav');
-    if(!nav||nav.querySelector('.authchip')) return;
+    if(!nav) return;
+    if(nav.querySelector('.authchip')){   /* 2026-11-25 修：狀態可能晚到（Supabase 非同步寫入）→ 重新渲染 */
+      var old=nav.querySelector('.authchip');
+      if(old.dataset.u4done==='1') return;
+      old.parentNode.removeChild(old);
+    }
     var s=sbSession();
     var on=!!s;
     var who=on?((s.user.user_metadata&&s.user.user_metadata.name)||s.user.email):'';
@@ -550,9 +555,14 @@ function openWin(u){
         } else { location.href=root+'login.html'; }
       });
     }
+    a.dataset.u4done='1';
     if(sp) nav.insertBefore(a,sp); else nav.appendChild(a);
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',add); else add();
+  /* 登入態可能比 app.js 晚成立：再補畫幾次 */
+  [200,800,2000].forEach(function(t){ setTimeout(add,t); });
+  document.addEventListener('visibilitychange', function(){ if(!document.hidden) add(); });
+  window.addEventListener('focus', add);
 })();
 
 /* ---------- 站主聊天框（2026-11-18）：只有「已登入 Supabase」的訪客才載入 ---------- */
