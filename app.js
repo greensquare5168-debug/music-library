@@ -1060,7 +1060,7 @@ function openWin(u){
     TOOLS.appendChild(del);
     if(kind!=='row'){ TOOLS.appendChild(minus); TOOLS.appendChild(plus); TOOLS.appendChild(wide); }
     el.style.outline='none';
-    el.style.boxShadow='0 0 0 2px rgba(47,111,235,.55)';
+    el.style.boxShadow='none';
     layoutReposition();
   }
   function layoutResize(el,kind,dx,dy){
