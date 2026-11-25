@@ -654,6 +654,7 @@ function openWin(u){
     };
   }
   function buildItem(u){
+    if(!u.title) return ''; // 清空的列 = 刪掉，不寫回檔案
     var lbl=u.label?'<span class="lbl">'+escT(u.label)+'</span>':'';
     return '<li><a href="'+esc(u.href)+'">'+escT(u.title)+'</a>'+lbl+'</li>';
   }
@@ -668,10 +669,10 @@ function openWin(u){
       var keep=(last.inner.match(/<li[^>]*>[\s\S]*?<\/li>/g)||[]).filter(function(it){
         return /srccap|srcframe|ytframe|blankline/.test(it);
       });
-      var next='<ul class="entries">\n'+keep.concat(usage.map(buildItem)).join('\n')+'\n</ul>';
+      var next='<ul class="entries">\n'+keep.concat(usage.map(buildItem).filter(function(x){return x;})).join('\n')+'\n</ul>';
       html=html.slice(0,last.index)+next+html.slice(last.end);
     }else{
-      var ul=usage.length?('<ul class="entries">\n'+usage.map(buildItem).join('\n')+'\n</ul>'):'';
+      var ul=usage.length?('<ul class="entries">\n'+usage.map(buildItem).filter(function(x){return x;}).join('\n')+'\n</ul>'):'';
       html=html.replace(/(<div class="albumartist">[\s\S]*?<\/div>)/,'$1'+ul);
     }
     if(usage.length){
@@ -854,6 +855,7 @@ function openWin(u){
     var li=document.createElement('li');
     var a=document.createElement('a');
     a.setAttribute('href', href||'#new');
+    a.setAttribute('data-u4-new','1');
     a.textContent=title||'（新的一筆）';
     li.appendChild(a);
     var sp=document.createElement('span'); sp.className='lbl'; sp.textContent=label?'（'+label+'）':'';
@@ -900,6 +902,7 @@ function openWin(u){
       });
       lis.forEach(function(li){
         var a=li.querySelector(':scope > a'), sp=li.querySelector(':scope > .lbl');
+        if(a && a.getAttribute('href')==='#new') a.setAttribute('data-u4-new','1');
         if(a && !a.getAttribute('data-keep')){ a.setAttribute('data-keep', a.getAttribute('href')||''); }
         makeEditable(a, '可以直接改作品名稱（連結不變）');
         if(!sp){ sp=document.createElement('span'); sp.className='lbl'; li.appendChild(sp); }
@@ -924,7 +927,8 @@ function openWin(u){
     }
   }
 
-  // 把頁面上（DOM）的改動寫回 CUR.usage：順序、刪除、文字、新增都算
+  // 把頁面上（DOM）的改動寫回 CUR.usage：順序、刪除、文字（含清空）、新增都算
+  // 2026-11-25 修：清空框內文字要「真的刪掉」——只有原始就空白的列才算「尚未填」
   function syncUsageFromDom(){
     if(!CUR) return;
     var ul=entriesUl(), out=[];
@@ -937,9 +941,9 @@ function openWin(u){
         var sp=li.querySelector(':scope > .lbl');
         var lb=sp?(sp.textContent||'').trim():'';
         lb=lb.replace(/^（/,'').replace(/）$/,'').trim();
-        if(!t && !href) return;
-        if(href==='#new') href='';
-        out.push({href:href, title:t, label:lb});
+        var wasBlank=(a.getAttribute('data-u4-new')==='1'); // 編輯模式中自己加的空列
+        if(!t && wasBlank && (!href || href==='#new')) return; // 沒填的新增列 → 略過
+        out.push({href:(href==='#new'?'':href), title:t, label:lb});
       });
     }
     CUR.usage=out;
@@ -955,12 +959,13 @@ function openWin(u){
         var a=li.querySelector(':scope > a');
         if(!a || /srccap|srcframe|ytframe|blankline/.test(li.className)) return;
         var t=(a.textContent||'').trim();
+        // 2026-11-25 修：清空＝真的刪掉（只有編輯時新增的空列才視為沒填）
         var href=a.getAttribute('data-keep')||a.getAttribute('href')||'';
         var sp=li.querySelector(':scope > .lbl');
         var lb=sp?(sp.textContent||'').trim():'';
         lb=lb.replace(/^（/,'').replace(/）$/,'').trim();
-        if(!t && !href) return;
-        usage.push({href:href, title:t, label:lb});
+        if(!t && a.getAttribute('data-u4-new')==='1' && (!href||href==='#new')) return;
+        usage.push({href:href==='#new'?'':href, title:t, label:lb});
       });
     }
     return {title:title, artist:artist, usage:usage};
