@@ -855,15 +855,18 @@ function openWin(u){
     if(document.getElementById('u4-edit-css')) return;
     var s=document.createElement('style'); s.id='u4-edit-css';
     s.textContent=''
-      +'body.u4-editing .album-card h1,body.u4-editing .album-card .albumartist,body.u4-editing .album-card ul.entries li>a,body.u4-editing .album-card ul.entries li>.lbl{outline:none!important;border-radius:5px;cursor:text;transition:background .15s}'
+      +'body.u4-editing .album-card h1{display:block;background:#fff;border:1px solid #cfd8e3;border-radius:8px;padding:10px 14px;margin:0 0 8px;cursor:text;transition:border-color .15s,box-shadow .15s}'
+      +'body.u4-editing .album-card .albumartist{display:block;background:#fff;border:1px solid #cfd8e3;border-radius:8px;padding:8px 12px;margin:0 0 14px;cursor:text;transition:border-color .15s,box-shadow .15s}'
+      +'body.u4-editing .album-card h1:hover,body.u4-editing .album-card .albumartist:hover,body.u4-editing .album-card ul.entries li:hover{background:#fbfdff;border-color:#9db8e8}'
+      +'body.u4-editing .album-card h1:focus,body.u4-editing .album-card .albumartist:focus,body.u4-editing .album-card [contenteditable=\"true\"]:focus{border-color:#2f6feb;background:#fff;box-shadow:0 0 0 3px rgba(47,111,235,.12);outline:none}'
+      +'body.u4-editing .album-card ul.entries li>a,body.u4-editing .album-card ul.entries li>.lbl{outline:none!important;cursor:text}'
       +'body.u4-editing .album-card h1:hover,body.u4-editing .album-card .albumartist:hover,body.u4-editing .album-card ul.entries li>a:hover,body.u4-editing .album-card ul.entries li>.lbl:hover{background:#f2f7ff}'
       +'body.u4-editing .album-card [contenteditable="true"]:focus{outline:2px solid #2f6feb;background:#fff;box-shadow:0 0 0 3px rgba(47,111,235,.12)}'
       +'body.u4-editing .album-card ul.entries li{position:relative;min-height:22px}'
-      +'body.u4-editing .album-card ul.entries li:has(>a){display:block;padding:8px 11px;margin:2px 0;border-radius:6px;background:transparent}'
-      +'body.u4-editing .album-card ul.entries li:has(>a):hover{background:#f2f7ff}'
+      +'body.u4-editing .album-card ul.entries li:has(>a){display:block;padding:9px 12px;margin:6px 0;border-radius:8px;background:#fff;border:1px solid #cfd8e3}'
       +'body.u4-editing .album-card ul.entries li:has(>a)>a{outline:none!important;cursor:text}'
       +'body.u4-editing .album-card ul.entries li:has(>a)>.lbl{outline:none!important;cursor:text;color:var(--muted)}'
-      +'body.u4-editing .album-card ul.entries li.u4-empty{min-height:30px;background:#fff4f4;border:0;border-left:3px solid #e8a2a2;border-radius:0;display:block;padding:6px 10px;cursor:pointer}'
+      +'body.u4-editing .album-card ul.entries li.u4-empty{min-height:36px;background:#fff;border:1px dashed #e0b4b4;border-radius:8px;display:block;padding:9px 12px;margin:6px 0;cursor:pointer}'
       +'body.u4-editing .album-card ul.entries li.u4-empty:after{content:"（空框 — 點這裡可刪除）";color:#c26a6a;font-size:12px}'
       +'body.u4-editing .u4-del{position:absolute;right:-6px;top:50%;transform:translateY(-50%);width:22px;height:22px;line-height:1;padding:0;border-radius:50%;border:1px solid #f3c0bb;background:#fff;color:#b42318;font-size:13px;cursor:pointer;display:none}'
       +'body.u4-editing .album-card ul.entries li:hover>.u4-del{display:block}'
@@ -1048,7 +1051,7 @@ function openWin(u){
     TOOLS.appendChild(del);
     if(kind!=='row'){ TOOLS.appendChild(minus); TOOLS.appendChild(plus); TOOLS.appendChild(wide); }
     el.style.outline='none';
-    el.style.boxShadow='inset 0 0 0 2px rgba(47,111,235,.55)';
+    el.style.boxShadow='0 0 0 2px rgba(47,111,235,.55)';
     layoutReposition();
   }
   function layoutResize(el,kind,dx,dy){
