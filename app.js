@@ -695,6 +695,23 @@ function openWin(u){
   function unesc(x){ return String(x).replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&#39;/g,"'").replace(/&amp;/g,'&'); }
   function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
   function escT(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  /* 2026-11-25 19:0x：只保留「單純字級 span」的行內格式，其他標籤/屬性一律清掉（存檔安全） */
+  function keepInlineHTML(h){
+    var s=String(h||'');
+    if(s.indexOf('<')<0) return '';
+    var out=s.replace(/<(\/?)([a-zA-Z][a-zA-Z0-9]*)([^>]*)>/g, function(all,close,tag,attrs){
+      tag=tag.toLowerCase();
+      if(tag!=='span') return '';
+      if(close) return '</span>';
+      var m=/font-size\s*:\s*(\d{1,2})px/i.exec(attrs||'');
+      if(!m) return '';
+      var n=Math.min(48,Math.max(10,parseInt(m[1],10)||15));
+      return '<span style="font-size:'+n+'px" data-u4-fs="'+n+'">';
+    });
+    var txt=unesc(out.replace(/<[^>]+>/g,'')).trim();
+    if(!txt) return '';
+    return out;
+  }
   var RE_UL=/<ul class="entries">([\s\S]*?)<\/ul>/g;
   var EMPTY_TIP='<p class="muted">（尚未發現使用作品）</p>';
 
@@ -727,9 +744,11 @@ function openWin(u){
     if(!u.title) return ''; // 清空的列 = 刪掉，不寫回檔案
     var lb=String(u.label||'').trim();
     if(lb && !/^[（(]/.test(lb)) lb='（'+lb+'）';   // 排版用外層括號（只在檔案裡，編輯時不顯示）
-    var lbl=lb?'<span class="lbl">'+escT(lb)+'</span>':'';
+    var lblHtml=(u.lblHtml&&u.lblHtml.replace(/<[^>]+>/g,'').trim())?u.lblHtml:escT(lb);
+    var lbl=lb?('<span class="lbl">'+lblHtml+'</span>'):'';
+    var titleHtml=(u.html&&u.html.replace(/<[^>]+>/g,'').trim())?u.html:escT(u.title);
     // 2026-11-25：整行包一個 <a> 感應區（span.u4line），讓整行可以一次選取／編輯
-    return '<li><span class="u4line"><a href="'+esc(u.href)+'">'+escT(u.title)+'</a>'+lbl+'</span></li>';
+    return '<li><span class="u4line"><a href="'+esc(u.href)+'">'+titleHtml+'</a>'+lbl+'</span></li>';
   }
 
   /* 把「版面工具」的操作寫進 HTML：刪掉的 li / 框整個移除；有改尺寸的補 style */
@@ -1184,14 +1203,66 @@ function openWin(u){
     try{ return Math.round(parseFloat(getComputedStyle(el).fontSize))||''; }catch(e){ return ''; }
   }
   function layoutFont(el,delta){
-    if(!el) return;
-    var cur=fontPx(el)||15;
-    layoutFontTo(el, cur+delta*2);
+    /* 2026-11-25 18:59 孝瓏：「按了加減，都是加減2，請改成加減1」中間數字框會同步 */
+    var info=TOOLS&&TOOLS.querySelector('.u4-fs');
+    var cur=parseInt(info&&info.value?String(info.value).replace(/[^0-9]/g,''):'',10) || fontPx(el) || 15;
+    layoutFontTo(el, cur+delta);
+  }
+  /* 2026-11-25 18:59 孝瓏：「當我只選取其中的文字，其他文字也一起變大小，應該只有選取的文字才變」
+     → 若畫面上有「選取範圍」（且不在輸入框裡）→ 只包選取的那幾段文字成 <span style="font-size:Npx"> */
+  function selInInput(){
+    var a=document.activeElement;
+    if(!a) return false;
+    var tg=String(a.tagName||'').toUpperCase();
+    if(tg==='INPUT'||tg==='TEXTAREA'||a.isContentEditable){ if(TOOLS&&TOOLS.contains(a)) return false; return true; }
+    return false;
+  }
+  function applyFontToSelection(next){
+    var sel=window.getSelection && window.getSelection();
+    if(!sel || sel.rangeCount===0 || sel.isCollapsed) return false;
+    var range=sel.getRangeAt(0);
+    var card=document.querySelector('.album-card');
+    if(!card || !card.contains(range.commonAncestorContainer)) return false;
+    if(selInInput()) return false;
+    var spans=[];
+    function walk(node){
+      if(node.nodeType===3){
+        if(!/\S/.test(node.nodeValue||'')) return;
+        if(node.parentNode && node.parentNode.closest && node.parentNode.closest('#u4-laytools')) return;
+        var r=document.createRange(); r.selectNodeContents(node);
+        if(range.compareBoundaryPoints(Range.END_TO_START,r)>0) return;
+        if(range.compareBoundaryPoints(Range.START_TO_END,r)<0) return;
+        var sp=document.createElement('span');
+        sp.style.fontSize=next+'px';
+        sp.setAttribute('data-u4-fs', next);
+        try{ r.surroundContents(sp); spans.push(sp); }catch(e){}
+        return;
+      }
+      if(node.nodeType!==1) return;
+      if(/^(SCRIPT|STYLE|IFRAME)$/i.test(node.tagName)) return;
+      if(node.id==='u4-laytools' || (node.closest && node.closest('#u4-laytools'))) return;
+      Array.prototype.slice.call(node.childNodes).forEach(walk);
+    }
+    Array.prototype.slice.call(range.commonAncestorContainer.childNodes||[range.commonAncestorContainer]).forEach(walk);
+    if(!spans.length){
+      /* 選取範圍剛好等於整個元素 → 直接套在該元素（例如只選一行文字） */
+      var c=range.commonAncestorContainer;
+      var host=(c.nodeType===1)?c:(c.parentNode);
+      if(host && host.tagName!=='UL' && host.tagName!=='OL'){
+        host.style.fontSize=next+'px'; host.setAttribute('data-u4-fs', next); spans.push(host);
+      }
+    }
+    if(spans.length){ setDirty(true); try{ layoutReposition(); }catch(e){} }
+    return spans.length>0;
   }
   /* 直接指定字級（輸入框用） */
   function layoutFontTo(el, px){
     if(!el) return;
     var next=Math.min(48, Math.max(10, Math.round(px||15)));
+    if(applyFontToSelection(next)){
+      var info0=TOOLS&&TOOLS.querySelector('.u4-fs'); if(info0) info0.value=String(next);
+      return;
+    }
     if(el.tagName==='LI'){ el.setAttribute('data-u4-fs', next); el.style.fontSize=next+'px';
       Array.prototype.forEach.call(el.querySelectorAll('a,.lbl'),function(x){ x.style.fontSize=next+'px'; });
     } else if(el.tagName==='UL'){
@@ -1542,16 +1613,18 @@ function openWin(u){
         var a=line?line.querySelector('a'):li.querySelector(':scope > a');
         if(!a || /srccap|srcframe|ytframe|blankline/.test(li.className)) return;
         var t=(a.textContent||'').trim();
+        var keepT=keepInlineHTML(a.innerHTML);   // 2026-11-25 19:0x 保留「只在選取文字」的字級 span
         // 2026-11-25 修：清空＝真的刪掉（只有編輯時新增的空列才視為沒填）
         var href=a.getAttribute('data-keep')||a.getAttribute('href')||'';
         var sp=line?line.querySelector('.lbl'):li.querySelector(':scope > .lbl');
         var lb=sp?(sp.textContent||'').trim():'';
+        var keepL=sp?keepInlineHTML(sp.innerHTML):'';
         /* 2026-11-25 修：外層括號只是排版，不能吃掉使用者打的括號 */
         lb=lb.trim();
         if(lb==='（）'||lb==='()') lb='';
         if(/^[（(][\s\S]*[）)]$/.test(lb)) lb=lb.slice(1,-1).trim();
         if(!t && a.getAttribute('data-u4-new')==='1' && (!href||href==='#new')) return;
-        usage.push({href:href==='#new'?'':href, title:t, label:lb, _blank:!!(a.getAttribute('data-u4-new')==='1' && (!href||href==='#new'))});
+        usage.push({href:href==='#new'?'':href, title:t, label:lb, html:keepT, lblHtml:keepL, _blank:!!(a.getAttribute('data-u4-new')==='1' && (!href||href==='#new'))});
       });
     }
     return {title:title, artist:artist, usage:usage};
