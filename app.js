@@ -795,6 +795,27 @@ function openWin(u){
     return html;
   }
 
+
+  /* 混合型 ul（播放框／來源框 ＋ 作品列）重建：
+     保留非作品 li（ytframe/srcframe/srccap/blankline），把作品 li 換成目前畫面內容（依原位置塞回）*/
+  function rebuildMixedUl(inner, usage){
+    var m, RE_LI=/<li[^>]*>[\s\S]*?<\/li>/g, items=[], out='';
+    var slot=-1;
+    while((m=RE_LI.exec(inner))){ items.push(m[0]); }
+    var built=usage.map(buildItem).filter(function(x){return x;});
+    var bi=0;
+    items.forEach(function(li){
+      /* 只有「播放框／來源框／來源說明／空行」這種非作品列才原樣保留；
+         一般作品列（可能還沒填連結）要換成目前畫面的內容 */
+      var isSpec=/srccap|srcframe|ytframe|blankline/.test(li)
+                 || (/<span class="(?:role|u4line)"/.test(li)===false && /<a\s[^>]*href=/.test(li)===false);
+      if(isSpec){ out+=li; return; }
+      if(bi<built.length){ out+=built[bi++]; }
+    });
+    while(bi<built.length){ out+=built[bi++]; }
+    return '<ul class="entries">\n'+out+'\n</ul>';
+  }
+
   function applyEdits(html, data, usage, layoutArr){
     // 先套用「版面工具」的刪除／尺寸（依 tag+index 定位，避免同名混淆）
     if(layoutArr && layoutArr.length) html=applyLayout(html, layoutArr);
@@ -814,7 +835,13 @@ function openWin(u){
         var isSpecial=/srccap|srcframe|ytframe|blankline/.test(b.inner);
         var hasLinks=/<li[^>]*>[\s\S]*?<a href=/.test(b.inner);
         if(!hasLinks){ continue; }                       // 播放框／來源框等沒有作品的 → 不動
-        // 有作品的清單才整批換新（即使混有 blankline 也一併換，舊空白框不會殘留）
+        if(isSpecial){
+          /* 2026-11-25 修：這個 ul 混有「來源框／播放框」＋作品列 → 不能整批覆蓋（會刪掉播放框）
+             只換掉裡面的作品 <li>：保留非作品 li（播放框／來源框／空行）原樣，作品列依序填回 */
+          html=html.slice(0,b.index)+rebuildMixedUl(b.inner,usage)+html.slice(b.end);
+          continue;
+        }
+        // 純作品清單 → 整批換新（舊空白框不會殘留）
         html=html.slice(0,b.index)+newInner+html.slice(b.end);
       }
     }else{
@@ -900,6 +927,9 @@ function openWin(u){
       +'body.u4-editing .album-card h1:focus,body.u4-editing .album-card .albumartist:focus{background:transparent;outline:none;box-shadow:none}'
       +'body.u4-editing .album-card [contenteditable=\"true\"]:focus{background:#fff;box-shadow:0 0 0 2px rgba(47,111,235,.35);outline:none;border-radius:6px}'
       +'body.u4-editing .album-card ul.entries{display:block;background:#fff;border:1px solid #cfd8e3;border-radius:8px;padding:10px 14px;margin:4px 0 8px;cursor:text;max-height:none}'
+      +'body.u4-editing .album-card .u4-block{display:block;background:#fff;border:1px solid #cfd8e3;border-radius:8px;padding:10px 14px;margin:4px 0 8px;cursor:text}'
+      +'body.u4-editing .album-card .u4-block:focus{outline:none;border-color:#2f6feb;box-shadow:0 0 0 3px rgba(47,111,235,.10)}'
+      +'body.u4-editing .album-card .u4-block ul.entries{border:0;border-radius:0;padding:0;margin:0;background:transparent}'
       +'body.u4-editing .album-card ul.entries.u4-whole{outline:none}'
       +'body.u4-editing .album-card ul.entries.u4-whole:focus{border-color:#2f6feb;box-shadow:0 0 0 3px rgba(47,111,235,.10)}'
       +'body.u4-editing .u4-addline{margin:0 0 14px;font-size:13px;padding:5px 10px;border-radius:7px;border:1px dashed #9fb3cc;background:#fff;color:#456;cursor:pointer}'
@@ -1209,9 +1239,15 @@ function openWin(u){
     CUR=null; DIRTY=false;
   }
 
-  function entriesUl(){
-    var uls=document.querySelectorAll('.album-card ul.entries');
-    return uls.length?uls[uls.length-1]:null;
+  /* 2026-11-25 孝瓏：「像大頭小狀元，應該都要在同一框，有標題框也是一樣」
+     → 使用作品頁常有多個 ul.entries（每個標題框「簡介／第1段…」各一組）
+       編輯區改成「整個 .album-card 內所有 ul.entries 一起包在一個大框裡」。 */
+  function allEntriesUls(){
+    return Array.prototype.slice.call(document.querySelectorAll('.album-card ul.entries'));
+  }
+  function entriesUl(){   /* 回傳目前要當編輯區的元素（第一組 ul 或合成 wrapper） */
+    var card=document.querySelector('.album-card'); if(!card) return null;
+    return card.querySelector('.u4-block.u4-whole') || card.querySelector('.u4-block') || allEntriesUls()[0] || null;
   }
   function linkArgs(a){
     // 只改文字，href 絕不動：用 data 存原 href，存檔前還原
@@ -1319,9 +1355,21 @@ function openWin(u){
           li.appendChild(del);
         }
       });
-      /* 2026-11-25 孝瓏：要能跨行選取 → 整個清單當成一個編輯區（像 Word 選多行） */
+      /* 2026-11-25 孝瓏：要能跨行選取 → 整個清單當成一個編輯區（像 Word 選多行）
+         2026-11-25 16:19 追加：「像大頭小狀元，應該都要在同一框，有標題框也是一樣」
+         → 一個 .album-card 內可能有多組 ul.entries（每個標題框一組），全部包進同一個 wrapper 大框 */
       (function(){
-        var ul2=entriesUl(); if(!ul2) return;
+        var wrapper=document.querySelector('.album-card .u4-block');
+        if(!wrapper){
+          var card=document.querySelector('.album-card');
+          var uls=allEntriesUls();
+          if(!card || !uls.length) return;
+          wrapper=document.createElement('div');
+          wrapper.className='u4-block';
+          card.insertBefore(wrapper, uls[0]);
+          uls.forEach(function(u){ wrapper.appendChild(u); });
+        }
+        var ul2=wrapper;
         Array.prototype.forEach.call(ul2.querySelectorAll('[contenteditable]'),function(el){ if(el!==ul2){ el.removeAttribute('contenteditable'); el.removeAttribute('spellcheck'); } });
         if(!ul2.classList.contains('u4-whole')){
           ul2.classList.add('u4-whole');
@@ -1374,9 +1422,11 @@ function openWin(u){
   // 2026-11-25 修：清空框內文字要「真的刪掉」——只有原始就空白的列才算「尚未填」
   function syncUsageFromDom(){
     if(!CUR) return;
-    var ul=entriesUl(), out=[];
-    if(ul){
-      Array.prototype.forEach.call(ul.querySelectorAll(':scope > li'), function(li){
+    var root=entriesUl(), out=[];
+    if(root){
+      /* wrapper(.u4-block) 內所有 ul.entries 的 li 都要讀（使用作品頁有多個標題框） */
+      Array.prototype.forEach.call(root.querySelectorAll('li'), function(li){
+        if(!li.parentNode || li.parentNode.tagName!=='UL') return;
         var line=li.querySelector(':scope > .u4line');
         var a=line?line.querySelector('a'):li.querySelector(':scope > a');
         if(!a || /srccap|srcframe|ytframe|blankline/.test(li.className)) return;
