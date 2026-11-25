@@ -1100,7 +1100,7 @@ function openWin(u){
         var lb=sp?(sp.textContent||'').trim():'';
         lb=lb.replace(/^（/,'').replace(/）$/,'').trim();
         if(!t && a.getAttribute('data-u4-new')==='1' && (!href||href==='#new')) return;
-        usage.push({href:href==='#new'?'':href, title:t, label:lb});
+        usage.push({href:href==='#new'?'':href, title:t, label:lb, _blank:!!(a.getAttribute('data-u4-new')==='1' && (!href||href==='#new'))});
       });
     }
     return {title:title, artist:artist, usage:usage};
@@ -1121,7 +1121,13 @@ function openWin(u){
       }
       try{ syncUsageFromDom(); }catch(err2){}
       d=readEdits();
-      d.usage=CUR.usage.slice();
+      /* 2026-11-25 修「刪掉的又跑回來」：
+         1) 寫入的是 DOM 目前的內容（d.usage），不是舊的 CUR.usage
+         2) 空白的列一律當「刪除」，只有「剛按＋新增、還沒打字」的列才忽略 */
+      d.usage=d.usage.filter(function(u){
+        if((u.title||'').trim()) return true;
+        return !!(u && u._blank);
+      });
       if(!d.title){ panelMsg('曲名不能空白',false); return Promise.reject(new Error('曲名空白')); }
       items=d.usage.filter(function(u){ return (u.href||'').trim() && (u.title||'').trim(); });
       var dropped=d.usage.length-items.length;
