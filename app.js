@@ -608,8 +608,14 @@ function openWin(u){
     var bytes=Uint8Array.from(bin,function(c){return c.charCodeAt(0);});
     return new TextDecoder().decode(bytes);
   }
+  /* GitHub 路徑編碼：中文資料夾要 encodeURI；但若路徑已是 %E7… 形式就不能再編（否則 %25E7 → 檔案不存在）*/
+  function ghPath(path){
+    var p=String(path||'');
+    if(/%[0-9A-Fa-f]{2}/.test(p)) return p;          // 已編碼過 → 直接送
+    return encodeURI(p);
+  }
   function ghGet(path){
-    return fetch('https://api.github.com/repos/'+OWNER+'/'+REPO+'/contents/'+encodeURI(path)+'?ref='+BRANCH+'&t='+Date.now(),{headers:headers()})
+    return fetch('https://api.github.com/repos/'+OWNER+'/'+REPO+'/contents/'+ghPath(path)+'?ref='+BRANCH+'&t='+Date.now(),{headers:headers()})
       .then(function(r){
         if(r.status===401||r.status===403) throw new Error('token 失效或沒權限（HTTP '+r.status+'）');
         if(r.status===404) throw new Error('檔案不存在：'+path);
@@ -621,7 +627,7 @@ function openWin(u){
   function ghPut(path, text, message, sha){
     var body={message:message, content:b64enc(text), branch:BRANCH};
     if(sha) body.sha=sha;
-    return fetch('https://api.github.com/repos/'+OWNER+'/'+REPO+'/contents/'+encodeURI(path),{
+    return fetch('https://api.github.com/repos/'+OWNER+'/'+REPO+'/contents/'+ghPath(path),{
       method:'PUT', headers:Object.assign({'Content-Type':'application/json'},headers()), body:JSON.stringify(body)
     }).then(function(r){
       return r.json().catch(function(){return {};}).then(function(d){
