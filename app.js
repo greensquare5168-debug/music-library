@@ -855,14 +855,15 @@ function openWin(u){
     if(document.getElementById('u4-edit-css')) return;
     var s=document.createElement('style'); s.id='u4-edit-css';
     s.textContent=''
-      +'body.u4-editing .album-card h1,body.u4-editing .album-card .albumartist,body.u4-editing .album-card ul.entries li>a,body.u4-editing .album-card ul.entries li>.lbl{outline:2px dashed #9db8e8;outline-offset:3px;border-radius:5px;cursor:text;transition:background .15s}'
+      +'body.u4-editing .album-card h1,body.u4-editing .album-card .albumartist,body.u4-editing .album-card ul.entries li>a,body.u4-editing .album-card ul.entries li>.lbl{outline:none!important;border-radius:5px;cursor:text;transition:background .15s}'
       +'body.u4-editing .album-card h1:hover,body.u4-editing .album-card .albumartist:hover,body.u4-editing .album-card ul.entries li>a:hover,body.u4-editing .album-card ul.entries li>.lbl:hover{background:#f2f7ff}'
       +'body.u4-editing .album-card [contenteditable="true"]:focus{outline:2px solid #2f6feb;background:#fff;box-shadow:0 0 0 3px rgba(47,111,235,.12)}'
       +'body.u4-editing .album-card ul.entries li{position:relative;min-height:22px}'
-      +'body.u4-editing .album-card ul.entries li:has(>a){display:table;border:1px dashed #9db8e8;border-radius:7px;padding:8px 11px;margin:4px 0;background:#fbfdff}'
+      +'body.u4-editing .album-card ul.entries li:has(>a){display:block;padding:8px 11px;margin:2px 0;border-radius:6px;background:transparent}'
+      +'body.u4-editing .album-card ul.entries li:has(>a):hover{background:#f2f7ff}'
       +'body.u4-editing .album-card ul.entries li:has(>a)>a{outline:none!important;cursor:text}'
       +'body.u4-editing .album-card ul.entries li:has(>a)>.lbl{outline:none!important;cursor:text;color:var(--muted)}'
-      +'body.u4-editing .album-card ul.entries li.u4-empty{min-height:34px;background:#fff8f8;border:1px dashed #e8a2a2;border-radius:7px;display:block;padding:8px 11px;cursor:pointer}'
+      +'body.u4-editing .album-card ul.entries li.u4-empty{min-height:30px;background:#fff4f4;border:0;border-left:3px solid #e8a2a2;border-radius:0;display:block;padding:6px 10px;cursor:pointer}'
       +'body.u4-editing .album-card ul.entries li.u4-empty:after{content:"（空框 — 點這裡可刪除）";color:#c26a6a;font-size:12px}'
       +'body.u4-editing .u4-del{position:absolute;right:-6px;top:50%;transform:translateY(-50%);width:22px;height:22px;line-height:1;padding:0;border-radius:50%;border:1px solid #f3c0bb;background:#fff;color:#b42318;font-size:13px;cursor:pointer;display:none}'
       +'body.u4-editing .album-card ul.entries li:hover>.u4-del{display:block}'
@@ -1001,6 +1002,7 @@ function openWin(u){
     return 'img';
   }
   function layoutHide(){
+    if(SEL){ try{ SEL.style.boxShadow=''; }catch(e){} }
     SEL=null;
     if(TOOLS){ TOOLS.remove(); TOOLS=null; }
   }
@@ -1045,7 +1047,8 @@ function openWin(u){
     wide.onclick=function(e){ e.preventDefault(); e.stopPropagation(); layoutResize(el,kind,1,0); };
     TOOLS.appendChild(del);
     if(kind!=='row'){ TOOLS.appendChild(minus); TOOLS.appendChild(plus); TOOLS.appendChild(wide); }
-    el.style.outline='2px solid #2f6feb'; el.style.outlineOffset='2px';
+    el.style.outline='none';
+    el.style.boxShadow='inset 0 0 0 2px rgba(47,111,235,.55)';
     layoutReposition();
   }
   function layoutResize(el,kind,dx,dy){
