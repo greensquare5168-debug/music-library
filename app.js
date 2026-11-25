@@ -690,10 +690,15 @@ function openWin(u){
   function loadRank(){
     if(RANK) return Promise.resolve(RANK);
     if(RANK_P) return RANK_P;
-    RANK_P=fetch(siteRoot()+'site-rank.json?v=20261124')
-      .then(function(r){ return r.ok?r.json():{}; })
-      .then(function(j){ RANK=j||{}; return RANK; })
-      .catch(function(){ RANK={}; return RANK; });
+    RANK_P=(function(){
+      var ctl=(typeof AbortController!=='undefined')?new AbortController():null;
+      var tid=setTimeout(function(){ if(ctl) ctl.abort(); }, 8000); // 8 秒拿不到就放棄，不擋存檔
+      return fetch(siteRoot()+'site-rank.json?v=20261124', ctl?{signal:ctl.signal}:undefined)
+        .then(function(r){ return r.ok?r.json():{}; })
+        .then(function(j){ RANK=j||{}; return RANK; })
+        .catch(function(){ RANK={}; return RANK; })
+        .then(function(j){ clearTimeout(tid); return j; }, function(j){ clearTimeout(tid); return j; });
+    })();
     return RANK_P;
   }
   function rankKey(href){
@@ -974,19 +979,28 @@ function openWin(u){
   }
 
   function doSave(){
-    if(!CUR) return;
-    syncUsageFromDom();
-    var d=readEdits();
-    d.usage=CUR.usage.slice();
-    if(!d.title){ panelMsg('曲名不能空白',false); return; }
-    var items=d.usage.filter(function(u){ return (u.href||'').trim() && (u.title||'').trim(); });
-    var dropped=d.usage.length-items.length;
-    if(dropped>0 && !confirm('有 '+dropped+' 筆沒填連結或標題，會被略過。要繼續嗎？')) return;
-
     var btn=document.getElementById('u4-save');
-    btn.disabled=true; panelMsg('存檔中…',true,60000);
-    var next=applyEdits(CUR.raw,{title:d.title,artist:d.artist},sortUsage(items));
-    ghPut(CUR.rel,next,'編輯模式：'+d.title+'（曲名／作者／使用作品）',CUR.sha).then(function(c1){
+    try{
+      if(!CUR){ panelMsg('還沒讀到這頁資料，請按「完成」再按 ✏️ 重進編輯模式',false,30000); return; }
+      syncUsageFromDom();
+      var d=readEdits();
+      d.usage=CUR.usage.slice();
+      if(!d.title){ panelMsg('曲名不能空白',false); return; }
+      var items=d.usage.filter(function(u){ return (u.href||'').trim() && (u.title||'').trim(); });
+      var dropped=d.usage.length-items.length;
+      if(dropped>0 && !confirm('有 '+dropped+' 筆沒填連結或標題，會被略過。要繼續嗎？')) return;
+    }catch(err){
+      panelMsg('存檔前檢查出錯：'+(err&&err.message||err),false,30000);
+      return;
+    }
+
+    if(btn) btn.disabled=true; panelMsg('存檔中…',true,60000);
+    // 存檔一定要帶 sha，沒有就先抓一次（避免「按了沒反應」）
+    Promise.resolve(CUR.sha?{sha:CUR.sha}:(ghGet(CUR.rel).then(function(f){ CUR.sha=f.sha; CUR.raw=f.text; return f; })))
+    .then(function(){
+      var next=applyEdits(CUR.raw,{title:d.title,artist:d.artist},sortUsage(items));
+      return ghPut(CUR.rel,next,'編輯模式：'+d.title+'（曲名／作者／使用作品）',CUR.sha);
+    }).then(function(c1){
       return saveAlbumMark(CUR.rel, items.length>0).then(function(c2){
         return ghGet(CUR.rel).then(function(f){
           CUR.sha=f.sha; CUR.raw=f.text; CUR.usage=items;
@@ -1006,8 +1020,8 @@ function openWin(u){
         });
       });
     }).catch(function(e){
-      panelMsg('存檔失敗：'+e.message,false,30000);
-    }).then(function(){ btn.disabled=false; });
+      panelMsg('存檔失敗：'+((e&&e.message)||e),false,30000);
+    }).then(function(){ if(btn) btn.disabled=false; });
   }
 
   /* ---------- 點頁面文字就進編輯（站主限定，不用先按 ✏️） ---------- */
