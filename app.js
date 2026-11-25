@@ -1371,8 +1371,10 @@ function openWin(u){
 
   function readEdits(){
     var card=document.querySelector('.album-card');
-    var title=(card.querySelector('h1').textContent||'').trim();
-    var artist=(card.querySelector('.albumartist').textContent||'').trim();
+    if(!card) return {title:'', artist:'', usage:[]};   // 2026-11-25 修：頁面不是專輯卡片時不要爆錯
+    var h1=card.querySelector('h1'), ar=card.querySelector('.albumartist');
+    var title=h1?(h1.textContent||'').trim():'';
+    var artist=ar?(ar.textContent||'').trim():'';
     var ul=entriesUl(), usage=[];
     if(ul){
       Array.prototype.forEach.call(ul.querySelectorAll(':scope > li'), function(li){
@@ -1417,7 +1419,7 @@ function openWin(u){
         if((u.title||'').trim()) return true;
         return !!(u && u._blank);
       });
-      if(!d.title){ panelMsg('曲名不能空白',false); return Promise.reject(new Error('曲名空白')); }
+      if(!d.title && document.querySelector('.album-card h1')){ panelMsg('曲名不能空白',false); return Promise.reject(new Error('曲名空白')); }
       items=d.usage.filter(function(u){ return (u.href||'').trim() && (u.title||'').trim(); });
       var dropped=d.usage.length-items.length;
       if(dropped>0 && !confirm('有 '+dropped+' 筆沒填連結或標題，會被略過。要繼續嗎？')) return Promise.reject(new Error('使用者取消'));
