@@ -861,7 +861,12 @@ function openWin(u){
       +'body.u4-editing .album-card h1:hover,body.u4-editing .album-card .albumartist:hover{background:#f4f8ff}'
       +'body.u4-editing .album-card h1:focus,body.u4-editing .album-card .albumartist:focus{background:transparent;outline:none;box-shadow:none}'
       +'body.u4-editing .album-card [contenteditable=\"true\"]:focus{background:#fff;box-shadow:0 0 0 2px rgba(47,111,235,.35);outline:none;border-radius:6px}'
-      +'body.u4-editing .album-card ul.entries{display:block;background:#fff;border:1px solid #cfd8e3;border-radius:8px;padding:10px 14px;margin:4px 0 14px}'
+      +'body.u4-editing .album-card ul.entries{display:block;background:#fff;border:1px solid #cfd8e3;border-radius:8px;padding:10px 14px;margin:4px 0 8px;cursor:text;max-height:none}'
+      +'body.u4-editing .album-card ul.entries.u4-whole{outline:none}'
+      +'body.u4-editing .album-card ul.entries.u4-whole:focus{border-color:#2f6feb;box-shadow:0 0 0 3px rgba(47,111,235,.10)}'
+      +'body.u4-editing .u4-addline{margin:0 0 14px;font-size:13px;padding:5px 10px;border-radius:7px;border:1px dashed #9fb3cc;background:#fff;color:#456;cursor:pointer}'
+      +'body.u4-editing .u4-addline:hover{background:#f2f7ff;border-color:#2f6feb}'
+      +'body.u4-editing .album-card ul.entries li .u4-del{display:none!important}'
       +'body.u4-editing .album-card ul.entries li>a,body.u4-editing .album-card ul.entries li>.lbl{outline:none!important;cursor:text;border-bottom:0!important}'
       +'body.u4-editing .album-card [contenteditable="true"]:focus{outline:none;background:transparent;border-radius:0;box-shadow:none}'
       +'body.u4-editing .album-card ul.entries li{position:relative;min-height:22px}'
@@ -1154,6 +1159,12 @@ function openWin(u){
         el.removeAttribute('contenteditable'); el.removeAttribute('spellcheck');
       });
       Array.prototype.forEach.call(card.querySelectorAll('.u4-del'),function(b){ b.remove(); });
+      Array.prototype.forEach.call(card.querySelectorAll('.u4-addline'),function(b){ b.remove(); });
+      Array.prototype.forEach.call(card.querySelectorAll('.u4line'),function(sp){
+        if(!sp.textContent.trim() && sp.querySelector('a')) return;
+        Array.prototype.slice.call(sp.childNodes).forEach(function(n){ sp.parentNode.insertBefore(n, sp); });
+        sp.remove();
+      });
     }
     CUR=null; DIRTY=false;
   }
@@ -1195,6 +1206,7 @@ function openWin(u){
     var line=document.createElement('span'); line.className='u4line';
     li.insertBefore(line, a); line.appendChild(a); line.appendChild(sp);
     var del=document.createElement('button');
+    del.setAttribute('contenteditable','false');
     del.className='u4-del'; del.type='button'; del.title='刪掉這筆'; del.textContent='×';
     del.onclick=function(e){
       e.preventDefault(); e.stopPropagation();
@@ -1203,8 +1215,7 @@ function openWin(u){
     };
     li.appendChild(del);
     ul.appendChild(li);
-    makeEditable(line, '整行可直接改（作品＋標記）');
-    a.focus();
+    li.classList.remove('u4-empty');
     return li;
   }
 
@@ -1256,13 +1267,7 @@ function openWin(u){
         if(a && !a.getAttribute('data-keep')){ a.setAttribute('data-keep', a.getAttribute('href')||''); }
         if(!sp){ sp=document.createElement('span'); sp.className='lbl'; li.appendChild(sp); }
         if(!sp.textContent || sp.textContent==='') sp.textContent='';
-        /* 2026-11-25 孝瓏：作品與標記要能一次選取 → 整行包一個可編輯容器 */
-        var line=li.querySelector(':scope > .u4line');
-        if(!line){
-          line=document.createElement('span'); line.className='u4line';
-          li.insertBefore(line, a); line.appendChild(a); line.appendChild(sp);
-        }
-        makeEditable(line, '整行可直接改（作品＋標記）');
+        /* 2026-11-25 孝瓏：要能跨行選取 → 不再逐行 contenteditable，改由整個清單當編輯區 */
         if(!li.querySelector('.u4-del')){
           var del=document.createElement('button');
           del.className='u4-del'; del.type='button'; del.title='刪掉這筆'; del.textContent='×';
@@ -1274,6 +1279,29 @@ function openWin(u){
           li.appendChild(del);
         }
       });
+      /* 2026-11-25 孝瓏：要能跨行選取 → 整個清單當成一個編輯區（像 Word 選多行） */
+      (function(){
+        var ul2=entriesUl(); if(!ul2) return;
+        Array.prototype.forEach.call(ul2.querySelectorAll('[contenteditable]'),function(el){ if(el!==ul2){ el.removeAttribute('contenteditable'); el.removeAttribute('spellcheck'); } });
+        if(!ul2.classList.contains('u4-whole')){
+          ul2.classList.add('u4-whole');
+          ul2.setAttribute('contenteditable','true');
+          ul2.setAttribute('spellcheck','false');
+          ul2.addEventListener('input', function(){ setDirty(true); });
+          ul2.addEventListener('paste', function(e){
+            e.preventDefault();
+            var t=(e.clipboardData||window.clipboardData).getData('text');
+            document.execCommand('insertText', false, t);
+          });
+        }
+        if(!ul2.querySelector('.u4-addline')){
+          var addBtn=document.createElement('button');
+          addBtn.type='button'; addBtn.className='u4-addline'; addBtn.textContent='＋ 新增一行';
+          addBtn.setAttribute('contenteditable','false');
+          addBtn.onclick=function(e){ e.preventDefault(); e.stopPropagation(); addUsageRow('', '', ''); setDirty(true); };
+          ul2.parentNode.insertBefore(addBtn, ul2.nextSibling);
+        }
+      })();
     }
     if(!hasUsage){
       // 目前是「尚未發現使用作品」→ 直接放一列可編輯的空白
@@ -1427,9 +1455,8 @@ function openWin(u){
     try{
       if(document.body.classList.contains('u4-editing')){
         // 編輯模式中：點頁面文字 → 聚焦到那一格
-        var el=e.target.closest&&e.target.closest('.album-card h1, .album-card .albumartist, .album-card ul.entries li > a, .album-card ul.entries li > .lbl');
+        var el=e.target.closest&&e.target.closest('.album-card h1, .album-card .albumartist');
         if(el && el.getAttribute('contenteditable')!=='true' && PANEL){
-          // 尚未被標成可編輯（例如剛載入失敗）→ 補上
           makeEditable(el,'點這裡直接改');
         }
         return;
