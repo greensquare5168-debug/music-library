@@ -1134,9 +1134,9 @@ function openWin(u){
     wide.onclick=function(e){ e.preventDefault(); e.stopPropagation(); layoutResize(el,kind,1,0); };
     /* 2026-11-25 18:09 孝瓏：「接下來要有字大小調節器」 */
     var fsMinus=document.createElement('button');
-    fsMinus.type='button'; fsMinus.textContent='A−';
+    fsMinus.type='button'; fsMinus.textContent='\u2212';
     fsMinus.title='字級縮小';
-    fsMinus.style.cssText='font:700 17px/1 system-ui;width:34px;height:32px;padding:0;border:1px solid #cfd8e3;border-radius:8px;background:#fff;color:#334;cursor:pointer';
+    fsMinus.style.cssText='font:700 19px/1 system-ui;width:34px;height:32px;padding:0;border:1px solid #cfd8e3;border-radius:8px;background:#fff;color:#334;cursor:pointer';
     fsMinus.onclick=function(e){ e.preventDefault(); e.stopPropagation(); layoutFont(el,-1); };
     /* 2026-11-25 18:44 孝瓏：「數字應該要變成可以打的，左右按鈕只要加減號，不要 A」 */
     var fsInfo=document.createElement('input');
@@ -1163,9 +1163,9 @@ function openWin(u){
       fsInfo.value=(fontPx(el))+'';
     });
     var fsPlus=document.createElement('button');
-    fsPlus.type='button'; fsPlus.textContent='A+';
+    fsPlus.type='button'; fsPlus.textContent='+';
     fsPlus.title='字級放大';
-    fsPlus.style.cssText='font:700 17px/1 system-ui;width:34px;height:32px;padding:0;border:1px solid #cfd8e3;border-radius:8px;background:#fff;color:#334;cursor:pointer';
+    fsPlus.style.cssText='font:700 19px/1 system-ui;width:34px;height:32px;padding:0;border:1px solid #cfd8e3;border-radius:8px;background:#fff;color:#334;cursor:pointer';
     fsPlus.onclick=function(e){ e.preventDefault(); e.stopPropagation(); layoutFont(el,1); };
     if(kind!=='block') TOOLS.appendChild(del);   // 大框不給刪（避免整份清單被誤刪）
     if(kind!=='row' && kind!=='block'){ TOOLS.appendChild(minus); TOOLS.appendChild(plus); TOOLS.appendChild(wide); }
