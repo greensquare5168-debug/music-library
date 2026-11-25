@@ -688,8 +688,10 @@ function openWin(u){
   function buildItem(u){
     if(!u.title) return ''; // 清空的列 = 刪掉，不寫回檔案
     var lb=String(u.label||'').trim();
+    if(lb && !/^[（(]/.test(lb)) lb='（'+lb+'）';   // 排版用外層括號（只在檔案裡，編輯時不顯示）
     var lbl=lb?'<span class="lbl">'+escT(lb)+'</span>':'';
-    return '<li><a href="'+esc(u.href)+'">'+escT(u.title)+'</a>'+lbl+'</li>';
+    // 2026-11-25：整行包一個 <a> 感應區（span.u4line），讓整行可以一次選取／編輯
+    return '<li><span class="u4line"><a href="'+esc(u.href)+'">'+escT(u.title)+'</a>'+lbl+'</span></li>';
   }
 
   /* 把「版面工具」的操作寫進 HTML：刪掉的 li / 框整個移除；有改尺寸的補 style */
@@ -701,11 +703,11 @@ function openWin(u){
     Array.prototype.forEach.call(card.querySelectorAll('.ytframe, .srcframe, .srcimg'),function(f){ els.push(f); });
     var ul=card.querySelector('ul.entries');
     if(ul) Array.prototype.slice.call(ul.querySelectorAll(':scope > li')).forEach(function(li){
-      if(li.querySelector(':scope > a')) els.push(li);
+      if(li.querySelector('.u4line > a') || li.querySelector(':scope > a')) els.push(li);
     });
     els.forEach(function(el){
       var sig='';
-      if(el.tagName==='LI'){ var a=el.querySelector(':scope > a'); sig=a?(a.getAttribute('data-keep')||a.getAttribute('href')||''):''; }
+      if(el.tagName==='LI'){ var a=el.querySelector('.u4line > a')||el.querySelector(':scope > a'); sig=a?(a.getAttribute('data-keep')||a.getAttribute('href')||''):''; }
       else { var f=el.querySelector('iframe'); sig=f?(f.getAttribute('src')||''):''; }
       if(!sig) return;
       var kind=layoutKind(el);
@@ -863,12 +865,13 @@ function openWin(u){
       +'body.u4-editing .album-card ul.entries li>a,body.u4-editing .album-card ul.entries li>.lbl{outline:none!important;cursor:text;border-bottom:0!important}'
       +'body.u4-editing .album-card [contenteditable="true"]:focus{outline:none;background:transparent;border-radius:0;box-shadow:none}'
       +'body.u4-editing .album-card ul.entries li{position:relative;min-height:22px}'
-      +'body.u4-editing .album-card ul.entries li:has(>a){display:block;padding:6px 2px;margin:0;border-radius:6px;background:transparent}'
-      +'body.u4-editing .album-card ul.entries li:has(>a):hover{background:#f4f8ff}'
-      +'body.u4-editing .album-card ul.entries li:has(>a)>a{outline:none!important;cursor:text;border-bottom:0!important}'
-      +'body.u4-editing .album-card ul.entries li:has(>a)>.lbl{outline:none!important;cursor:text;color:var(--muted)}'
+      +'body.u4-editing .album-card ul.entries li:has(>a),body.u4-editing .album-card ul.entries li:has(>.u4line){display:block;padding:6px 2px;margin:0;border-radius:6px;background:transparent}'
+      +'body.u4-editing .album-card ul.entries li:has(>a):hover,body.u4-editing .album-card ul.entries li:has(>.u4line):hover{background:#f4f8ff}'
+      +'body.u4-editing .album-card ul.entries li a{outline:none!important;cursor:text;border-bottom:0!important}'
+      +'body.u4-editing .album-card ul.entries li .lbl{outline:none!important;cursor:text;color:var(--muted)}'
       +'body.u4-editing .album-card ul.entries li.u4-empty{min-height:26px;background:#fffbe8;border:0;border-radius:3px;display:block;padding:4px 2px;margin:0;cursor:pointer}'
       +'body.u4-editing .album-card ul.entries li.u4-empty:after{content:"（空框 — 點這裡可刪除）";color:#c26a6a;font-size:12px}'
+      +'ul:not(.u4-line) > li > .u4line{display:inline}'
       +'body.u4-editing .u4-del{position:absolute;right:-6px;top:50%;transform:translateY(-50%);width:22px;height:22px;line-height:1;padding:0;border-radius:50%;border:1px solid #f3c0bb;background:#fff;color:#b42318;font-size:13px;cursor:pointer;display:none}'
       +'body.u4-editing .album-card ul.entries li:hover>.u4-del{display:block}'
       +'#u4-bar{position:fixed;left:50%;transform:translateX(-50%);bottom:18px;z-index:99999;display:flex;align-items:center;gap:10px;background:#fff;border:1px solid #e3e8ee;border-radius:14px;box-shadow:0 10px 30px rgba(15,23,42,.18);padding:10px 14px;font-size:14px;flex-wrap:wrap;max-width:96vw}'
@@ -1189,7 +1192,8 @@ function openWin(u){
     a.textContent=title||'（新的一筆）';
     li.appendChild(a);
     var sp=document.createElement('span'); sp.className='lbl'; sp.textContent=label?'（'+label+'）':'';
-    li.appendChild(sp);
+    var line=document.createElement('span'); line.className='u4line';
+    li.insertBefore(line, a); line.appendChild(a); line.appendChild(sp);
     var del=document.createElement('button');
     del.className='u4-del'; del.type='button'; del.title='刪掉這筆'; del.textContent='×';
     del.onclick=function(e){
@@ -1199,8 +1203,7 @@ function openWin(u){
     };
     li.appendChild(del);
     ul.appendChild(li);
-    makeEditable(a, '可以直接改這段文字（連結不變）');
-    makeEditable(sp, '用括號寫標記，例：（JPX-04 Amusement Park）');
+    makeEditable(line, '整行可直接改（作品＋標記）');
     a.focus();
     return li;
   }
@@ -1229,7 +1232,7 @@ function openWin(u){
     var ul=card.querySelector('ul.entries'); if(!ul) return;
     Array.prototype.slice.call(ul.querySelectorAll(':scope > li')).forEach(function(li){
       if(li.querySelector('.ytframe,.srcframe,.srcimg,.srcwin')) { li.classList.remove('u4-empty'); return; }
-      var a=li.querySelector(':scope > a');
+      var a=li.querySelector('.u4line > a')||li.querySelector(':scope > a');
       var txt=(a?a.textContent:li.textContent||'').trim();
       if(!txt) li.classList.add('u4-empty'); else li.classList.remove('u4-empty');
     });
@@ -1244,16 +1247,22 @@ function openWin(u){
     var ul=entriesUl();
     if(ul){
       var lis=Array.prototype.slice.call(ul.querySelectorAll(':scope > li')).filter(function(li){
-        return li.querySelector(':scope > a');
+        return li.querySelector('.u4line > a') || li.querySelector(':scope > a');
       });
       lis.forEach(function(li){
-        var a=li.querySelector(':scope > a'), sp=li.querySelector(':scope > .lbl');
+        var line=li.querySelector(':scope > .u4line');
+        var a=line?line.querySelector('a'):li.querySelector(':scope > a'), sp=line?line.querySelector('.lbl'):li.querySelector(':scope > .lbl');
         if(a && a.getAttribute('href')==='#new') a.setAttribute('data-u4-new','1');
         if(a && !a.getAttribute('data-keep')){ a.setAttribute('data-keep', a.getAttribute('href')||''); }
-        makeEditable(a, '可以直接改作品名稱（連結不變）');
         if(!sp){ sp=document.createElement('span'); sp.className='lbl'; li.appendChild(sp); }
         if(!sp.textContent || sp.textContent==='') sp.textContent='';
-        makeEditable(sp, '括號標記，可留空');
+        /* 2026-11-25 孝瓏：作品與標記要能一次選取 → 整行包一個可編輯容器 */
+        var line=li.querySelector(':scope > .u4line');
+        if(!line){
+          line=document.createElement('span'); line.className='u4line';
+          li.insertBefore(line, a); line.appendChild(a); line.appendChild(sp);
+        }
+        makeEditable(line, '整行可直接改（作品＋標記）');
         if(!li.querySelector('.u4-del')){
           var del=document.createElement('button');
           del.className='u4-del'; del.type='button'; del.title='刪掉這筆'; del.textContent='×';
@@ -1280,11 +1289,12 @@ function openWin(u){
     var ul=entriesUl(), out=[];
     if(ul){
       Array.prototype.forEach.call(ul.querySelectorAll(':scope > li'), function(li){
-        var a=li.querySelector(':scope > a');
+        var line=li.querySelector(':scope > .u4line');
+        var a=line?line.querySelector('a'):li.querySelector(':scope > a');
         if(!a || /srccap|srcframe|ytframe|blankline/.test(li.className)) return;
         var t=(a.textContent||'').trim();
         var href=a.getAttribute('data-keep')||a.getAttribute('href')||'';
-        var sp=li.querySelector(':scope > .lbl');
+        var sp=line?line.querySelector('.lbl'):li.querySelector(':scope > .lbl');
         var lb=sp?(sp.textContent||'').trim():'';
         /* 2026-11-25 修：外層括號只是排版，不能吃掉使用者打的括號 */
         lb=lb.trim();
@@ -1305,12 +1315,13 @@ function openWin(u){
     var ul=entriesUl(), usage=[];
     if(ul){
       Array.prototype.forEach.call(ul.querySelectorAll(':scope > li'), function(li){
-        var a=li.querySelector(':scope > a');
+        var line=li.querySelector(':scope > .u4line');
+        var a=line?line.querySelector('a'):li.querySelector(':scope > a');
         if(!a || /srccap|srcframe|ytframe|blankline/.test(li.className)) return;
         var t=(a.textContent||'').trim();
         // 2026-11-25 修：清空＝真的刪掉（只有編輯時新增的空列才視為沒填）
         var href=a.getAttribute('data-keep')||a.getAttribute('href')||'';
-        var sp=li.querySelector(':scope > .lbl');
+        var sp=line?line.querySelector('.lbl'):li.querySelector(':scope > .lbl');
         var lb=sp?(sp.textContent||'').trim():'';
         /* 2026-11-25 修：外層括號只是排版，不能吃掉使用者打的括號 */
         lb=lb.trim();
@@ -1369,9 +1380,9 @@ function openWin(u){
           // 存檔後把新連結記回 data-keep，並把 #new 換成正式路徑（下次存檔才不會亂）
           var ul=entriesUl();
           if(ul){
-            var lis=Array.prototype.slice.call(ul.querySelectorAll(':scope > li')).filter(function(li){ return li.querySelector(':scope > a'); });
+            var lis=Array.prototype.slice.call(ul.querySelectorAll(':scope > li')).filter(function(li){ return li.querySelector('.u4line > a') || li.querySelector(':scope > a'); });
             lis.forEach(function(li,i){
-              var a=li.querySelector(':scope > a');
+              var a=li.querySelector('.u4line > a') || li.querySelector(':scope > a');
               if(!a) return;
               var u=items[i];
               if(u && u.href) a.setAttribute('data-keep', u.href);
@@ -1482,7 +1493,7 @@ function openWin(u){
     var ul=card.querySelector('ul.entries');
     if(ul){
       Array.prototype.slice.call(ul.querySelectorAll(':scope > li')).slice(0,20).forEach(function(li){
-        var a=li.querySelector(':scope > a'); if(a) list.push(a);
+        var a=li.querySelector('.u4line > a') || li.querySelector(':scope > a'); if(a) list.push(a);
       });
     }
     return list;
