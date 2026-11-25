@@ -693,6 +693,32 @@ function openWin(u){
   }
 
   /* 把「版面工具」的操作寫進 HTML：刪掉的 li / 框整個移除；有改尺寸的補 style */
+  /* 收集「版面工具」在畫面上的操作（刪除／尺寸），存檔時寫回檔案 */
+  function layoutOps(){
+    var ops=[], card=document.querySelector('.album-card');
+    if(!card) return ops;
+    var els=[];
+    Array.prototype.forEach.call(card.querySelectorAll('.ytframe, .srcframe, .srcimg'),function(f){ els.push(f); });
+    var ul=card.querySelector('ul.entries');
+    if(ul) Array.prototype.slice.call(ul.querySelectorAll(':scope > li')).forEach(function(li){
+      if(li.querySelector(':scope > a')) els.push(li);
+    });
+    els.forEach(function(el){
+      var sig='';
+      if(el.tagName==='LI'){ var a=el.querySelector(':scope > a'); sig=a?(a.getAttribute('data-keep')||a.getAttribute('href')||''):''; }
+      else { var f=el.querySelector('iframe'); sig=f?(f.getAttribute('src')||''):''; }
+      if(!sig) return;
+      var kind=layoutKind(el);
+      var op={sig:sig, kind:kind, cls:String(el.className).split(' ')[0]};
+      if(el.getAttribute('data-u4-del')==='1'){ op.del=true; ops.push(op); return; }
+      if(el.style.height) op.height=parseInt(el.style.height,10)||0;
+      if(el.style.width) op.width=el.style.width;
+      if(el.style.aspectRatio==='auto') op.noAspect=true;
+      if(op.height||op.width||op.noAspect) ops.push(op);
+    });
+    return ops;
+  }
+
   function applyLayout(html, ops){
     var doc=null;
     ops.forEach(function(op){
@@ -881,7 +907,7 @@ function openWin(u){
       +'<span class="msg" id="u4-bar-msg"></span>'
       +'<button class="gh" id="u4-add">＋ 加一筆使用作品</button>'
       +'<label style="display:inline-flex;align-items:center;gap:5px;font-size:13px;color:#334;cursor:pointer;user-select:none"><input type="checkbox" id="u4-meas" style="margin:0;cursor:pointer">顯示尺寸</label>'
-      +'<label style="display:inline-flex;align-items:center;gap:5px;font-size:13px;color:#334;cursor:pointer;user-select:none"><input type="checkbox" id="u4-layout" style="margin:0;cursor:pointer">調整版面</label>'
+
       +'<button id="u4-close">✅ 完成（存檔）</button>';
     if(CUR) bar.querySelector('#u4-close').textContent='💾 儲存修改（未存）';
     document.body.appendChild(bar);
@@ -902,6 +928,7 @@ function openWin(u){
     };
     document.body.classList.add('u4-editing');
 
+    layoutSet(true);
     document.getElementById('u4-close').onclick=function(){
       var b=this; var label=b.textContent;
       if(!DIRTY){ closePanel(); return; }
@@ -927,7 +954,7 @@ function openWin(u){
       loadPanel();
     };
     document.getElementById('u4-meas').onchange=function(e){ measSet(this.checked); };
-    document.getElementById('u4-layout').onchange=function(e){ layoutSet(this.checked); };
+
     window.addEventListener('beforeunload', beforeUnload);
 
     loadPanel();
@@ -941,127 +968,115 @@ function openWin(u){
   }
 
 
-  /* ---------- 🧰 版面工具（2026-11-25 孝瓏：可以刪掉框、調整大小） ----------
-     做法：對「框」（播放框／來源框／使用作品的列）直接操作
-     - 每個框右上角出現工具鈕：🗑 刪除、↕ 高度、⤢ 寬度
-     - 尺寸與刪除都只改「頁面上」，按完成（存檔）才寫回檔案
-     - 存檔時把 style/data 寫進對應 tag，不需另外後端 */
-  var LAYOUT_ON=false, LAYOUT_ST=[];
+  /* ---------- 🧰 版面工具（2026-11-25 孝瓏：點選框的內容，上方就出現 大小／垃圾桶） ----------
+     行為：
+     - 在編輯模式中，點任何「框」（播放框／來源框／作品列）→ 該框上方浮出一條小工具列
+     - 工具列：🗑 刪除、↕ 高度（點 +40，Shift 點 -40）、⤢ 寬度、還有尺寸數字
+     - 刪除／尺寸只改畫面，按「完成」才寫回檔案
+     - 點空白處 → 工具列消失 */
+  var LAYOUT_ON=false, SEL=null, TOOLS=null;
   function layoutSet(on){
     LAYOUT_ON=!!on;
-    if(!LAYOUT_ON){ layoutClear(); return; }
-    layoutPaint();
+    if(!on) layoutHide();
+    if(!LAYOUT_ON){ layoutHide(); window.removeEventListener('scroll', layoutReposition, true); window.removeEventListener('resize', layoutReposition); return; }
     window.addEventListener('scroll', layoutReposition, true);
     window.addEventListener('resize', layoutReposition);
   }
-  function layoutClear(){
-    LAYOUT_ST.forEach(function(o){ if(o.tools&&o.tools.remove) o.tools.remove(); });
-    LAYOUT_ST=[];
-    window.removeEventListener('scroll', layoutReposition, true);
-    window.removeEventListener('resize', layoutReposition);
+  function layoutTargetOf(t){
+    if(!t || !t.closest) return null;
+    var card=t.closest('.album-card'); if(!card) return null;
+    var el=t.closest('.ytframe, .srcframe, .srcimg, ul.entries > li');
+    if(!el) return null;
+    if(el.tagName==='LI' && !el.querySelector(':scope > a') && !el.querySelector('.ytframe,.srcframe,.srcimg')) return null;
+    return el;
   }
-  function layoutOps(){
-    var ops=[];
-    if(!LAYOUT_ST||!LAYOUT_ST.length) return ops;
-    LAYOUT_ST.forEach(function(o){
-      var el=o.el, sig='';
-      if(el.tagName==='LI'){
-        var a=el.querySelector(':scope > a');
-        sig=a?(a.getAttribute('data-keep')||a.getAttribute('href')||''):'';
-      }else{
-        var f=el.querySelector('iframe');
-        sig=f?(f.getAttribute('src')||''):'';
-      }
-      if(!sig) return;
-      var op={sig:sig, kind:el.tagName==='LI'?'row':(el.className.indexOf('ytframe')>=0?'yt':(el.className.indexOf('srcframe')>=0?'src':'img')), cls:el.className.split(' ')[0]};
-      if(el.getAttribute('data-u4-del')==='1'){ op.del=true; ops.push(op); return; }
-      if(el.style.height) op.height=parseInt(el.style.height,10)||0;
-      if(el.style.width) op.width=el.style.width;
-      if(el.style.aspectRatio==='auto') op.noAspect=true;
-      if(op.height||op.width) ops.push(op);
-    });
-    return ops;
+  function layoutKind(el){
+    if(el.tagName==='LI') return el.querySelector('.ytframe')?'yt':(el.querySelector('.srcframe')?'src':'row');
+    if(el.classList.contains('ytframe')) return 'yt';
+    if(el.classList.contains('srcframe')) return 'src';
+    return 'img';
   }
-  function layoutBoxes(){
-    var card=document.querySelector('.album-card'); if(!card) return [];
-    var out=[];
-    var frames=card.querySelectorAll('.ytframe, .srcframe, .srcimg');
-    Array.prototype.forEach.call(frames,function(f){ out.push({el:f,kind:f.className.indexOf('ytframe')>=0?'yt':'src'}); });
-    var ul=card.querySelector('ul.entries'); 
-    if(ul){
-      Array.prototype.slice.call(ul.querySelectorAll(':scope > li')).forEach(function(li){
-        if(li.querySelector(':scope > a')) out.push({el:li,kind:'row'});
-      });
+  function layoutHide(){
+    SEL=null;
+    if(TOOLS){ TOOLS.remove(); TOOLS=null; }
+  }
+  function layoutShow(el){
+    SEL=el;
+    if(!TOOLS){
+      TOOLS=document.createElement('div'); TOOLS.id='u4-laytools';
+      TOOLS.style.cssText='position:fixed;z-index:2147483000;display:flex;align-items:center;gap:6px;background:#111827;color:#fff;padding:5px 7px;border-radius:9px;box-shadow:0 8px 24px rgba(0,0,0,.32);font:12px/1.2 system-ui';
+      document.body.appendChild(TOOLS);
+      TOOLS.addEventListener('click',function(e){ e.stopPropagation(); });
+      TOOLS.addEventListener('mousedown',function(e){ e.stopPropagation(); });
     }
-    return out;
-  }
-  function layoutPaint(){
-    layoutClear();
-    layoutBoxes().forEach(function(b){
-      var el=b.el;
-      el.style.outline='2px solid #2f6feb'; el.style.outlineOffset='3px';
-      var box=document.createElement('div');
-      box.className='u4-laytools';
-      box.style.cssText='position:absolute;z-index:2147483000;display:flex;gap:4px;background:#111827;padding:4px;border-radius:7px;box-shadow:0 4px 14px rgba(0,0,0,.3)';
-      var tag=document.createElement('span');
-      tag.textContent=b.kind==='yt'?'播放框':(b.kind==='src'?'來源框':'作品列');
-      tag.style.cssText='color:#9ca3af;font:11px/1.6 system-ui;padding:0 4px';
-      box.appendChild(tag);
-      var del=document.createElement('button');
-      del.type='button'; del.textContent='🗑';
-      del.title='刪掉這個框（存檔後生效）';
-      del.style.cssText='font:13px/1 system-ui;padding:4px 6px;border:0;border-radius:5px;background:#ef4444;color:#fff;cursor:pointer';
-      del.onclick=function(e){
-        e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation();
-        if(!confirm('刪掉這個'+(b.kind==='row'?'作品列':'框')+'？存檔後就消失。')) return;
-        el.setAttribute('data-u4-del','1'); el.style.display='none'; setDirty(true);
-        layoutPaint();
-      };
-      box.appendChild(del);
-      if(b.kind!=='row'){
-        var h=document.createElement('button');
-        h.type='button'; h.textContent='↕';
-        h.title='點一下把高度增加 40px（按住 Shift 點＝減 40px）';
-        h.style.cssText='font:13px/1 system-ui;padding:4px 6px;border:0;border-radius:5px;background:#2f6feb;color:#fff;cursor:pointer';
-        h.onclick=function(e){
-          e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation();
-          var cur=el.getBoundingClientRect().height;
-          var next=Math.max(80, Math.round(cur + (e.shiftKey?-40:40)));
-          el.style.height=next+'px';
-          if(b.kind==='yt') el.style.aspectRatio='auto';
-          setDirty(true); layoutReposition();
-        };
-        box.appendChild(h);
-        var w=document.createElement('button');
-        w.type='button'; w.textContent='⤢';
-        w.title='點一下切換寬度：滿版 ⇄ 75%（按住 Shift＝60%）';
-        w.style.cssText='font:13px/1 system-ui;padding:4px 6px;border:0;border-radius:5px;background:#2f6feb;color:#fff;cursor:pointer';
-        w.onclick=function(e){
-          e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation();
-          var cur=el.style.width;
-          if(!cur || cur==='100%') el.style.width='75%';
-          else if(cur==='75%') el.style.width=(e.shiftKey?'60%':'100%');
-          else el.style.width='100%';
-          setDirty(true); layoutReposition();
-        };
-        box.appendChild(w);
-      }
-      document.body.appendChild(box);
-      LAYOUT_ST.push({el:el,tools:box});
-    });
+    var kind=layoutKind(el);
+    var name=kind==='yt'?'播放框':(kind==='src'?'來源框':(kind==='img'?'圖片框':'作品列'));
+    var r=el.getBoundingClientRect();
+    var info=(Math.round(r.width*10)/10)+'×'+(Math.round(r.height*10)/10);
+    var html='<span style="color:#9ca3af;font-size:11px">'+name+'</span>'
+      +'<span style="font-family:ui-monospace,Menlo,monospace;font-size:11px;color:#c7d2fe">'+info+'</span>';
+    TOOLS.innerHTML=html;
+    var del=document.createElement('button');
+    del.type='button'; del.textContent='🗑 刪除';
+    del.title='刪掉這個框（按完成才生效）';
+    del.style.cssText='font:12px/1 system-ui;padding:5px 8px;border:0;border-radius:6px;background:#ef4444;color:#fff;cursor:pointer';
+    del.onclick=function(e){ e.preventDefault(); e.stopPropagation();
+      if(!confirm('刪掉這個'+name+'？按「完成」後就消失。')) return;
+      el.style.display='none'; el.setAttribute('data-u4-del','1'); setDirty(true); layoutHide();
+    };
+    var minus=document.createElement('button');
+    minus.type='button'; minus.textContent='↕−';
+    minus.title='高度 -40px';
+    minus.style.cssText='font:12px/1 system-ui;padding:5px 7px;border:0;border-radius:6px;background:#374151;color:#fff;cursor:pointer';
+    minus.onclick=function(e){ e.preventDefault(); e.stopPropagation(); layoutResize(el,kind,0,-40); };
+    var plus=document.createElement('button');
+    plus.type='button'; plus.textContent='↕+';
+    plus.title='高度 +40px';
+    plus.style.cssText='font:12px/1 system-ui;padding:5px 7px;border:0;border-radius:6px;background:#2f6feb;color:#fff;cursor:pointer';
+    plus.onclick=function(e){ e.preventDefault(); e.stopPropagation(); layoutResize(el,kind,0,40); };
+    var wide=document.createElement('button');
+    wide.type='button'; wide.textContent='⤢';
+    wide.title='切換寬度';
+    wide.style.cssText='font:12px/1 system-ui;padding:5px 7px;border:0;border-radius:6px;background:#374151;color:#fff;cursor:pointer';
+    wide.onclick=function(e){ e.preventDefault(); e.stopPropagation(); layoutResize(el,kind,1,0); };
+    TOOLS.appendChild(del);
+    if(kind!=='row'){ TOOLS.appendChild(minus); TOOLS.appendChild(plus); TOOLS.appendChild(wide); }
+    el.style.outline='2px solid #2f6feb'; el.style.outlineOffset='2px';
     layoutReposition();
   }
-  function layoutReposition(){
-    if(!LAYOUT_ON) return;
-    LAYOUT_ST.forEach(function(o){
-      if(o.el.style.display==='none'){ o.tools.style.display='none'; return; }
-      o.tools.style.display='';
-      var r=o.el.getBoundingClientRect();
-      o.tools.style.left=Math.max(4,Math.round(r.right-o.tools.offsetWidth))+'px';
-      o.tools.style.top=Math.max(4,Math.round(r.top-2))+'px';
-      o.tools.style.transform='translateY(-100%)';
-    });
+  function layoutResize(el,kind,dx,dy){
+    var r=el.getBoundingClientRect();
+    if(dy){
+      var next=Math.max(80, Math.round(r.height+dy));
+      el.style.height=next+'px';
+      if(kind==='yt') el.style.aspectRatio='auto';
+    }
+    if(dx){
+      var cur=el.style.width;
+      if(!cur||cur==='100%') el.style.width='75%';
+      else if(cur==='75%') el.style.width='100%';
+      else el.style.width='100%';
+    }
+    setDirty(true);
+    layoutShow(el); // 更新上方數字
   }
+  function layoutReposition(){
+    if(!TOOLS||!SEL) return;
+    if(SEL.style.display==='none'){ layoutHide(); return; }
+    var r=SEL.getBoundingClientRect();
+    TOOLS.style.left=Math.max(6, Math.round(r.left))+'px';
+    TOOLS.style.top=Math.max(6, Math.round(r.top-TOOLS.offsetHeight-8))+'px';
+  }
+  /* 點選框 → 出工具列；點空白 → 收起 */
+  document.addEventListener('click', function(e){
+    if(!LAYOUT_ON || !PANEL) return;
+    if(TOOLS && TOOLS.contains(e.target)) return;
+    if(e.target.closest && e.target.closest('#u4-bar')) return;
+    var el=layoutTargetOf(e.target);
+    if(!el){ layoutHide(); return; }
+    if(el===SEL) return;
+    layoutShow(el);
+  }, true);
 
   /* 工具列可拖曳（2026-11-25 孝瓏：那列會擋到內容） */
   function makeDraggable(bar){
