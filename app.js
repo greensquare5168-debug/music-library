@@ -695,15 +695,22 @@ function openWin(u){
     html=html.replace(/<h1>[\s\S]*?<\/h1>/,'<h1>'+escT(data.title)+'</h1>');
     html=html.replace(/<div class="albumartist">[\s\S]*?<\/div>/,'<div class="albumartist">'+escT(data.artist)+'</div>');
     html=html.replace(/<title>[\s\S]*?<\/title>/,'<title>'+escT(data.title)+' - '+escT(data.artist)+'｜圖書館音樂研究所</title>');
-    var blocks=[], m; RE_UL.lastIndex=0;
-    while((m=RE_UL.exec(html))) blocks.push({index:m.index,end:m.index+m[0].length,inner:m[1]});
-    if(blocks.length){
-      var last=blocks[blocks.length-1];
-      var keep=(last.inner.match(/<li[^>]*>[\s\S]*?<\/li>/g)||[]).filter(function(it){
-        return /srccap|srcframe|ytframe|blankline/.test(it);
-      });
-      var next='<ul class="entries">\n'+keep.concat(usage.map(buildItem).filter(function(x){return x;})).join('\n')+'\n</ul>';
-      html=html.slice(0,last.index)+next+html.slice(last.end);
+    /* 2026-11-25 修「殘留舊框／刪不掉」：
+       每個 ul.entries 分開處理：
+       - 裡面有 ytframe / srcframe / srccap / blankline 的（播放框、來源框）→ 原樣不動
+       - 裡面只有使用作品（<a href>）的 → 整個換成目前畫面的清單 */
+    var uls=[], m; RE_UL.lastIndex=0;
+    while((m=RE_UL.exec(html))) uls.push({index:m.index,end:m.index+m[0].length,inner:m[1]});
+    if(uls.length){
+      var newInner='<ul class="entries">\n'+usage.map(buildItem).filter(function(x){return x;}).join('\n')+'\n</ul>';
+      for(var i=uls.length-1;i>=0;i--){
+        var b=uls[i];
+        var isSpecial=/srccap|srcframe|ytframe|blankline/.test(b.inner);
+        var hasLinks=/<li[^>]*>[\s\S]*?<a href=/.test(b.inner);
+        if(!hasLinks){ continue; }                       // 播放框／來源框等沒有作品的 → 不動
+        // 有作品的清單才整批換新（即使混有 blankline 也一併換，舊空白框不會殘留）
+        html=html.slice(0,b.index)+newInner+html.slice(b.end);
+      }
     }else{
       var ul=usage.length?('<ul class="entries">\n'+usage.map(buildItem).filter(function(x){return x;}).join('\n')+'\n</ul>'):'';
       html=html.replace(/(<div class="albumartist">[\s\S]*?<\/div>)/,'$1'+ul);
