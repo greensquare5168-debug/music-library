@@ -687,7 +687,8 @@ function openWin(u){
   }
   function buildItem(u){
     if(!u.title) return ''; // 清空的列 = 刪掉，不寫回檔案
-    var lbl=u.label?'<span class="lbl">'+escT(u.label)+'</span>':'';
+    var lb=String(u.label||'').trim();
+    var lbl=lb?'<span class="lbl">'+escT(lb)+'</span>':'';
     return '<li><a href="'+esc(u.href)+'">'+escT(u.title)+'</a>'+lbl+'</li>';
   }
   function applyEdits(html, data, usage){
@@ -1075,7 +1076,10 @@ function openWin(u){
         var href=a.getAttribute('data-keep')||a.getAttribute('href')||'';
         var sp=li.querySelector(':scope > .lbl');
         var lb=sp?(sp.textContent||'').trim():'';
-        lb=lb.replace(/^（/,'').replace(/）$/,'').trim();
+        /* 2026-11-25 修：外層括號只是排版，不能吃掉使用者打的括號 */
+        lb=lb.trim();
+        if(lb==='（）'||lb==='()') lb='';
+        if(/^[（(][\s\S]*[）)]$/.test(lb)) lb=lb.slice(1,-1).trim();
         var wasBlank=(a.getAttribute('data-u4-new')==='1'); // 編輯模式中自己加的空列
         if(!t && wasBlank && (!href || href==='#new')) return; // 沒填的新增列 → 略過
         out.push({href:(href==='#new'?'':href), title:t, label:lb});
@@ -1098,7 +1102,10 @@ function openWin(u){
         var href=a.getAttribute('data-keep')||a.getAttribute('href')||'';
         var sp=li.querySelector(':scope > .lbl');
         var lb=sp?(sp.textContent||'').trim():'';
-        lb=lb.replace(/^（/,'').replace(/）$/,'').trim();
+        /* 2026-11-25 修：外層括號只是排版，不能吃掉使用者打的括號 */
+        lb=lb.trim();
+        if(lb==='（）'||lb==='()') lb='';
+        if(/^[（(][\s\S]*[）)]$/.test(lb)) lb=lb.slice(1,-1).trim();
         if(!t && a.getAttribute('data-u4-new')==='1' && (!href||href==='#new')) return;
         usage.push({href:href==='#new'?'':href, title:t, label:lb, _blank:!!(a.getAttribute('data-u4-new')==='1' && (!href||href==='#new'))});
       });
