@@ -755,7 +755,11 @@ function openWin(u){
       +'body.u4-editing .album-card ul.entries li{position:relative}'
       +'body.u4-editing .u4-del{position:absolute;right:-6px;top:50%;transform:translateY(-50%);width:22px;height:22px;line-height:1;padding:0;border-radius:50%;border:1px solid #f3c0bb;background:#fff;color:#b42318;font-size:13px;cursor:pointer;display:none}'
       +'body.u4-editing .album-card ul.entries li:hover>.u4-del{display:block}'
-      +'#u4-bar{position:fixed;left:50%;transform:translateX(-50%);bottom:18px;z-index:99999;display:flex;align-items:center;gap:10px;background:#fff;border:1px solid #e3e8ee;border-radius:14px;box-shadow:0 10px 30px rgba(15,23,42,.18);padding:10px 14px;font-size:14px}'
+      +'#u4-bar{position:fixed;left:50%;transform:translateX(-50%);bottom:18px;z-index:99999;display:flex;align-items:center;gap:10px;background:#fff;border:1px solid #e3e8ee;border-radius:14px;box-shadow:0 10px 30px rgba(15,23,42,.18);padding:10px 14px;font-size:14px;flex-wrap:wrap;max-width:96vw}'
+      +'#u4-bar.dragged{transform:none}'
+      +'#u4-bar .grip{cursor:grab;user-select:none;touch-action:none;font-size:15px;color:#9aa7b8;padding:0 2px;letter-spacing:-1px}'
+      +'#u4-bar .grip:active{cursor:grabbing}'
+      +'#u4-bar .min{font:inherit;font-size:13px;line-height:1;padding:6px 9px;border-radius:8px;border:1px solid #cfd8e3;background:#fff;color:#334;cursor:pointer}'
       +'#u4-bar .msg{font-size:13px;color:#6b7280;max-width:46vw}'
       +'#u4-bar .msg.ok{color:#12894a}'
       +'#u4-bar .msg.err{color:#b42318}'
@@ -789,14 +793,25 @@ function openWin(u){
     css();
     var bar=document.createElement('div'); bar.id='u4-bar';
     bar.innerHTML=''
+      +'<span class="grip" id="u4-grip" title="按住這裡可以拖動整條工具列">⠿⠿</span>'
       +'<span style="font-weight:600">✏️ 編輯模式</span>'
       +'<span class="msg" id="u4-bar-msg"></span>'
       +'<button class="gh" id="u4-add">＋ 加一筆使用作品</button>'
       +'<label style="display:inline-flex;align-items:center;gap:5px;font-size:13px;color:#334;cursor:pointer;user-select:none"><input type="checkbox" id="u4-meas" style="margin:0;cursor:pointer">顯示尺寸</label>'
       +'<button id="u4-save">💾 存檔</button>'
+      +'<button class="mini" id="u4-min" title="收成一顆小圓球，不擋畫面">–</button>'
       +'<button class="gh" id="u4-close">完成</button>';
     document.body.appendChild(bar);
     PANEL=bar;
+    makeDraggable(bar);
+    document.getElementById('u4-min').onclick=function(){
+      bar.style.display='none';
+      var ball=document.createElement('button'); ball.id='u4-ball';
+      ball.textContent='✏️';
+      ball.style.cssText='position:fixed;right:16px;bottom:16px;z-index:99999;width:46px;height:46px;border-radius:50%;border:1px solid #cfd8e3;background:#fff7e6;font-size:19px;cursor:pointer;box-shadow:0 8px 22px rgba(15,23,42,.22)';
+      ball.onclick=function(){ ball.remove(); bar.style.display=''; };
+      document.body.appendChild(ball);
+    };
     document.body.classList.add('u4-editing');
 
     // 2026-11-25 孝瓏：「按完成之後刷新又變回沒改的樣子」→ 完成鍵改成存檔後才關（不再默默丟掉修改）
@@ -815,6 +830,50 @@ function openWin(u){
 
     loadPanel();
   }
+  /* 工具列可拖曳（2026-11-25 孝瓏：那列會擋到內容） */
+  function makeDraggable(bar){
+    var grip=document.getElementById('u4-grip');
+    if(!grip) return;
+    var st=null;
+    grip.addEventListener('pointerdown', function(e){
+      if(e.button!==0&&e.pointerType==='mouse') return;
+      var r=bar.getBoundingClientRect();
+      var key='u4bar-pos';
+      var saved=null; try{ saved=JSON.parse(localStorage.getItem(key)||'null'); }catch(err){}
+      st={dx:e.clientX-r.left, dy:e.clientY-r.top};
+      bar.classList.add('dragged');
+      bar.style.left=r.left+'px'; bar.style.top=r.top+'px';
+      bar.style.right='auto'; bar.style.bottom='auto';
+      try{ grip.setPointerCapture(e.pointerId); }catch(err){}
+      e.preventDefault();
+    });
+    grip.addEventListener('pointermove', function(e){
+      if(!st) return;
+      var r=bar.getBoundingClientRect();
+      var x=Math.min(Math.max(2, e.clientX-st.dx), innerWidth-r.width-2);
+      var y=Math.min(Math.max(2, e.clientY-st.dy), innerHeight-r.height-2);
+      bar.style.left=x+'px'; bar.style.top=y+'px';
+    });
+    function end(e){
+      if(!st) return; st=null;
+      try{ grip.releasePointerCapture(e.pointerId); }catch(err){}
+      var r=bar.getBoundingClientRect();
+      try{ localStorage.setItem('u4bar-pos', JSON.stringify({left:Math.round(r.left),top:Math.round(r.top)})); }catch(err){}
+    }
+    grip.addEventListener('pointerup', end);
+    grip.addEventListener('pointercancel', end);
+    // 回來時記住上次拖到的位置
+    try{
+      var p=JSON.parse(localStorage.getItem('u4bar-pos')||'null');
+      if(p&&typeof p.left==='number'){
+        var w=bar.offsetWidth||360;
+        bar.classList.add('dragged');
+        bar.style.left=Math.min(Math.max(2,p.left), Math.max(2, innerWidth-w-2))+'px';
+        bar.style.top=Math.max(2, Math.min(p.top, innerHeight-60))+'px';
+        bar.style.right='auto'; bar.style.bottom='auto';
+      }
+    }catch(err){}
+  }
   function beforeUnload(e){
     if(!DIRTY) return;
     e.preventDefault(); e.returnValue='有未存的修改，確定要離開嗎？';
@@ -822,6 +881,7 @@ function openWin(u){
   }
   function closePanel(){
     try{ measSet(false); }catch(e){}
+    var ball=document.getElementById('u4-ball'); if(ball) ball.remove();
     if(PANEL){ PANEL.remove(); PANEL=null; }
     document.body.classList.remove('u4-editing');
     window.removeEventListener('beforeunload', beforeUnload);
