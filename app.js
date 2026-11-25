@@ -973,9 +973,13 @@ function openWin(u){
       +'body.u4-editing .u4-del{position:absolute;right:-6px;top:50%;transform:translateY(-50%);width:22px;height:22px;line-height:1;padding:0;border-radius:50%;border:1px solid #f3c0bb;background:#fff;color:#b42318;font-size:13px;cursor:pointer;display:none}'
       +'body.u4-editing .album-card ul.entries li:hover>.u4-del{display:block}'
       /* 2026-11-25 19:09 標題框／橫線 */
-      +'.album-card h2.u4-big,.album-card span.u4-big{display:block;font-size:22px;font-weight:700;color:#2b3648;margin:16px 0 8px;padding:9px 14px;background:#f1f5f9;border:1px solid #e3e8ee;border-radius:8px;line-height:1.4}'
-      +'.album-card h3.u4-small,.album-card span.u4-small{display:block;font-size:17px;font-weight:700;color:#33414f;margin:12px 0 6px;padding:6px 12px;background:#f7f9fb;border:1px solid #e8edf3;border-radius:7px;line-height:1.4}'
-      +'.album-card span.u4-big,.album-card span.u4-small{display:inline;margin:0;padding:1px 6px}'
+      /* 2026-11-25 19:49 孝瓏：「大標題框應該像低年級版的大標題框，灰框白底」
+         → 白底 + 2px 灰藍框（#8fa3bd）+ 圓角 9px + 22px 粗體（比照站上低年級版 .unit） */
+      +'.album-card h2.u4-big,.album-card span.u4-big{display:block;font-size:22px;font-weight:700;color:#2b3648;margin:24px 0 4px;padding:8px 14px;min-height:51px;background:#fff;border:2px solid #8fa3bd;border-radius:9px;letter-spacing:1px;line-height:1.5;box-sizing:border-box}'
+      +'.album-card h3.u4-small,.album-card span.u4-small{display:block;font-size:16px;font-weight:700;color:#2b3648;margin:18px 0 4px;padding:4px 14px;background:#fff;border:2px solid #8fa3bd;border-radius:9px;line-height:1.5;box-sizing:border-box}'
+      +'.album-card span.u4-big,.album-card span.u4-small{display:inline-block;margin:0 2px;padding:0 8px;min-height:0}'
+      /* 2026-11-25 19:49 選取時也看得到灰框（編輯模式） */
+      +'body.u4-editing .album-card h2.u4-big,body.u4-editing .album-card h3.u4-small{background:#fff!important;border:2px solid #8fa3bd!important;color:#2b3648!important}'
       +'.album-card hr.u4-hr{border:0;border-top:2px solid #cfd8e3;margin:14px 0}'
       +'body.u4-editing .album-card div.u4-plain{display:block;font-size:inherit;font-weight:400;color:inherit;background:transparent;border:0;padding:0;margin:0}'
       +'#u4-bar{position:fixed;left:50%;transform:translateX(-50%);bottom:18px;z-index:99999;display:flex;align-items:center;gap:10px;background:#fff;border:1px solid #e3e8ee;border-radius:14px;box-shadow:0 10px 30px rgba(15,23,42,.18);padding:10px 14px;font-size:14px;flex-wrap:wrap;max-width:96vw}'
