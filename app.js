@@ -634,11 +634,22 @@ function openWin(u){
       return r.json().catch(function(){return {};}).then(function(d){
         if(!r.ok){
           var err=new Error('存檔失敗 HTTP '+r.status+'：'+(d.message||''));
-          err.status=r.status; err.retryable=(r.status===403||r.status>=500||r.status===429);
+          err.status=r.status;
+          err.shaMismatch=(r.status===409);                     // 遠端檔案已被改過（sha 不符）
+          err.retryable=(r.status===403||r.status>=500||r.status===429);
           throw err;
         }
         return (d.commit&&d.commit.sha)?d.commit.sha.slice(0,7):'';
       });
+    });
+  }
+  /* 2026-11-25 修 409：存檔瞬間遠端檔案被改過（sha 不符）→ 重抓最新 sha 後再存一次
+     （重抓只為了拿對的 sha；內容一律用「畫面上你正在改的版本」，不會回退你的修改） */
+  function ghPutAuto(path, text, message, sha){
+    return ghPut(path, text, message, sha).catch(function(e){
+      if(!e || !e.shaMismatch) throw e;
+      panelMsg('檔案剛被更新過，正在重新同步後存檔…',true,20000);
+      return ghGet(path).then(function(f){ return ghPut(path, text, message, f.sha); });
     });
   }
   function ghPut(path, text, message, sha){
@@ -1400,7 +1411,7 @@ function openWin(u){
     return Promise.resolve(CUR.sha?{sha:CUR.sha}:(ghGet(CUR.rel).then(function(f){ CUR.sha=f.sha; CUR.raw=f.text; return f; })))
     .then(function(){
       next=applyEdits(CUR.raw,{title:d.title,artist:d.artist},sortUsage(items),layoutOps());
-      return ghPut(CUR.rel,next,'編輯模式：'+d.title+'（曲名／作者／使用作品）',CUR.sha);
+      return ghPutAuto(CUR.rel,next,'編輯模式：'+d.title+'（曲名／作者／使用作品）',CUR.sha);
     }).then(function(c1){
       return saveAlbumMark(CUR.rel, items.length>0).then(function(c2){
         return ghGet(CUR.rel).then(function(f){
