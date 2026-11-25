@@ -787,6 +787,7 @@ function openWin(u){
       +'<span style="font-weight:600">✏️ 編輯模式</span>'
       +'<span class="msg" id="u4-bar-msg"></span>'
       +'<button class="gh" id="u4-add">＋ 加一筆使用作品</button>'
+      +'<button class="gh" id="u4-meas">🔍 量尺寸</button>'
       +'<button id="u4-save">💾 存檔</button>'
       +'<button class="gh" id="u4-close">完成</button>';
     document.body.appendChild(bar);
@@ -801,6 +802,7 @@ function openWin(u){
       closePanel();
     };
     document.getElementById('u4-add').onclick=function(){ addUsageRow('', '（新的一筆）', ''); setDirty(true); };
+    document.getElementById('u4-meas').onclick=function(e){ e.preventDefault(); toggleMeasure(this); };
     document.getElementById('u4-save').onclick=doSave;
     window.addEventListener('beforeunload', beforeUnload);
 
@@ -1094,15 +1096,18 @@ function openWin(u){
     t.style.top=Math.min(y+14, innerHeight-h-8)+'px';
   }
   function measHide(){ if(!LOCKED&&MEAS) MEAS.style.display='none'; }
-  function toggleMeasure(){
+  function toggleMeasure(fromBtn){
     if(document.getElementById('u4-meas-on')){
       var b=document.getElementById('u4-meas-on'); b.remove();
       document.removeEventListener('mousemove', measMove, true);
       document.removeEventListener('click', measClick, true);
-      measHide(); LOCKED=null; return;
+      measHide(); LOCKED=null;
+      if(fromBtn) fromBtn.style.background=''; 
+      return;
     }
+    if(fromBtn) fromBtn.style.background='#fff7e6';
     var btn=document.createElement('div'); btn.id='u4-meas-on';
-    btn.textContent='🔍 量尺寸（滑過元素看數據，點一下鎖住，再點🔍結束）';
+    btn.textContent='🔍 量尺寸中：滑過元素看數據，點一下鎖住，再按🔍結束';
     btn.style.cssText='position:fixed;top:10px;left:50%;transform:translateX(-50%);z-index:2147483646;background:#111827;color:#fff;font:13px/1.4 system-ui;padding:7px 14px;border-radius:999px;pointer-events:none;box-shadow:0 6px 20px rgba(0,0,0,.35)';
     document.body.appendChild(btn);
     document.addEventListener('mousemove', measMove, true);
@@ -1141,15 +1146,7 @@ function openWin(u){
     a.onclick=function(e){ e.preventDefault(); openPanel(); };
     var sp=nav.querySelector('.navsearch');
     if(sp) nav.insertBefore(a,sp); else nav.appendChild(a);
-    // 🔍 量尺寸按鈕（只給站主，不進編輯模式也能用）
-    if(!document.querySelector('.measure-edit')){
-      var mb=document.createElement('a');
-      mb.className='measure-edit'; mb.href='#'; mb.title='🔍 量尺寸（字距／標題框高度）';
-      mb.textContent='🔍';
-      mb.style.cssText='display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:10px;border:1px solid #cfd8e3;background:#fff;text-decoration:none;font-size:15px;line-height:1;margin-left:6px;cursor:pointer';
-      mb.onclick=function(e){ e.preventDefault(); toggleMeasure(); };
-      if(sp && sp.parentNode) sp.parentNode.insertBefore(mb, sp); else nav.appendChild(mb);
-    }
+    // 🔍 量尺寸按鈕已收進編輯模式工具列（2026-11-25 孝瓏：不要分開）
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',add); else add();
 })();
