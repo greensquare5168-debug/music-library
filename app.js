@@ -929,7 +929,11 @@ function openWin(u){
       +'body.u4-editing .album-card ul.entries{display:block;background:#fff;border:1px solid #cfd8e3;border-radius:8px;padding:10px 14px;margin:4px 0 8px;cursor:text;max-height:none}'
       +'body.u4-editing .album-card .u4-block{display:block;background:#fff;border:1px solid #cfd8e3;border-radius:8px;padding:10px 14px;margin:4px 0 8px;cursor:text}'
       +'body.u4-editing .album-card .u4-block:focus{outline:none;border-color:#2f6feb;box-shadow:0 0 0 3px rgba(47,111,235,.10)}'
-      +'body.u4-editing .album-card .u4-block ul.entries{border:0;border-radius:0;padding:0;margin:0;background:transparent}'
+      +'body.u4-editing .album-card .u4-block ul.entries{border:0;border-radius:0;padding:0;margin:0;background:transparent;display:block;list-style:none}'
+      /* 2026-11-25 17:24 孝瓏：「編輯器裡的曲目要連在一起，不是跑位」；大框內所有行連續排列、不分隔 */
+      +'body.u4-editing .album-card .u4-block ul.entries li{display:block!important;padding:2px 2px!important;margin:0!important;border:0!important;border-bottom:0!important;line-height:1.9}'
+      +'body.u4-editing .album-card .u4-block ul.entries li.blankline{height:0;padding:0!important;line-height:0;overflow:hidden}'
+      +'body.u4-editing .album-card .u4-block ul.entries li .u4line,body.u4-editing .album-card .u4-block ul.entries li>.role{display:inline}'
       +'body.u4-editing .album-card ul.entries.u4-whole{outline:none}'
       +'body.u4-editing .album-card ul.entries.u4-whole:focus{border-color:#2f6feb;box-shadow:0 0 0 3px rgba(47,111,235,.10)}'
       +'body.u4-editing .u4-addline{margin:0 0 14px;font-size:13px;padding:5px 10px;border-radius:7px;border:1px dashed #9fb3cc;background:#fff;color:#456;cursor:pointer}'
