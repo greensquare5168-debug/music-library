@@ -1097,7 +1097,7 @@ function openWin(u){
     SEL=el;
     if(!TOOLS){
       TOOLS=document.createElement('div'); TOOLS.id='u4-laytools';
-      TOOLS.style.cssText='position:fixed;z-index:2147483000;display:flex;align-items:center;gap:6px;background:#111827;color:#fff;padding:5px 7px;border-radius:9px;box-shadow:0 8px 24px rgba(0,0,0,.32);font:12px/1.2 system-ui';
+      TOOLS.style.cssText='position:fixed;z-index:2147483000;display:flex;align-items:center;gap:8px;background:#fff;color:#27364a;padding:8px 11px;border:1px solid #e3e8ee;border-radius:12px;box-shadow:0 8px 24px rgba(15,23,42,.16);font:15px/1.3 system-ui';
       document.body.appendChild(TOOLS);
       TOOLS.addEventListener('click',function(e){ e.stopPropagation(); });
       TOOLS.addEventListener('mousedown',function(e){ e.stopPropagation(); });
@@ -1105,14 +1105,14 @@ function openWin(u){
     var kind=layoutKind(el);
     var name=kind==='yt'?'播放框':(kind==='src'?'來源框':(kind==='img'?'圖片框':(kind==='block'?'使用作品清單':'作品列')));
     var r=el.getBoundingClientRect();
+    /* 2026-11-25 18:21 孝瓏：「使用作品清單六字也不要了，幾成幾也不要了」→ 名稱與尺寸不再顯示 */
     var info=(Math.round(r.width*10)/10)+'×'+(Math.round(r.height*10)/10);
-    var html='<span style="color:#9ca3af;font-size:11px">'+name+'</span>'
-      +'<span style="font-family:ui-monospace,Menlo,monospace;font-size:11px;color:#c7d2fe">'+info+'</span>';
+    var html='';
     TOOLS.innerHTML=html;
     var del=document.createElement('button');
     del.type='button'; del.textContent='🗑 刪除';
     del.title='刪掉這個框（按完成才生效）';
-    del.style.cssText='font:12px/1 system-ui;padding:5px 8px;border:0;border-radius:6px;background:#ef4444;color:#fff;cursor:pointer';
+    del.style.cssText='font:14px/1 system-ui;padding:7px 10px;border:1px solid #f3c0bb;border-radius:8px;background:#fff;color:#b42318;cursor:pointer';
     del.onclick=function(e){ e.preventDefault(); e.stopPropagation();
       if(!confirm('刪掉這個'+name+'？按「完成」後就消失。')) return;
       el.style.display='none'; el.setAttribute('data-u4-del','1'); setDirty(true); layoutHide(); try{ markEmptyRows(); }catch(err){}
@@ -1120,32 +1120,32 @@ function openWin(u){
     var minus=document.createElement('button');
     minus.type='button'; minus.textContent='↕−';
     minus.title='高度 -40px';
-    minus.style.cssText='font:12px/1 system-ui;padding:5px 7px;border:0;border-radius:6px;background:#374151;color:#fff;cursor:pointer';
+    minus.style.cssText='font:14px/1 system-ui;padding:7px 9px;border:1px solid #cfd8e3;border-radius:8px;background:#fff;color:#334;cursor:pointer';
     minus.onclick=function(e){ e.preventDefault(); e.stopPropagation(); layoutResize(el,kind,0,-40); };
     var plus=document.createElement('button');
     plus.type='button'; plus.textContent='↕+';
     plus.title='高度 +40px';
-    plus.style.cssText='font:12px/1 system-ui;padding:5px 7px;border:0;border-radius:6px;background:#2f6feb;color:#fff;cursor:pointer';
+    plus.style.cssText='font:14px/1 system-ui;padding:7px 9px;border:1px solid #cfd8e3;border-radius:8px;background:#fff;color:#334;cursor:pointer';
     plus.onclick=function(e){ e.preventDefault(); e.stopPropagation(); layoutResize(el,kind,0,40); };
     var wide=document.createElement('button');
     wide.type='button'; wide.textContent='⤢';
     wide.title='切換寬度';
-    wide.style.cssText='font:12px/1 system-ui;padding:5px 7px;border:0;border-radius:6px;background:#374151;color:#fff;cursor:pointer';
+    wide.style.cssText='font:14px/1 system-ui;padding:7px 9px;border:1px solid #cfd8e3;border-radius:8px;background:#fff;color:#334;cursor:pointer';
     wide.onclick=function(e){ e.preventDefault(); e.stopPropagation(); layoutResize(el,kind,1,0); };
     /* 2026-11-25 18:09 孝瓏：「接下來要有字大小調節器」 */
     var fsMinus=document.createElement('button');
     fsMinus.type='button'; fsMinus.textContent='A−';
     fsMinus.title='字級縮小';
-    fsMinus.style.cssText='font:12px/1 system-ui;padding:5px 7px;border:0;border-radius:6px;background:#374151;color:#fff;cursor:pointer';
+    fsMinus.style.cssText='font:15px/1 system-ui;padding:7px 10px;border:1px solid #cfd8e3;border-radius:8px;background:#fff;color:#334;cursor:pointer';
     fsMinus.onclick=function(e){ e.preventDefault(); e.stopPropagation(); layoutFont(el,-1); };
     var fsInfo=document.createElement('span');
     fsInfo.className='u4-fs';
-    fsInfo.style.cssText='font:11px/1 ui-monospace,Menlo,monospace;color:#c7d2fe;min-width:30px;text-align:center';
+    fsInfo.style.cssText='font:15px/1 ui-monospace,Menlo,monospace;color:#27364a;min-width:30px;text-align:center';
     fsInfo.textContent=(fontPx(el)||'')+'';
     var fsPlus=document.createElement('button');
     fsPlus.type='button'; fsPlus.textContent='A+';
     fsPlus.title='字級放大';
-    fsPlus.style.cssText='font:12px/1 system-ui;padding:5px 7px;border:0;border-radius:6px;background:#2f6feb;color:#fff;cursor:pointer';
+    fsPlus.style.cssText='font:15px/1 system-ui;padding:7px 10px;border:1px solid #2f6feb;border-radius:8px;background:#eef4ff;color:#2f6feb;cursor:pointer';
     fsPlus.onclick=function(e){ e.preventDefault(); e.stopPropagation(); layoutFont(el,1); };
     if(kind!=='block') TOOLS.appendChild(del);   // 大框不給刪（避免整份清單被誤刪）
     if(kind!=='row' && kind!=='block'){ TOOLS.appendChild(minus); TOOLS.appendChild(plus); TOOLS.appendChild(wide); }
