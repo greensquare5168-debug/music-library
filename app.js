@@ -624,17 +624,33 @@ function openWin(u){
       })
       .then(function(d){ return {sha:d.sha, text:b64dec(d.content)}; });
   }
-  function ghPut(path, text, message, sha){
+  /* 存檔（PUT）：GitHub 偶會回 403「The rule did not run because of a timeout」→ 自動重試 3 次（1.5s/4s/8s）*/
+  function ghPutOnce(path, text, message, sha){
     var body={message:message, content:b64enc(text), branch:BRANCH};
     if(sha) body.sha=sha;
     return fetch('https://api.github.com/repos/'+OWNER+'/'+REPO+'/contents/'+ghPath(path),{
       method:'PUT', headers:Object.assign({'Content-Type':'application/json'},headers()), body:JSON.stringify(body)
     }).then(function(r){
       return r.json().catch(function(){return {};}).then(function(d){
-        if(!r.ok) throw new Error('存檔失敗 HTTP '+r.status+'：'+(d.message||''));
+        if(!r.ok){
+          var err=new Error('存檔失敗 HTTP '+r.status+'：'+(d.message||''));
+          err.status=r.status; err.retryable=(r.status===403||r.status>=500||r.status===429);
+          throw err;
+        }
         return (d.commit&&d.commit.sha)?d.commit.sha.slice(0,7):'';
       });
     });
+  }
+  function ghPut(path, text, message, sha){
+    var waits=[1500,4000,8000];
+    function attempt(n){
+      return ghPutOnce(path, text, message, sha).catch(function(e){
+        if(!e.retryable || n>=waits.length){ throw e; }
+        panelMsg('GitHub 忙碌中（第 '+(n+1)+' 次重試，約 '+Math.round(waits[n]/1000)+' 秒後）…',true,12000);
+        return new Promise(function(res){ setTimeout(res, waits[n]); }).then(function(){ return attempt(n+1); });
+      });
+    }
+    return attempt(0);
   }
 
   /* ---------- HTML 工具 ---------- */
