@@ -1209,6 +1209,9 @@ function openWin(u){
     fsPlus.onclick=function(e){ e.preventDefault(); e.stopPropagation(); layoutFont(el,1); };
     if(kind!=='block') TOOLS.appendChild(del);   // 大框不給刪（避免整份清單被誤刪）
     if(kind!=='row' && kind!=='block'){ TOOLS.appendChild(minus); TOOLS.appendChild(plus); TOOLS.appendChild(wide); }
+    /* 2026-11-25 19:32 孝瓏：「選擇標題應該在字大小左邊」 */
+    var blkSel=document.getElementById('u4-blk');
+    if(blkSel) TOOLS.appendChild(blkSel);
     TOOLS.appendChild(fsMinus); TOOLS.appendChild(fsInfo); TOOLS.appendChild(fsPlus);
     el.style.outline='none';
     el.style.boxShadow='none';
