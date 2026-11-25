@@ -1229,6 +1229,8 @@ function openWin(u){
     var card=document.querySelector('.album-card');
     if(card){
       card.classList.remove('u4-grouped');
+      card.classList.remove('u4-whole');
+      card.removeAttribute('contenteditable'); card.removeAttribute('spellcheck');
       Array.prototype.forEach.call(card.querySelectorAll('.u4-block'),function(b){
         while(b.firstChild) b.parentNode.insertBefore(b.firstChild, b);
         b.parentNode.removeChild(b);
@@ -1376,15 +1378,14 @@ function openWin(u){
         var uls=allEntriesUls();
         if(!uls.length) return;
         card.classList.add('u4-grouped');
-        uls.forEach(function(u){
-          Array.prototype.forEach.call(u.querySelectorAll('[contenteditable]'),function(el){ el.removeAttribute('contenteditable'); el.removeAttribute('spellcheck'); });
-          if(u.classList.contains('u4-whole')) return;
-          u.classList.add('u4-whole');
-          u.setAttribute('contenteditable','true');
-          u.setAttribute('spellcheck','false');
-          u.addEventListener('input', function(){ setDirty(true); });
-          /* 貼上要保留連結／格式 → 優先貼 HTML，沒有 HTML 才貼純文字 */
-          u.addEventListener('paste', function(e){
+        /* 2026-11-25 17:36 孝瓏：「又互不相擾了，應該要可以選取一起」
+           多組 ul 各自是獨立編輯區 → 跨組選不到。改成整張卡片一個編輯區（元素原位不動）。 */
+        if(!card.classList.contains('u4-whole')){
+          card.classList.add('u4-whole');
+          card.setAttribute('contenteditable','true');
+          card.setAttribute('spellcheck','false');
+          card.addEventListener('input', function(){ setDirty(true); });
+          card.addEventListener('paste', function(e){
             var cd=e.clipboardData||window.clipboardData;
             var html=cd&&cd.getData?cd.getData('text/html'):'';
             var txt=cd&&cd.getData?cd.getData('text/plain'):'';
@@ -1407,6 +1408,11 @@ function openWin(u){
               return;
             }
           });
+        }
+        uls.forEach(function(u){
+          Array.prototype.forEach.call(u.querySelectorAll('[contenteditable]'),function(el){ el.removeAttribute('contenteditable'); el.removeAttribute('spellcheck'); });
+          u.removeAttribute('contenteditable');
+          u.classList.add('u4-whole');
         });
         /* 「＋ 新增一行」放在最後一組清單後面 */
         var last=uls[uls.length-1];
