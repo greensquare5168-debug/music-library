@@ -927,13 +927,12 @@ function openWin(u){
       +'body.u4-editing .album-card h1:focus,body.u4-editing .album-card .albumartist:focus{background:transparent;outline:none;box-shadow:none}'
       +'body.u4-editing .album-card [contenteditable=\"true\"]:focus{background:#fff;box-shadow:0 0 0 2px rgba(47,111,235,.35);outline:none;border-radius:6px}'
       +'body.u4-editing .album-card ul.entries{display:block;background:#fff;border:1px solid #cfd8e3;border-radius:8px;padding:10px 14px;margin:4px 0 8px;cursor:text;max-height:none}'
-      +'body.u4-editing .album-card .u4-block{display:block;background:#fff;border:1px solid #cfd8e3;border-radius:8px;padding:10px 14px;margin:4px 0 8px;cursor:text}'
-      +'body.u4-editing .album-card .u4-block:focus{outline:none;border-color:#2f6feb;box-shadow:0 0 0 3px rgba(47,111,235,.10)}'
-      +'body.u4-editing .album-card .u4-block ul.entries{border:0;border-radius:0;padding:0;margin:0;background:transparent;display:block;list-style:none}'
-      /* 2026-11-25 17:24 孝瓏：「編輯器裡的曲目要連在一起，不是跑位」；大框內所有行連續排列、不分隔 */
-      +'body.u4-editing .album-card .u4-block ul.entries li{display:block!important;padding:2px 2px!important;margin:0!important;border:0!important;border-bottom:0!important;line-height:1.9}'
-      +'body.u4-editing .album-card .u4-block ul.entries li.blankline{height:0;padding:0!important;line-height:0;overflow:hidden}'
-      +'body.u4-editing .album-card .u4-block ul.entries li .u4line,body.u4-editing .album-card .u4-block ul.entries li>.role{display:inline}'
+      /* 2026-11-25 17:30 多組清單（標題框之間夾著曲目）→ 外觀看起來是同一個大框，內容留在原位 */
+      +'body.u4-editing .album-card.u4-grouped{background:#fff;border:1px solid #cfd8e3;border-radius:8px;padding:10px 14px;margin:4px 0 8px}'
+      +'body.u4-editing .album-card.u4-grouped ul.entries{background:transparent;border:0;border-radius:0;padding:0;margin:0;display:block;list-style:none}'
+      +'body.u4-editing .album-card.u4-grouped ul.entries:focus{outline:none}'
+      +'body.u4-editing .album-card.u4-grouped ul.entries li{display:block!important;padding:2px 2px!important;margin:0!important;border:0!important;line-height:1.9}'
+      +'body.u4-editing .album-card.u4-grouped ul.entries li.blankline{height:0;padding:0!important;line-height:0;overflow:hidden}'
       +'body.u4-editing .album-card ul.entries.u4-whole{outline:none}'
       +'body.u4-editing .album-card ul.entries.u4-whole:focus{border-color:#2f6feb;box-shadow:0 0 0 3px rgba(47,111,235,.10)}'
       +'body.u4-editing .u4-addline{margin:0 0 14px;font-size:13px;padding:5px 10px;border-radius:7px;border:1px dashed #9fb3cc;background:#fff;color:#456;cursor:pointer}'
@@ -1229,8 +1228,14 @@ function openWin(u){
     window.removeEventListener('beforeunload', beforeUnload);
     var card=document.querySelector('.album-card');
     if(card){
+      card.classList.remove('u4-grouped');
+      Array.prototype.forEach.call(card.querySelectorAll('.u4-block'),function(b){
+        while(b.firstChild) b.parentNode.insertBefore(b.firstChild, b);
+        b.parentNode.removeChild(b);
+      });
       Array.prototype.forEach.call(card.querySelectorAll('[contenteditable]'),function(el){
         el.removeAttribute('contenteditable'); el.removeAttribute('spellcheck');
+        el.classList.remove('u4-whole');
       });
       Array.prototype.forEach.call(card.querySelectorAll('.u4-del'),function(b){ b.remove(); });
       Array.prototype.forEach.call(card.querySelectorAll('.u4-addline'),function(b){ b.remove(); });
@@ -1251,7 +1256,7 @@ function openWin(u){
   }
   function entriesUl(){   /* 回傳目前要當編輯區的元素（第一組 ul 或合成 wrapper） */
     var card=document.querySelector('.album-card'); if(!card) return null;
-    return card.querySelector('.u4-block.u4-whole') || card.querySelector('.u4-block') || allEntriesUls()[0] || null;
+    return allEntriesUls()[0] || null;
   }
   function linkArgs(a){
     // 只改文字，href 絕不動：用 data 存原 href，存檔前還原
@@ -1362,26 +1367,24 @@ function openWin(u){
       /* 2026-11-25 孝瓏：要能跨行選取 → 整個清單當成一個編輯區（像 Word 選多行）
          2026-11-25 16:19 追加：「像大頭小狀元，應該都要在同一框，有標題框也是一樣」
          → 一個 .album-card 內可能有多組 ul.entries（每個標題框一組），全部包進同一個 wrapper 大框 */
+      /* 2026-11-25 17:30 孝瓏：「不要編輯模式時所有曲目跑到頂端，應該要在原位」
+         → 不再把所有 ul 搬進 wrapper（搬家會讓曲目聚集）。
+           改成每個 ul 各自 contenteditable，用 CSS 讓整組看起來是同一個大框。 */
       (function(){
-        var wrapper=document.querySelector('.album-card .u4-block');
-        if(!wrapper){
-          var card=document.querySelector('.album-card');
-          var uls=allEntriesUls();
-          if(!card || !uls.length) return;
-          wrapper=document.createElement('div');
-          wrapper.className='u4-block';
-          card.insertBefore(wrapper, uls[0]);
-          uls.forEach(function(u){ wrapper.appendChild(u); });
-        }
-        var ul2=wrapper;
-        Array.prototype.forEach.call(ul2.querySelectorAll('[contenteditable]'),function(el){ if(el!==ul2){ el.removeAttribute('contenteditable'); el.removeAttribute('spellcheck'); } });
-        if(!ul2.classList.contains('u4-whole')){
-          ul2.classList.add('u4-whole');
-          ul2.setAttribute('contenteditable','true');
-          ul2.setAttribute('spellcheck','false');
-          ul2.addEventListener('input', function(){ setDirty(true); });
-          /* 2026-11-25 孝瓏：貼上要保留連結／格式 → 優先貼 HTML，沒有 HTML 才貼純文字 */
-          ul2.addEventListener('paste', function(e){
+        var card=document.querySelector('.album-card');
+        if(!card) return;
+        var uls=allEntriesUls();
+        if(!uls.length) return;
+        card.classList.add('u4-grouped');
+        uls.forEach(function(u){
+          Array.prototype.forEach.call(u.querySelectorAll('[contenteditable]'),function(el){ el.removeAttribute('contenteditable'); el.removeAttribute('spellcheck'); });
+          if(u.classList.contains('u4-whole')) return;
+          u.classList.add('u4-whole');
+          u.setAttribute('contenteditable','true');
+          u.setAttribute('spellcheck','false');
+          u.addEventListener('input', function(){ setDirty(true); });
+          /* 貼上要保留連結／格式 → 優先貼 HTML，沒有 HTML 才貼純文字 */
+          u.addEventListener('paste', function(e){
             var cd=e.clipboardData||window.clipboardData;
             var html=cd&&cd.getData?cd.getData('text/html'):'';
             var txt=cd&&cd.getData?cd.getData('text/plain'):'';
@@ -1403,15 +1406,16 @@ function openWin(u){
               setDirty(true);
               return;
             }
-            // 其他情況（圖片等）→ 交給瀏覽器預設
           });
-        }
-        if(!ul2.querySelector('.u4-addline')){
+        });
+        /* 「＋ 新增一行」放在最後一組清單後面 */
+        var last=uls[uls.length-1];
+        if(last && !document.querySelector('.u4-addline')){
           var addBtn=document.createElement('button');
           addBtn.type='button'; addBtn.className='u4-addline'; addBtn.textContent='＋ 新增一行';
           addBtn.setAttribute('contenteditable','false');
           addBtn.onclick=function(e){ e.preventDefault(); e.stopPropagation(); addUsageRow('', '', ''); setDirty(true); };
-          ul2.parentNode.insertBefore(addBtn, ul2.nextSibling);
+          last.parentNode.insertBefore(addBtn, last.nextSibling);
         }
       })();
     }
@@ -1426,7 +1430,7 @@ function openWin(u){
   // 2026-11-25 修：清空框內文字要「真的刪掉」——只有原始就空白的列才算「尚未填」
   function syncUsageFromDom(){
     if(!CUR) return;
-    var root=entriesUl(), out=[];
+    var root=document.querySelector('.album-card'), out=[];
     if(root){
       /* wrapper(.u4-block) 內所有 ul.entries 的 li 都要讀（使用作品頁有多個標題框） */
       Array.prototype.forEach.call(root.querySelectorAll('li'), function(li){
