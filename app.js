@@ -1301,10 +1301,30 @@ function openWin(u){
           ul2.setAttribute('contenteditable','true');
           ul2.setAttribute('spellcheck','false');
           ul2.addEventListener('input', function(){ setDirty(true); });
+          /* 2026-11-25 孝瓏：貼上要保留連結／格式 → 優先貼 HTML，沒有 HTML 才貼純文字 */
           ul2.addEventListener('paste', function(e){
-            e.preventDefault();
-            var t=(e.clipboardData||window.clipboardData).getData('text');
-            document.execCommand('insertText', false, t);
+            var cd=e.clipboardData||window.clipboardData;
+            var html=cd&&cd.getData?cd.getData('text/html'):'';
+            var txt=cd&&cd.getData?cd.getData('text/plain'):'';
+            if(html && /<a\s/i.test(html)){
+              e.preventDefault();
+              var clean=html
+                .replace(/<\/?(html|body|meta|style|script|head)[^>]*>/gi,'')
+                .replace(/<!--[\s\S]*?-->/g,'')
+                .replace(/\son\w+="[^"]*"/gi,'')
+                .replace(/\sclass="[^"]*"/gi,'')
+                .replace(/style="[^"]*"/gi,'');
+              document.execCommand('insertHTML', false, clean);
+              setDirty(true);
+              return;
+            }
+            if(typeof txt==='string' && txt){
+              e.preventDefault();
+              document.execCommand('insertText', false, txt);
+              setDirty(true);
+              return;
+            }
+            // 其他情況（圖片等）→ 交給瀏覽器預設
           });
         }
         if(!ul2.querySelector('.u4-addline')){
