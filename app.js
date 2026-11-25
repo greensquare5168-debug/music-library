@@ -973,11 +973,11 @@ function openWin(u){
       +'body.u4-editing .u4-del{position:absolute;right:-6px;top:50%;transform:translateY(-50%);width:22px;height:22px;line-height:1;padding:0;border-radius:50%;border:1px solid #f3c0bb;background:#fff;color:#b42318;font-size:13px;cursor:pointer;display:none}'
       +'body.u4-editing .album-card ul.entries li:hover>.u4-del{display:block}'
       /* 2026-11-25 19:09 標題框／橫線 */
-      +'body.u4-editing .album-card h2.u4-big{font-size:22px;font-weight:700;color:#2b3648;margin:16px 0 8px;padding:6px 12px;border-left:5px solid #2f6feb;background:#f4f8ff;border-radius:6px}'
-      +'body.u4-editing .album-card h3.u4-small{font-size:17px;font-weight:700;color:#33414f;margin:12px 0 6px;padding:4px 10px;border-left:3px solid #9fb3cc;background:#f8fafc;border-radius:5px}'
-      +'body.u4-editing .album-card h2.u4-big[style*="inline"]{margin:0;padding:0 6px;background:#eef4ff;border-left:3px solid #2f6feb}'
-      +'body.u4-editing .album-card h3.u4-small[style*="inline"]{margin:0;padding:0 5px;background:#f3f6fa;border-left:2px solid #9fb3cc}'
-      +'body.u4-editing .album-card hr.u4-hr{border:0;border-top:2px solid #cfd8e3;margin:14px 0}'
+      +'.album-card h2.u4-big,.album-card span.u4-big{display:block;font-size:22px;font-weight:700;color:#2b3648;margin:16px 0 8px;padding:9px 14px;background:#f1f5f9;border:1px solid #e3e8ee;border-radius:8px;line-height:1.4}'
+      +'.album-card h3.u4-small,.album-card span.u4-small{display:block;font-size:17px;font-weight:700;color:#33414f;margin:12px 0 6px;padding:6px 12px;background:#f7f9fb;border:1px solid #e8edf3;border-radius:7px;line-height:1.4}'
+      +'.album-card span.u4-big,.album-card span.u4-small{display:inline;margin:0;padding:1px 6px}'
+      +'.album-card hr.u4-hr{border:0;border-top:2px solid #cfd8e3;margin:14px 0}'
+      +'body.u4-editing .album-card div.u4-plain{display:block;font-size:inherit;font-weight:400;color:inherit;background:transparent;border:0;padding:0;margin:0}'
       +'#u4-bar{position:fixed;left:50%;transform:translateX(-50%);bottom:18px;z-index:99999;display:flex;align-items:center;gap:10px;background:#fff;border:1px solid #e3e8ee;border-radius:14px;box-shadow:0 10px 30px rgba(15,23,42,.18);padding:10px 14px;font-size:14px;flex-wrap:wrap;max-width:96vw}'
       +'#u4-bar.dragged{transform:none}'
       +'#u4-bar .grip{cursor:grab;user-select:none;touch-action:none;font-size:15px;color:#9aa7b8;padding:0 2px;letter-spacing:-1px}'
@@ -1026,6 +1026,7 @@ function openWin(u){
       +'<label style="display:inline-flex;align-items:center;gap:5px;font-size:13px;color:#334;cursor:pointer;user-select:none"><input type="checkbox" id="u4-meas" style="margin:0;cursor:pointer">顯示尺寸</label>'
       +'<select id="u4-blk" title="把「目前選取的那一行」變成標題或橫線（要先選取文字）" style="font:inherit;font-size:13px;padding:7px 9px;border-radius:8px;border:1px solid #cfd8e3;background:#fff;color:#27364a;cursor:pointer">'
       +'  <option value="">選擇標題…</option>'
+      +'  <option value="p">一般文字</option>'
       +'  <option value="h1">大標題框</option>'
       +'  <option value="h2">小標題框</option>'
       +'  <option value="hr">橫線</option>'
@@ -1303,6 +1304,18 @@ function openWin(u){
     var range=sel.getRangeAt(0);
     if(!card.contains(range.commonAncestorContainer)) return false;
     try{ setDirty(true); }catch(e){}
+    /* 2026-11-25 19:38 孝瓏：「忘加一般文字了」→ 把標題變回一般文字（去掉灰框／大字） */
+    if(kind==='p'){
+      var pe=range.commonAncestorContainer; if(pe.nodeType===3) pe=pe.parentNode;
+      var ttl=pe&&pe.closest?pe.closest('h2.u4-big,h3.u4-small,div.u4-plain,span.u4-big,span.u4-small'):null;
+      if(!ttl) return false;
+      var pd=document.createElement('div');
+      pd.className='u4-plain';
+      while(ttl.firstChild) pd.appendChild(ttl.firstChild);
+      if(!(pd.textContent||'').trim()){ ttl.remove(); return true; }
+      ttl.parentNode.replaceChild(pd, ttl);
+      return true;
+    }
     if(kind==='hr'){
       var host=range.commonAncestorContainer;
       if(host.nodeType===3) host=host.parentNode;
