@@ -796,6 +796,7 @@ function openWin(u){
     var bar=document.createElement('div'); bar.id='u4-bar';
     bar.innerHTML=''
       +'<span class="grip" id="u4-grip" title="按住這裡可以拖動整條工具列">⠿⠿</span>'
+      +'<button class="gh" id="u4-token" title="貼上新的 GitHub token" style="display:none;border-color:#f0c36d;background:#fff7e6;color:#8a5a00">🔑 重新設定 token</button>'
       +'<span style="font-weight:600">✏️ 編輯模式</span>'
       +'<span class="msg" id="u4-bar-msg"></span>'
       +'<button class="gh" id="u4-add">＋ 加一筆使用作品</button>'
@@ -831,6 +832,18 @@ function openWin(u){
       });
     };
     document.getElementById('u4-add').onclick=function(){ addUsageRow('', '（新的一筆）', ''); setDirty(true); };
+    document.getElementById('u4-token').onclick=function(){
+      var oldV=''; try{ oldV=localStorage.getItem(TOKEN_KEY)||''; }catch(e){}
+      var v=prompt('請貼上新的 GitHub token（在彈出視窗按 Ctrl+V 貼上，按確定）\n\n如果剛換過，舊的：'+(oldV?oldV.slice(0,6)+'…':'（沒有）')+'', '');
+      if(v===null) return;
+      v=v.trim();
+      if(!v){ panelMsg('沒貼到內容，token 沒變更',false,8000); return; }
+      if(v.indexOf(' ')>=0 || v.length<20){ panelMsg('貼上的內容看起來不像 token（有空白或太短）→ 請重新複製再貼',false,30000); return; }
+      try{ localStorage.setItem(TOKEN_KEY, v); }catch(e){}
+      this.style.display='none';
+      panelMsg('✅ 已換上新 token，重新讀取…',true,8000);
+      loadPanel();
+    };
     document.getElementById('u4-meas').onchange=function(e){ measSet(this.checked); };
     window.addEventListener('beforeunload', beforeUnload);
 
@@ -963,9 +976,9 @@ function openWin(u){
     }).catch(function(e){
       var m=String(e&&e.message||'');
       if(/HTTP (401|403)/.test(m)){
-        panelMsg('讀取失敗：GitHub token 失效或沒權限（HTTP '+m.replace(/[^0-9]/g,'')+'）→ 按這裡重新貼 token',false,0);
-        var box=document.getElementById('u4-bar-msg');
-        if(box){ box.style.cursor='pointer'; box.style.textDecoration='underline'; box.onclick=function(){ box.onclick=null; box.style.cursor=''; box.style.textDecoration=''; try{localStorage.removeItem(TOKEN_KEY);}catch(err){} if(askToken()) loadPanel(); }; }
+        panelMsg('讀取失敗：token 失效或沒權限（HTTP '+m.replace(/[^0-9]/g,'')+'）→ 按左邊「🔑 重新設定 token」',false,0);
+        var tb=document.getElementById('u4-token');
+        if(tb) tb.style.display='';
       } else panelMsg('讀取失敗：'+m,false,30000);
     });
   }
