@@ -858,7 +858,12 @@ function openWin(u){
       +'body.u4-editing .album-card h1,body.u4-editing .album-card .albumartist,body.u4-editing .album-card ul.entries li>a,body.u4-editing .album-card ul.entries li>.lbl{outline:2px dashed #9db8e8;outline-offset:3px;border-radius:5px;cursor:text;transition:background .15s}'
       +'body.u4-editing .album-card h1:hover,body.u4-editing .album-card .albumartist:hover,body.u4-editing .album-card ul.entries li>a:hover,body.u4-editing .album-card ul.entries li>.lbl:hover{background:#f2f7ff}'
       +'body.u4-editing .album-card [contenteditable="true"]:focus{outline:2px solid #2f6feb;background:#fff;box-shadow:0 0 0 3px rgba(47,111,235,.12)}'
-      +'body.u4-editing .album-card ul.entries li{position:relative}'
+      +'body.u4-editing .album-card ul.entries li{position:relative;min-height:22px}'
+      +'body.u4-editing .album-card ul.entries li:has(>a){display:table;border:1px dashed #9db8e8;border-radius:7px;padding:8px 11px;margin:4px 0;background:#fbfdff}'
+      +'body.u4-editing .album-card ul.entries li:has(>a)>a{outline:none!important;cursor:text}'
+      +'body.u4-editing .album-card ul.entries li:has(>a)>.lbl{outline:none!important;cursor:text;color:var(--muted)}'
+      +'body.u4-editing .album-card ul.entries li.u4-empty{min-height:34px;background:#fff8f8;border:1px dashed #e8a2a2;border-radius:7px;display:block;padding:8px 11px;cursor:pointer}'
+      +'body.u4-editing .album-card ul.entries li.u4-empty:after{content:"（空框 — 點這裡可刪除）";color:#c26a6a;font-size:12px}'
       +'body.u4-editing .u4-del{position:absolute;right:-6px;top:50%;transform:translateY(-50%);width:22px;height:22px;line-height:1;padding:0;border-radius:50%;border:1px solid #f3c0bb;background:#fff;color:#b42318;font-size:13px;cursor:pointer;display:none}'
       +'body.u4-editing .album-card ul.entries li:hover>.u4-del{display:block}'
       +'#u4-bar{position:fixed;left:50%;transform:translateX(-50%);bottom:18px;z-index:99999;display:flex;align-items:center;gap:10px;background:#fff;border:1px solid #e3e8ee;border-radius:14px;box-shadow:0 10px 30px rgba(15,23,42,.18);padding:10px 14px;font-size:14px;flex-wrap:wrap;max-width:96vw}'
@@ -985,10 +990,9 @@ function openWin(u){
   function layoutTargetOf(t){
     if(!t || !t.closest) return null;
     var card=t.closest('.album-card'); if(!card) return null;
-    var el=t.closest('.ytframe, .srcframe, .srcimg, ul.entries > li');
+    var el=t.closest('.ytframe, .srcframe, .srcimg, .srcwin, ul.entries > li');
     if(!el) return null;
-    if(el.tagName==='LI' && !el.querySelector(':scope > a') && !el.querySelector('.ytframe,.srcframe,.srcimg')) return null;
-    return el;
+    return el;   // 空框、播放框的 li 也都可以選（2026-11-25 孝瓏：點不到無字的空框）
   }
   function layoutKind(el){
     if(el.tagName==='LI') return el.querySelector('.ytframe')?'yt':(el.querySelector('.srcframe')?'src':'row');
@@ -1022,7 +1026,7 @@ function openWin(u){
     del.style.cssText='font:12px/1 system-ui;padding:5px 8px;border:0;border-radius:6px;background:#ef4444;color:#fff;cursor:pointer';
     del.onclick=function(e){ e.preventDefault(); e.stopPropagation();
       if(!confirm('刪掉這個'+name+'？按「完成」後就消失。')) return;
-      el.style.display='none'; el.setAttribute('data-u4-del','1'); setDirty(true); layoutHide();
+      el.style.display='none'; el.setAttribute('data-u4-del','1'); setDirty(true); layoutHide(); try{ markEmptyRows(); }catch(err){}
     };
     var minus=document.createElement('button');
     minus.type='button'; minus.textContent='↕−';
@@ -1213,9 +1217,20 @@ function openWin(u){
     });
   }
 
+  function markEmptyRows(){
+    var card=document.querySelector('.album-card'); if(!card) return;
+    var ul=card.querySelector('ul.entries'); if(!ul) return;
+    Array.prototype.slice.call(ul.querySelectorAll(':scope > li')).forEach(function(li){
+      if(li.querySelector('.ytframe,.srcframe,.srcimg,.srcwin')) { li.classList.remove('u4-empty'); return; }
+      var a=li.querySelector(':scope > a');
+      var txt=(a?a.textContent:li.textContent||'').trim();
+      if(!txt) li.classList.add('u4-empty'); else li.classList.remove('u4-empty');
+    });
+  }
   function paintEditable(hasUsage){
     var card=document.querySelector('.album-card');
     if(!card) return;
+    try{ markEmptyRows(); }catch(e){}
     var h1=card.querySelector('h1'), ar=card.querySelector('.albumartist');
     makeEditable(h1, '直接點這裡改曲名');
     makeEditable(ar, '直接點這裡改作者');
