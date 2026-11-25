@@ -751,6 +751,7 @@ function openWin(u){
       var kind=layoutKind(el);
       var op={sig:sig, kind:kind, cls:String(el.className).split(' ')[0]};
       if(el.getAttribute('data-u4-del')==='1'){ op.del=true; ops.push(op); return; }
+      if(el.getAttribute('data-u4-fs')) op.fs=parseInt(el.getAttribute('data-u4-fs'),10)||0;
       if(el.style.height) op.height=parseInt(el.style.height,10)||0;
       if(el.style.width) op.width=el.style.width;
       if(el.style.aspectRatio==='auto') op.noAspect=true;
@@ -775,13 +776,14 @@ function openWin(u){
         html=html.replace(re,'');
         return;
       }
-      if(op.sig && (op.height||op.width)){
+      if(op.sig && (op.height||op.width||op.fs)){
         var esig=op.sig.replace(/[.*+?^${}()|[\\]\\\\]/g,'\\\\$&');
         var re2=new RegExp('(<(div|li)[^>]*?(?=[^>]*'+esig+')[^>]*?)(>)','m');
         var styleParts=[];
         if(op.height) styleParts.push('height:'+op.height+'px');
         if(op.width) styleParts.push('width:'+op.width);
         if(op.noAspect) styleParts.push('aspect-ratio:auto');
+        if(op.fs) styleParts.push('font-size:'+op.fs+'px');
         if(!styleParts.length) return;
         html=html.replace(re2, function(all,head,tn,close){
           var add=styleParts.join(';');
@@ -1130,12 +1132,53 @@ function openWin(u){
     wide.title='切換寬度';
     wide.style.cssText='font:12px/1 system-ui;padding:5px 7px;border:0;border-radius:6px;background:#374151;color:#fff;cursor:pointer';
     wide.onclick=function(e){ e.preventDefault(); e.stopPropagation(); layoutResize(el,kind,1,0); };
+    /* 2026-11-25 18:09 孝瓏：「接下來要有字大小調節器」 */
+    var fsMinus=document.createElement('button');
+    fsMinus.type='button'; fsMinus.textContent='A−';
+    fsMinus.title='字級縮小';
+    fsMinus.style.cssText='font:12px/1 system-ui;padding:5px 7px;border:0;border-radius:6px;background:#374151;color:#fff;cursor:pointer';
+    fsMinus.onclick=function(e){ e.preventDefault(); e.stopPropagation(); layoutFont(el,-1); };
+    var fsInfo=document.createElement('span');
+    fsInfo.className='u4-fs';
+    fsInfo.style.cssText='font:11px/1 ui-monospace,Menlo,monospace;color:#c7d2fe;min-width:30px;text-align:center';
+    fsInfo.textContent=(fontPx(el)||'')+'';
+    var fsPlus=document.createElement('button');
+    fsPlus.type='button'; fsPlus.textContent='A+';
+    fsPlus.title='字級放大';
+    fsPlus.style.cssText='font:12px/1 system-ui;padding:5px 7px;border:0;border-radius:6px;background:#2f6feb;color:#fff;cursor:pointer';
+    fsPlus.onclick=function(e){ e.preventDefault(); e.stopPropagation(); layoutFont(el,1); };
     if(kind!=='block') TOOLS.appendChild(del);   // 大框不給刪（避免整份清單被誤刪）
     if(kind!=='row' && kind!=='block'){ TOOLS.appendChild(minus); TOOLS.appendChild(plus); TOOLS.appendChild(wide); }
+    TOOLS.appendChild(fsMinus); TOOLS.appendChild(fsInfo); TOOLS.appendChild(fsPlus);
     el.style.outline='none';
     el.style.boxShadow='none';
     layoutReposition();
   }
+
+  /* 2026-11-25 18:09 孝瓏：字大小調節器
+     對「點到的元素」（作品行 / 清單 / 播放框）套 font-size，直接寫進 style，存檔時一併記進 HTML */
+  function fontPx(el){
+    if(!el) return '';
+    var v=el.style&&el.style.fontSize;
+    if(v) return parseInt(v,10)||'';
+    try{ return Math.round(parseFloat(getComputedStyle(el).fontSize))||''; }catch(e){ return ''; }
+  }
+  function layoutFont(el,delta){
+    if(!el) return;
+    var cur=fontPx(el)||15;
+    var next=Math.min(48, Math.max(10, Math.round(cur+delta*2)));
+    if(el.tagName==='LI'){ el.setAttribute('data-u4-fs', next); el.style.fontSize=next+'px';
+      Array.prototype.forEach.call(el.querySelectorAll('a,.lbl'),function(x){ x.style.fontSize=next+'px'; });
+    } else if(el.tagName==='UL'){
+      el.setAttribute('data-u4-fs', next); el.style.fontSize=next+'px';
+      Array.prototype.forEach.call(el.querySelectorAll('li,a,.lbl'),function(x){ x.style.fontSize=next+'px'; });
+    } else {
+      el.setAttribute('data-u4-fs', next); el.style.fontSize=next+'px';
+    }
+    var info=TOOLS&&TOOLS.querySelector('.u4-fs'); if(info) info.textContent=next;
+    setDirty(true); layoutShow(el);
+  }
+
   function layoutResize(el,kind,dx,dy){
     var r=el.getBoundingClientRect();
     if(dy){
