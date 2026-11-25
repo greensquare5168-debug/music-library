@@ -565,14 +565,11 @@ function openWin(u){
   window.addEventListener('focus', add);
 })();
 
-/* ---------- 站主聊天框（2026-11-18）：只有「已登入 Supabase」的訪客才載入 ---------- */
+/* ---------- 站主聊天框（2026-11-18）：2026-11-25 孝瓏「右下角跟U4說也不要了」→ 停用（勿再啟用） ---------- */
 (function () {
   try {
-    var has = false;
-    for (var i = 0; i < localStorage.length; i++) {
-      var k = localStorage.key(i) || '';
-      if (k.indexOf('sb-') === 0 && k.slice(-11) === '-auth-token') { has = true; break; }
-    }
+    var has = false;          /* 2026-11-25 再次確認：停用右下角聊天球 */
+    try{ document.querySelectorAll('#u4chat-btn,#u4chat-panel').forEach(function(b){ b.remove(); }); }catch(e){}
     if (has) import('/music-library/chat-owner.js').catch(function () {});
   } catch (e) {}
 })();
@@ -624,23 +621,26 @@ function openWin(u){
     var email=sbEmail();
     if(!email) return;                       // 訪客：不加
     if(document.querySelector('.pencil-edit')) return;
-    var nav=document.querySelector('header .topnav');
-    if(!nav) nav=document.querySelector('header');
-    if(!nav) return;
+    /* 2026-11-25 孝瓏：「編輯按鈕要放右下角（原本跟U4說的位置）」→ 固定在右下角 */
     var a=document.createElement('a');
     a.className='pencil-edit';
     a.href=editUrl();
     a.target='_blank';
     a.rel='noopener';
-    a.title='編輯這一頁（GitHub）';
+    a.title='✏️ 編輯這一頁';
     a.textContent='✏️';
-    a.style.cssText='display:inline-flex;align-items:center;justify-content:center;'
-      +'width:34px;height:34px;border-radius:10px;border:1px solid #cfd8e3;background:#fff;'
-      +'text-decoration:none;font-size:16px;line-height:1;margin-left:6px';
-    a.onmouseover=function(){a.style.background='#eef3fb';};
-    a.onmouseout=function(){a.style.background='#fff';};
-    var sp=nav.querySelector('.navsearch');
-    if(sp) nav.insertBefore(a,sp); else nav.appendChild(a);
+    a.style.cssText='position:fixed;right:20px;bottom:20px;z-index:9998;display:flex;'
+      +'align-items:center;justify-content:center;width:56px;height:56px;border-radius:50%;'
+      +'border:0;cursor:pointer;background:linear-gradient(135deg,#f6c667,#eaa63c);color:#5a3d00;'
+      +'font-size:24px;line-height:1;box-shadow:0 8px 24px rgba(20,40,90,.28);'
+      +'text-decoration:none;transition:transform .12s';
+    a.onmouseover=function(){a.style.transform='translateY(-2px)';};
+    a.onmouseout=function(){a.style.transform='';};
+    document.body.appendChild(a);
+    try{ document.querySelectorAll('#u4chat-btn,#u4chat-panel').forEach(function(b){ b.remove(); }); }catch(e){}
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',add); else add();
+  /* 登入態可能晚到 → 補畫幾次 */
+  [200,800,2000].forEach(function(t){ setTimeout(add,t); });
+  window.addEventListener('focus', add);
 })();
