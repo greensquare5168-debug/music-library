@@ -871,7 +871,7 @@ function openWin(u){
       +'body.u4-editing .album-card [contenteditable="true"]:focus{outline:none;background:transparent;border-radius:0;box-shadow:none}'
       +'body.u4-editing .album-card ul.entries li{position:relative;min-height:22px}'
       +'body.u4-editing .album-card ul.entries li:has(>a),body.u4-editing .album-card ul.entries li:has(>.u4line){display:block;padding:6px 2px;margin:0;border-radius:6px;background:transparent}'
-      +'body.u4-editing .album-card ul.entries li:has(>a):hover,body.u4-editing .album-card ul.entries li:has(>.u4line):hover{background:#f4f8ff}'
+      +'body.u4-editing .album-card ul.entries li:hover{background:transparent!important}'
       +'body.u4-editing .album-card ul.entries li a{outline:none!important;cursor:text;border-bottom:0!important}'
       +'body.u4-editing .album-card ul.entries li .lbl{outline:none!important;cursor:text;color:var(--muted)}'
       +'body.u4-editing .album-card ul.entries li.u4-empty{min-height:26px;background:#fffbe8;border:0;border-radius:3px;display:block;padding:4px 2px;margin:0;cursor:pointer}'
