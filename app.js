@@ -1008,6 +1008,9 @@ function openWin(u){
     if(!t || !t.closest) return false;
     return !!t.closest('.album-card h1, .album-card .albumartist, .album-card ul.entries li > a, .album-card ul.entries li > .lbl');
   }
+  function isPencilClick(t){
+    return !!(t.closest && t.closest('.pencil-edit'));
+  }
   function tryInlineEdit(t){
     if(!isEditableTarget(t)) return;
     if(document.body.classList.contains('u4-editing')){
@@ -1036,7 +1039,9 @@ function openWin(u){
         return;
       }
       if(!e.target.closest || e.target.closest('#u4-bar')) return;
-      tryInlineEdit(e.target);
+      if(isPencilClick(e.target)) return; // 鉛筆按鈕自己處理（不要彈兩次確認）
+      // 2026-11-25 孝瓏：平常點連結/文字不要問要不要編輯 → 只有按 ✏️ 才進編輯模式
+      return;
     }catch(err){}
   }, true);
 
