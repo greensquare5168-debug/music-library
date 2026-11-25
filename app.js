@@ -972,6 +972,12 @@ function openWin(u){
       +'ul:not(.u4-line) > li > .u4line{display:inline}'
       +'body.u4-editing .u4-del{position:absolute;right:-6px;top:50%;transform:translateY(-50%);width:22px;height:22px;line-height:1;padding:0;border-radius:50%;border:1px solid #f3c0bb;background:#fff;color:#b42318;font-size:13px;cursor:pointer;display:none}'
       +'body.u4-editing .album-card ul.entries li:hover>.u4-del{display:block}'
+      /* 2026-11-25 19:09 標題框／橫線 */
+      +'body.u4-editing .album-card h2.u4-big{font-size:22px;font-weight:700;color:#2b3648;margin:16px 0 8px;padding:6px 12px;border-left:5px solid #2f6feb;background:#f4f8ff;border-radius:6px}'
+      +'body.u4-editing .album-card h3.u4-small{font-size:17px;font-weight:700;color:#33414f;margin:12px 0 6px;padding:4px 10px;border-left:3px solid #9fb3cc;background:#f8fafc;border-radius:5px}'
+      +'body.u4-editing .album-card h2.u4-big[style*="inline"]{margin:0;padding:0 6px;background:#eef4ff;border-left:3px solid #2f6feb}'
+      +'body.u4-editing .album-card h3.u4-small[style*="inline"]{margin:0;padding:0 5px;background:#f3f6fa;border-left:2px solid #9fb3cc}'
+      +'body.u4-editing .album-card hr.u4-hr{border:0;border-top:2px solid #cfd8e3;margin:14px 0}'
       +'#u4-bar{position:fixed;left:50%;transform:translateX(-50%);bottom:18px;z-index:99999;display:flex;align-items:center;gap:10px;background:#fff;border:1px solid #e3e8ee;border-radius:14px;box-shadow:0 10px 30px rgba(15,23,42,.18);padding:10px 14px;font-size:14px;flex-wrap:wrap;max-width:96vw}'
       +'#u4-bar.dragged{transform:none}'
       +'#u4-bar .grip{cursor:grab;user-select:none;touch-action:none;font-size:15px;color:#9aa7b8;padding:0 2px;letter-spacing:-1px}'
@@ -1018,6 +1024,12 @@ function openWin(u){
       +'<span class="msg" id="u4-bar-msg"></span>'
       +'<button class="gh" id="u4-add">＋ 加一筆使用作品</button>'
       +'<label style="display:inline-flex;align-items:center;gap:5px;font-size:13px;color:#334;cursor:pointer;user-select:none"><input type="checkbox" id="u4-meas" style="margin:0;cursor:pointer">顯示尺寸</label>'
+      +'<select id="u4-blk" title="把「目前選取的那一行」變成標題或橫線（要先選取文字）" style="font:inherit;font-size:13px;padding:7px 9px;border-radius:8px;border:1px solid #cfd8e3;background:#fff;color:#27364a;cursor:pointer">'
+      +'  <option value="">選擇標題…</option>'
+      +'  <option value="h1">大標題框</option>'
+      +'  <option value="h2">小標題框</option>'
+      +'  <option value="hr">橫線</option>'
+      +'</select>'
 
       +'<button id="u4-close">✅ 完成（存檔）</button>';
     if(CUR) bar.querySelector('#u4-close').textContent='💾 儲存修改（未存）';
@@ -1065,6 +1077,14 @@ function openWin(u){
       loadPanel();
     };
     document.getElementById('u4-meas').onchange=function(e){ measSet(this.checked); };
+    /* 2026-11-25 19:09 孝瓏：「接下來選擇標題的部分，大標題框、小標題框、橫線」 */
+    document.getElementById('u4-blk').onchange=function(e){
+      var v=this.value; this.value='';
+      if(!v) return;
+      var ok=blockFormat(v);
+      if(!ok) panelMsg('先選取要變成標題的那段文字（或那一整行）再選',false,8000);
+      else panelMsg('✅ 已套用（按「完成」才寫回網站）',true,5000);
+    };
 
     window.addEventListener('beforeunload', beforeUnload);
 
@@ -1266,6 +1286,68 @@ function openWin(u){
       var info0=TOOLS&&TOOLS.querySelector('.u4-fs'); if(info0) info0.value=String(next);
     }
     return;
+  }
+
+  /* 2026-11-25 19:09 孝瓏：「大標題框／小標題框／橫線」
+     規則：先選取文字（或整行）→ 選單選一種 → 只改「選取到的那段」
+     - 大標題框 / 小標題框：把那一段包成 <h2 class="u4-big"><span>...</span></h2> 或 <h3 class="u4-small">
+     - 橫線：在選取的那一行後面插入 <hr class="u4-hr">
+     - 取消（再選同一種）→ 還原成一般文字 */
+  function blockFormat(kind){
+    var sel=window.getSelection && window.getSelection();
+    if(!sel || sel.rangeCount===0) return false;
+    var card=document.querySelector('.album-card'); if(!card) return false;
+    var range=sel.getRangeAt(0);
+    if(!card.contains(range.commonAncestorContainer)) return false;
+    try{ setDirty(true); }catch(e){}
+    if(kind==='hr'){
+      var host=range.commonAncestorContainer;
+      if(host.nodeType===3) host=host.parentNode;
+      var lineEl=host.closest?host.closest('li,div.unit,h2.u4-big,h3.u4-small,p'):null;
+      if(!lineEl || !card.contains(lineEl)) return false;
+      var nx=lineEl.nextElementSibling;
+      if(nx && nx.tagName==='HR' && nx.classList.contains('u4-hr')){ nx.remove(); return true; }
+      var hr=document.createElement('hr');
+      hr.className='u4-hr';
+      hr.setAttribute('contenteditable','false');
+      lineEl.parentNode.insertBefore(hr, lineEl.nextSibling);
+      return true;
+    }
+    var tag = kind==='h1' ? 'h2' : 'h3';
+    var cls = kind==='h1' ? 'u4-big' : 'u4-small';
+    /* 先把選取內容抽出來（可能是文字節點的一小段，也可能跨節點） */
+    var frag=range.cloneContents();
+    /* 1) 已經是同型標題 → 取消（還原成一般文字） */
+    var anc=range.startContainer; var e=(anc.nodeType===1)?anc:anc.parentNode;
+    var cur=e&&e.closest?e.closest('h2.u4-big,h3.u4-small'):null;
+    if(cur && cur.tagName===tag.toUpperCase()){
+      var p=document.createElement('div'); p.className='u4-plain';
+      while(cur.firstChild) p.appendChild(cur.firstChild);
+      cur.parentNode.replaceChild(p, cur);
+      return true;
+    }
+    /* 2) 選取範圍「在一個作品列裡」（只有部分文字）→ 包成行內的大/小標題樣式 */
+    var li=e&&e.closest?e.closest('li'):null;
+    var wrapEl=null;
+    if(li && card.contains(li) && !e.closest('h2.u4-big,h3.u4-small')){
+      wrapEl=document.createElement(tag);
+      wrapEl.className=cls;
+      wrapEl.style.display='inline';
+      try{ wrapEl.appendChild(range.extractContents()); range.insertNode(wrapEl); }catch(err){ return false; }
+      var rg=document.createRange(); rg.selectNodeContents(wrapEl); sel.removeAllRanges(); sel.addRange(rg);
+      return true;
+    }
+    /* 3) 選取整行 → 把整個 li / div.unit 換成標題元素（文字保留） */
+    var lineEl2=e&&e.closest?e.closest('li,div.unit,p'):null;
+    if(lineEl2 && card.contains(lineEl2)){
+      var tagEl=document.createElement(tag);
+      tagEl.className=cls;
+      tagEl.textContent=(lineEl2.textContent||'').trim();
+      lineEl2.parentNode.replaceChild(tagEl, lineEl2);
+      var rg2=document.createRange(); rg2.selectNodeContents(tagEl); sel.removeAllRanges(); sel.addRange(rg2);
+      return true;
+    }
+    return false;
   }
 
   function layoutResize(el,kind,dx,dy){
