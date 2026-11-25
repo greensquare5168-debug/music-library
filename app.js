@@ -799,12 +799,14 @@ function openWin(u){
     PANEL=bar;
     document.body.classList.add('u4-editing');
 
+    // 2026-11-25 孝瓏：「按完成之後刷新又變回沒改的樣子」→ 完成鍵改成存檔後才關（不再默默丟掉修改）
     document.getElementById('u4-close').onclick=function(){
-      if(DIRTY){
-        if(!confirm('有未存的修改，離開會消失。要先存檔嗎？（按「取消」留下繼續編輯）')) return;
-        DIRTY=false;
-      }
-      closePanel();
+      if(!DIRTY){ closePanel(); return; }
+      if(!confirm('有還沒存的修改，現在幫你存檔再關閉，好嗎？\n（按「取消」留在這頁繼續改）')) return;
+      doSave().then(function(ok){
+        if(ok) closePanel();
+        else alert('存檔沒成功（原因寫在底部那行紅字）→ 修改還在，先別關掉，把那行字截圖給我。');
+      });
     };
     document.getElementById('u4-add').onclick=function(){ addUsageRow('', '（新的一筆）', ''); setDirty(true); };
     document.getElementById('u4-meas').onclick=function(e){ e.preventDefault(); toggleMeasure(this); };
@@ -980,25 +982,29 @@ function openWin(u){
 
   function doSave(){
     var btn=document.getElementById('u4-save');
+    var items, d, next;
     try{
-      if(!CUR){ panelMsg('還沒讀到這頁資料，請按「完成」再按 ✏️ 重進編輯模式',false,30000); return; }
+      if(!CUR){
+        panelMsg('還沒讀到這頁資料，請按「完成」再按 ✏️ 重進編輯模式',false,30000);
+        return Promise.reject(new Error('尚未讀到頁面資料'));
+      }
       syncUsageFromDom();
-      var d=readEdits();
+      d=readEdits();
       d.usage=CUR.usage.slice();
-      if(!d.title){ panelMsg('曲名不能空白',false); return; }
-      var items=d.usage.filter(function(u){ return (u.href||'').trim() && (u.title||'').trim(); });
+      if(!d.title){ panelMsg('曲名不能空白',false); return Promise.reject(new Error('曲名空白')); }
+      items=d.usage.filter(function(u){ return (u.href||'').trim() && (u.title||'').trim(); });
       var dropped=d.usage.length-items.length;
-      if(dropped>0 && !confirm('有 '+dropped+' 筆沒填連結或標題，會被略過。要繼續嗎？')) return;
+      if(dropped>0 && !confirm('有 '+dropped+' 筆沒填連結或標題，會被略過。要繼續嗎？')) return Promise.reject(new Error('使用者取消'));
     }catch(err){
       panelMsg('存檔前檢查出錯：'+(err&&err.message||err),false,30000);
-      return;
+      return Promise.reject(err);
     }
 
-    if(btn) btn.disabled=true; panelMsg('存檔中…',true,60000);
+    if(btn) btn.disabled=true; panelMsg('存檔中…（約 5–15 秒）',true,60000);
     // 存檔一定要帶 sha，沒有就先抓一次（避免「按了沒反應」）
-    Promise.resolve(CUR.sha?{sha:CUR.sha}:(ghGet(CUR.rel).then(function(f){ CUR.sha=f.sha; CUR.raw=f.text; return f; })))
+    return Promise.resolve(CUR.sha?{sha:CUR.sha}:(ghGet(CUR.rel).then(function(f){ CUR.sha=f.sha; CUR.raw=f.text; return f; })))
     .then(function(){
-      var next=applyEdits(CUR.raw,{title:d.title,artist:d.artist},sortUsage(items));
+      next=applyEdits(CUR.raw,{title:d.title,artist:d.artist},sortUsage(items));
       return ghPut(CUR.rel,next,'編輯模式：'+d.title+'（曲名／作者／使用作品）',CUR.sha);
     }).then(function(c1){
       return saveAlbumMark(CUR.rel, items.length>0).then(function(c2){
@@ -1019,9 +1025,11 @@ function openWin(u){
           panelMsg('✅ 已上線（版本 '+(c1||'—')+(c2?'／專輯 ✓ '+c2:'')+'）· 約 2 分鐘後網站更新',true,20000);
         });
       });
-    }).catch(function(e){
+    }).then(function(){ if(btn) btn.disabled=false; return true; }, function(e){
       panelMsg('存檔失敗：'+((e&&e.message)||e),false,30000);
-    }).then(function(){ if(btn) btn.disabled=false; });
+      if(btn) btn.disabled=false;
+      throw e;
+    });
   }
 
   /* ---------- 點頁面文字就進編輯（站主限定，不用先按 ✏️） ---------- */
