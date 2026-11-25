@@ -743,7 +743,7 @@ function openWin(u){
   }
 
   /* ---------- 就地編輯模式（不彈面板：直接在頁面文字上改） ---------- */
-  var CUR=null, DIRTY=false, PANEL=null;
+  var CUR=null, DIRTY=false, PANEL=null, MEAS_ON=false;
 
   function css(){
     if(document.getElementById('u4-edit-css')) return;
@@ -792,7 +792,7 @@ function openWin(u){
       +'<span style="font-weight:600">✏️ 編輯模式</span>'
       +'<span class="msg" id="u4-bar-msg"></span>'
       +'<button class="gh" id="u4-add">＋ 加一筆使用作品</button>'
-      +'<button class="gh" id="u4-meas">🔍 量尺寸</button>'
+      +'<label style="display:inline-flex;align-items:center;gap:5px;font-size:13px;color:#334;cursor:pointer;user-select:none"><input type="checkbox" id="u4-meas" style="margin:0;cursor:pointer">顯示尺寸</label>'
       +'<button id="u4-save">💾 存檔</button>'
       +'<button class="gh" id="u4-close">完成</button>';
     document.body.appendChild(bar);
@@ -809,7 +809,7 @@ function openWin(u){
       });
     };
     document.getElementById('u4-add').onclick=function(){ addUsageRow('', '（新的一筆）', ''); setDirty(true); };
-    document.getElementById('u4-meas').onclick=function(e){ e.preventDefault(); toggleMeasure(this); };
+    document.getElementById('u4-meas').onchange=function(e){ measSet(this.checked); };
     document.getElementById('u4-save').onclick=doSave;
     window.addEventListener('beforeunload', beforeUnload);
 
@@ -821,6 +821,7 @@ function openWin(u){
     return e.returnValue;
   }
   function closePanel(){
+    try{ measSet(false); }catch(e){}
     if(PANEL){ PANEL.remove(); PANEL=null; }
     document.body.classList.remove('u4-editing');
     window.removeEventListener('beforeunload', beforeUnload);
@@ -894,7 +895,12 @@ function openWin(u){
       setDirty(false);
       panelMsg('', true, 1);
     }).catch(function(e){
-      panelMsg('讀取失敗：'+e.message,false,30000);
+      var m=String(e&&e.message||'');
+      if(/HTTP (401|403)/.test(m)){
+        panelMsg('讀取失敗：GitHub token 失效或沒權限（HTTP '+m.replace(/[^0-9]/g,'')+'）→ 按這裡重新貼 token',false,0);
+        var box=document.getElementById('u4-bar-msg');
+        if(box){ box.style.cursor='pointer'; box.style.textDecoration='underline'; box.onclick=function(){ box.onclick=null; box.style.cursor=''; box.style.textDecoration=''; try{localStorage.removeItem(TOKEN_KEY);}catch(err){} if(askToken()) loadPanel(); }; }
+      } else panelMsg('讀取失敗：'+m,false,30000);
     });
   }
 
@@ -1075,7 +1081,7 @@ function openWin(u){
   }, true);
 
   /* ---------- 🔍 量尺寸（字距／標題框高度…）：滑鼠移到元素上就顯示，點一下鎖住 ---------- */
-  var MEAS=null, LOCKED=null;
+  var MEAS=null, LOCKED=null, LABELS=[], PAINT_T=null;
   function px(v){ var n=parseFloat(v); return isNaN(n)?v:(Math.round(n*10)/10+'px'); }
   function q(node, sel){ return node.querySelector(sel); }
   function infoOf(el){
@@ -1118,7 +1124,47 @@ function openWin(u){
     t.style.top=Math.min(y+14, innerHeight-h-8)+'px';
   }
   function measHide(){ if(!LOCKED&&MEAS) MEAS.style.display='none'; }
+  /* 版面上的常駐尺寸標註（2026-11-25 孝瓏：尺寸要顯示在版面上，不是加按鈕） */
+  function measTargets(){
+    var card=document.querySelector('.album-card');
+    if(!card) return [];
+    var list=[card.querySelector('h1'), card.querySelector('.albumartist')].filter(Boolean);
+    var ul=card.querySelector('ul.entries');
+    if(ul){
+      Array.prototype.slice.call(ul.querySelectorAll(':scope > li')).slice(0,20).forEach(function(li){
+        var a=li.querySelector(':scope > a'); if(a) list.push(a);
+      });
+    }
+    return list;
+  }
+  function measPaint(){
+    measClear();
+    measTargets().forEach(function(el){
+      var r=el.getBoundingClientRect(), cs=getComputedStyle(el);
+      if(!r.height||r.width<2) return;
+      var tag=document.createElement('span');
+      tag.className='u4-meas-tag';
+      tag.textContent=Math.round(r.height*10)/10+'×'+Math.round(r.width*10)/10+'　字'+parseFloat(cs.fontSize).toFixed(1)+'　行'+((parseFloat(cs.lineHeight)||0)/parseFloat(cs.fontSize)||0).toFixed(2);
+      tag.style.cssText='position:fixed;left:'+Math.round(r.left)+'px;top:'+Math.round(r.top-15)+'px;z-index:99998;pointer-events:none;background:#111827;color:#fff;font:10px/1.35 ui-monospace,Menlo,Consolas,monospace;padding:1px 5px;border-radius:4px;opacity:.92;white-space:nowrap';
+      document.body.appendChild(tag); LABELS.push(tag);
+      el.style.outline='1px dashed rgba(47,111,235,.75)'; el.style.outlineOffset='2px';
+      LABELS.push({el:el});
+    });
+  }
+  function measClear(){
+    LABELS.forEach(function(o){ if(o&&o.el){ o.el.style.outline=''; o.el.style.outlineOffset=''; } else if(o&&o.remove) o.remove(); });
+    LABELS=[];
+    var t=document.getElementById('u4-meas'); if(t) t.style.display='none';
+  }
+  function measSet(on){
+    MEAS_ON=!!on;
+    if(PAINT_T){clearInterval(PAINT_T);PAINT_T=null;}
+    if(MEAS_ON){ measPaint(); window.addEventListener('scroll', measPaint, true); window.addEventListener('resize', measPaint); }
+    else { window.removeEventListener('scroll', measPaint, true); window.removeEventListener('resize', measPaint); measClear(); }
+    if(MEAS_ON) PAINT_T=setInterval(measPaint, 1200);
+  }
   function toggleMeasure(fromBtn){
+    if(fromBtn && fromBtn.type==='checkbox') return measSet(fromBtn.checked);
     if(document.getElementById('u4-meas-on')){
       var b=document.getElementById('u4-meas-on'); b.remove();
       document.removeEventListener('mousemove', measMove, true);
