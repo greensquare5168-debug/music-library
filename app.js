@@ -798,13 +798,15 @@ function openWin(u){
       +'<span class="msg" id="u4-bar-msg"></span>'
       +'<button class="gh" id="u4-add">＋ 加一筆使用作品</button>'
       +'<label style="display:inline-flex;align-items:center;gap:5px;font-size:13px;color:#334;cursor:pointer;user-select:none"><input type="checkbox" id="u4-meas" style="margin:0;cursor:pointer">顯示尺寸</label>'
-      +'<button id="u4-save">💾 存檔</button>'
-      +'<button class="mini" id="u4-min" title="收成一顆小圓球，不擋畫面">–</button>'
-      +'<button class="gh" id="u4-close">完成</button>';
+      +'<button id="u4-close">✅ 完成（存檔）</button>';
     document.body.appendChild(bar);
     PANEL=bar;
     makeDraggable(bar);
-    document.getElementById('u4-min').onclick=function(){
+    var miniBtn=document.createElement('button');
+    miniBtn.className='mini'; miniBtn.id='u4-min'; miniBtn.title='收成一顆小圓球，不擋畫面'; miniBtn.textContent='–';
+    var closeBtn=document.getElementById('u4-close');
+    closeBtn.parentNode.insertBefore(miniBtn, closeBtn);
+    miniBtn.onclick=function(){
       bar.style.display='none';
       var ball=document.createElement('button'); ball.id='u4-ball';
       ball.textContent='✏️';
@@ -814,18 +816,17 @@ function openWin(u){
     };
     document.body.classList.add('u4-editing');
 
-    // 2026-11-25 孝瓏：「按完成之後刷新又變回沒改的樣子」→ 完成鍵改成存檔後才關（不再默默丟掉修改）
     document.getElementById('u4-close').onclick=function(){
       if(!DIRTY){ closePanel(); return; }
-      if(!confirm('有還沒存的修改，現在幫你存檔再關閉，好嗎？\n（按「取消」留在這頁繼續改）')) return;
+      var b=this; b.disabled=true; b.textContent='儲存中…';
       doSave().then(function(ok){
-        if(ok) closePanel();
-        else alert('存檔沒成功（原因寫在底部那行紅字）→ 修改還在，先別關掉，把那行字截圖給我。');
+        b.disabled=false; b.textContent='✅ 完成（存檔）';
+        if(ok){ closePanel(); }
+        else alert('存檔沒成功（原因寫在工具列紅字）→ 修改還在，先別關掉，把那行字截圖給我。');
       });
     };
     document.getElementById('u4-add').onclick=function(){ addUsageRow('', '（新的一筆）', ''); setDirty(true); };
     document.getElementById('u4-meas').onchange=function(e){ measSet(this.checked); };
-    document.getElementById('u4-save').onclick=doSave;
     window.addEventListener('beforeunload', beforeUnload);
 
     loadPanel();
@@ -1047,7 +1048,7 @@ function openWin(u){
   }
 
   function doSave(){
-    var btn=document.getElementById('u4-save');
+    var btn=document.getElementById('u4-close');
     var items, d, next;
     try{
       if(!CUR){
