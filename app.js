@@ -256,7 +256,24 @@ function openWin(u){
       if(node.h){
         var a=document.createElement('a'); a.href=linkBase+node.h; a.textContent=label; a.title=node.n;
         if(absOf(node.h)===curAbs || (window.__kmtCurHref && node.h===window.__kmtCurHref)) a.className='curlink';
+        // 2026-11-25 孝瓏：品牌/專輯節點帶 yt 徽章（tree-lib 節點有 b:'yt'/'ytdots' 才顯示）
+        if(node.b){
+          var _bd=document.createElement('span'); _bd.className='tbadge';
+          if(node.b==='ytdots'){
+            _bd.title='YouTube 尚未上線，曲目頁連結為 DL 官網';
+            _bd.innerHTML='<img src="'+base+'assets/ytdots.png" alt="YouTube（尚未上線）" style="display:block;max-width:15px;max-height:13px;width:auto;height:auto">';
+          }else{
+            _bd.title='YouTube';
+            _bd.innerHTML='<img src="'+base+'assets/yt-logo.png" alt="YouTube" style="display:block;max-width:16px;max-height:13px;width:auto;height:auto">';
+          }
+          var _bs=_bd.style;
+          _bs.display='inline-flex'; _bs.alignItems='center'; _bs.justifyContent='center';
+          _bs.width='20px'; _bs.height='13px'; _bs.marginLeft='5px'; _bs.flex='0 0 20px';
+          _bs.position='relative'; _bs.verticalAlign='middle'; _bs.lineHeight='0';
+          a.appendChild(_bd);
+        }
         li.appendChild(a);
+        try{ a.style.display='inline-flex'; a.style.alignItems='center'; }catch(e){}
       }else{
         var sp=document.createElement('span'); sp.className='dh'; sp.textContent=label; sp.title=node.n; li.appendChild(sp);
       }
@@ -366,7 +383,7 @@ function openWin(u){
     if(pathIsLib){
       // 音樂圖書館：改用 tree-lib.json（品牌 → 專輯 → 曲目）
       linkBase=base+'罐頭音樂研究所/圖書館音樂/';
-      fetch(base+'tree-lib.json?v=20261127a',{cache:'no-store'}).then(function(r){return r.json();}).then(function(t){
+      fetch(base+'tree-lib.json?v=20261128a',{cache:'no-store'}).then(function(r){return r.json();}).then(function(t){
         if(!build(t)) treeReady();
       }).catch(function(){ treeReady(); });
     }else{
