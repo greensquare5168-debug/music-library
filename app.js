@@ -771,6 +771,8 @@ function openWin(u){
   }
   function setDirty(v){
     DIRTY=v;
+    var b=document.getElementById('u4-close');
+    if(b && !b.disabled) b.textContent=v?'💾 儲存修改（未存）':(CUR?'✅ 完成':'✅ 完成（存檔）');
     var d=document.getElementById('u4-bar-msg');
     if(d && v) d.textContent='（有未存的修改）';
   }
@@ -799,6 +801,7 @@ function openWin(u){
       +'<button class="gh" id="u4-add">＋ 加一筆使用作品</button>'
       +'<label style="display:inline-flex;align-items:center;gap:5px;font-size:13px;color:#334;cursor:pointer;user-select:none"><input type="checkbox" id="u4-meas" style="margin:0;cursor:pointer">顯示尺寸</label>'
       +'<button id="u4-close">✅ 完成（存檔）</button>';
+    if(CUR) bar.querySelector('#u4-close').textContent='💾 儲存修改（未存）';
     document.body.appendChild(bar);
     PANEL=bar;
     makeDraggable(bar);
@@ -817,10 +820,12 @@ function openWin(u){
     document.body.classList.add('u4-editing');
 
     document.getElementById('u4-close').onclick=function(){
+      var b=this; var label=b.textContent;
       if(!DIRTY){ closePanel(); return; }
-      var b=this; b.disabled=true; b.textContent='儲存中…';
+      if(CUR===null){ CUR={rel:repoPath(), sha:null, raw:null, usage:[]}; } // 沒讀到也讓它試存（會先抓 sha）
+      b.disabled=true; b.textContent='儲存中…';
       doSave().then(function(ok){
-        b.disabled=false; b.textContent='✅ 完成（存檔）';
+        b.disabled=false; b.textContent=label;
         if(ok){ closePanel(); }
         else alert('存檔沒成功（原因寫在工具列紅字）→ 修改還在，先別關掉，把那行字截圖給我。');
       });
@@ -1052,10 +1057,14 @@ function openWin(u){
     var items, d, next;
     try{
       if(!CUR){
-        panelMsg('還沒讀到這頁資料，請按「完成」再按 ✏️ 重進編輯模式',false,30000);
-        return Promise.reject(new Error('尚未讀到頁面資料'));
+        CUR={rel:repoPath(), sha:null, raw:null, usage:[]};
       }
-      syncUsageFromDom();
+      if(!CUR.raw && !CUR.sha){
+        panelMsg('先讀取這頁資料…',true,8000);
+        return ghGet(repoPath()).then(function(f){ CUR={rel:repoPath(),sha:f.sha,raw:f.text,usage:parseDoc(f.text).usage}; return doSave(); },
+          function(e){ panelMsg('讀取失敗：'+(e&&e.message||e),false,30000); var bb=document.getElementById('u4-close'); if(bb) bb.disabled=false; throw e; });
+      }
+      try{ syncUsageFromDom(); }catch(err2){}
       d=readEdits();
       d.usage=CUR.usage.slice();
       if(!d.title){ panelMsg('曲名不能空白',false); return Promise.reject(new Error('曲名空白')); }
@@ -1068,6 +1077,8 @@ function openWin(u){
     }
 
     if(btn) btn.disabled=true; panelMsg('存檔中…（約 5–15 秒）',true,60000);
+    // 沒抓到原檔就先抓（避免「按了沒反應」）
+    if(!CUR.raw) return ghGet(CUR.rel).then(function(f){ CUR.sha=f.sha; CUR.raw=f.text; return doSave(); }, function(e){ panelMsg('讀不到這頁檔案：'+(e&&e.message||e),false,30000); if(btn) btn.disabled=false; throw e; });
     // 存檔一定要帶 sha，沒有就先抓一次（避免「按了沒反應」）
     return Promise.resolve(CUR.sha?{sha:CUR.sha}:(ghGet(CUR.rel).then(function(f){ CUR.sha=f.sha; CUR.raw=f.text; return f; })))
     .then(function(){
