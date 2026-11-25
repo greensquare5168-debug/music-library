@@ -1316,11 +1316,20 @@ function openWin(u){
       var pe=range.commonAncestorContainer; if(pe.nodeType===3) pe=pe.parentNode;
       var ttl=pe&&pe.closest?pe.closest('h2.u4-big,h3.u4-small,div.u4-plain,span.u4-big,span.u4-small'):null;
       if(!ttl) return false;
-      var pd=document.createElement('div');
-      pd.className='u4-plain';
+      /* 還原成原本的行（連結／標記都保留） */
+      var orig=ttl.getAttribute('data-u4-orig')||'div|u4-plain';
+      var parts=orig.split('|');
+      var tg=(parts[0]||'div').toLowerCase();
+      if(tg!=='li' && tg!=='div' && tg!=='p') tg='div';
+      var pd=document.createElement(tg);
+      var clsTxt=(parts[1]||'').trim();
+      if(clsTxt) pd.className=clsTxt;
+      var lb2=parts.filter(function(x){return x.indexOf('label:')===0;})[0];
+      if(lb2) pd.setAttribute('data-label', lb2.slice(6));
       while(ttl.firstChild) pd.appendChild(ttl.firstChild);
-      if(!(pd.textContent||'').trim()){ ttl.remove(); return true; }
+      if(!(pd.textContent||'').trim() && !pd.querySelector('a')){ ttl.remove(); return true; }
       ttl.parentNode.replaceChild(pd, ttl);
+      try{ markEmptyRows(); }catch(e){}
       return true;
     }
     if(kind==='hr'){
@@ -1352,13 +1361,20 @@ function openWin(u){
     /* 2) 2026-11-25 19:57 孝瓏：「大小框要一條，不是只到文字」
        → 一律以「整行」為單位：把所在的那一行（li / div.unit / div.blankline / div / p）整條換成標題元素，
          框會撐滿整個版面寬度，不是只有文字那幾個字的寬度 */
-    /* 3) 選取整行 → 把整個 li / div.unit 換成標題元素（文字保留） */
+    /* 3) 選取整行 → 把整個 li / div.unit 換成標題元素
+       2026-11-25 20:18 孝瓏：「曲目變成大標題再改回一般文字，連結會消失」
+       → 標題元素要把整行內部的 HTML（<a href> / .lbl / .same）一起搬進去，
+         並用 data-u4-orig 記住原本的樣子；「一般文字」時整段還原（含連結）。 */
     var lineEl2=e&&e.closest?e.closest('li,div.unit,p,div.blankline,div'):null;
     if(lineEl2 && lineEl2.tagName==='DIV' && lineEl2.closest('.album-card')===lineEl2) lineEl2=null;
     if(lineEl2 && card.contains(lineEl2)){
       var tagEl=document.createElement(tag);
       tagEl.className=cls;
-      tagEl.textContent=(lineEl2.textContent||'').trim();
+      while(lineEl2.firstChild) tagEl.appendChild(lineEl2.firstChild);   // 整行內容（含連結）一起搬
+      /* 記住原本標籤與 class，方便還原 */
+      tagEl.setAttribute('data-u4-orig', lineEl2.tagName.toLowerCase()
+        +(lineEl2.className?('|'+lineEl2.className):'')
+        +(lineEl2.getAttribute('data-label')?('|label:'+lineEl2.getAttribute('data-label')):''));
       lineEl2.parentNode.replaceChild(tagEl, lineEl2);
       var rg2=document.createRange(); rg2.selectNodeContents(tagEl); sel.removeAllRanges(); sel.addRange(rg2);
       return true;
