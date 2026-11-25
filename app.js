@@ -835,6 +835,7 @@ function openWin(u){
   function makeEditable(el, hint, onInput){
     if(!el || el.getAttribute('contenteditable')==='true') return;
     el.setAttribute('contenteditable','true');
+    el.setAttribute('data-u4-ed','1');
     el.setAttribute('spellcheck','false');
     if(hint) el.title=hint;
     el.addEventListener('input', function(){ setDirty(true); if(onInput) onInput(); });
@@ -923,6 +924,27 @@ function openWin(u){
     }
   }
 
+  // 把頁面上（DOM）的改動寫回 CUR.usage：順序、刪除、文字、新增都算
+  function syncUsageFromDom(){
+    if(!CUR) return;
+    var ul=entriesUl(), out=[];
+    if(ul){
+      Array.prototype.forEach.call(ul.querySelectorAll(':scope > li'), function(li){
+        var a=li.querySelector(':scope > a');
+        if(!a || /srccap|srcframe|ytframe|blankline/.test(li.className)) return;
+        var t=(a.textContent||'').trim();
+        var href=a.getAttribute('data-keep')||a.getAttribute('href')||'';
+        var sp=li.querySelector(':scope > .lbl');
+        var lb=sp?(sp.textContent||'').trim():'';
+        lb=lb.replace(/^（/,'').replace(/）$/,'').trim();
+        if(!t && !href) return;
+        if(href==='#new') href='';
+        out.push({href:href, title:t, label:lb});
+      });
+    }
+    CUR.usage=out;
+  }
+
   function readEdits(){
     var card=document.querySelector('.album-card');
     var title=(card.querySelector('h1').textContent||'').trim();
@@ -946,7 +968,9 @@ function openWin(u){
 
   function doSave(){
     if(!CUR) return;
+    syncUsageFromDom();
     var d=readEdits();
+    d.usage=CUR.usage.slice();
     if(!d.title){ panelMsg('曲名不能空白',false); return; }
     var items=d.usage.filter(function(u){ return (u.href||'').trim() && (u.title||'').trim(); });
     var dropped=d.usage.length-items.length;
@@ -959,6 +983,17 @@ function openWin(u){
       return saveAlbumMark(CUR.rel, items.length>0).then(function(c2){
         return ghGet(CUR.rel).then(function(f){
           CUR.sha=f.sha; CUR.raw=f.text; CUR.usage=items;
+          // 存檔後把新連結記回 data-keep，並把 #new 換成正式路徑（下次存檔才不會亂）
+          var ul=entriesUl();
+          if(ul){
+            var lis=Array.prototype.slice.call(ul.querySelectorAll(':scope > li')).filter(function(li){ return li.querySelector(':scope > a'); });
+            lis.forEach(function(li,i){
+              var a=li.querySelector(':scope > a');
+              if(!a) return;
+              var u=items[i];
+              if(u && u.href) a.setAttribute('data-keep', u.href);
+            });
+          }
           setDirty(false);
           panelMsg('✅ 已上線（版本 '+(c1||'—')+(c2?'／專輯 ✓ '+c2:'')+'）· 約 2 分鐘後網站更新',true,20000);
         });
@@ -967,6 +1002,43 @@ function openWin(u){
       panelMsg('存檔失敗：'+e.message,false,30000);
     }).then(function(){ btn.disabled=false; });
   }
+
+  /* ---------- 點頁面文字就進編輯（站主限定，不用先按 ✏️） ---------- */
+  function isEditableTarget(t){
+    if(!t || !t.closest) return false;
+    return !!t.closest('.album-card h1, .album-card .albumartist, .album-card ul.entries li > a, .album-card ul.entries li > .lbl');
+  }
+  function tryInlineEdit(t){
+    if(!isEditableTarget(t)) return;
+    if(document.body.classList.contains('u4-editing')){
+      var el=t.closest('[data-u4-ed]');
+      if(el && el.getAttribute('contenteditable')==='true'){
+        el.focus();
+        try{ document.execCommand('selectAll',false,null); }catch(e){}
+      }
+      return;
+    }
+    if(!isOwner() || !token()) return;
+    if(t.closest('a') && (t.closest('a').getAttribute('href')||'').indexOf('http')===0) return;
+    if(confirm('要編輯這一頁的內容嗎？（只有你看得到，改完按存檔才會上線）')){
+      openPanel();
+    }
+  }
+  document.addEventListener('click', function(e){
+    try{
+      if(document.body.classList.contains('u4-editing')){
+        // 編輯模式中：點頁面文字 → 聚焦到那一格
+        var el=e.target.closest&&e.target.closest('.album-card h1, .album-card .albumartist, .album-card ul.entries li > a, .album-card ul.entries li > .lbl');
+        if(el && el.getAttribute('contenteditable')!=='true' && PANEL){
+          // 尚未被標成可編輯（例如剛載入失敗）→ 補上
+          makeEditable(el,'點這裡直接改');
+        }
+        return;
+      }
+      if(!e.target.closest || e.target.closest('#u4-bar')) return;
+      tryInlineEdit(e.target);
+    }catch(err){}
+  }, true);
 
   /* ---------- 鉛筆按鈕 ---------- */
   function add(){
