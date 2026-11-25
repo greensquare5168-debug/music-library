@@ -518,7 +518,7 @@ function openWin(u){
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',add); else add();
 })();
 
-/* ---------- 站主聊天框（2026-11-18）：只有「已登入 Supabase」的訪客才載入 ---------- */
+/* ---------- 站主聊天框（2026-11-18）：2026-11-25 19:01 孝瓏「右下角跟U4說也不要了」→ 停用 ---------- */
 (function () {
   try {
     var has = false;
@@ -526,6 +526,7 @@ function openWin(u){
       var k = localStorage.key(i) || '';
       if (k.indexOf('sb-') === 0 && k.slice(-11) === '-auth-token') { has = true; break; }
     }
+    has = false;   // 2026-11-25 19:01 停用右下角聊天球（改放 ✏️ 編輯鈕）
     if (has) import('/music-library/chat-owner.js').catch(function () {});
   } catch (e) {}
 })();
@@ -1856,21 +1857,21 @@ function openWin(u){
   function add(){
     if(!isOwner()) return;
     if(document.querySelector('.pencil-edit')) return;
-    var nav=document.querySelector('header .topnav')||document.querySelector('header');
-    if(!nav) return;
+    /* 2026-11-25 19:01 孝瓏：「編輯按鈕要移到原本跟U4說的地方」→ 固定在右下角（原聊天球位置） */
     var a=document.createElement('a');
     a.className='pencil-edit';
     a.href='#';
     a.title='✏️ 編輯這一頁';
     a.textContent='✏️';
-    a.style.cssText='display:inline-flex;align-items:center;justify-content:center;'
-      +'width:34px;height:34px;border-radius:10px;border:1px solid #cfd8e3;background:#fff;'
-      +'text-decoration:none;font-size:16px;line-height:1;margin-left:6px;cursor:pointer';
-    a.onmouseover=function(){a.style.background='#eef3fb';};
-    a.onmouseout=function(){a.style.background='#fff';};
+    a.style.cssText='position:fixed;right:20px;bottom:20px;z-index:9998;display:flex;align-items:center;justify-content:center;'
+      +'width:56px;height:56px;border-radius:50%;border:0;cursor:pointer;'
+      +'background:linear-gradient(135deg,#f6c667,#eaa63c);color:#5a3d00;font-size:24px;line-height:1;'
+      +'box-shadow:0 8px 24px rgba(20,40,90,.28);text-decoration:none;transition:transform .12s';
+    a.onmouseover=function(){a.style.transform='translateY(-2px)';};
+    a.onmouseout=function(){a.style.transform='';};
     a.onclick=function(e){ e.preventDefault(); openPanel(); };
-    var sp=nav.querySelector('.navsearch');
-    if(sp) nav.insertBefore(a,sp); else nav.appendChild(a);
+    document.body.appendChild(a);
+    try{ document.querySelectorAll('#u4chat-btn,#u4chat-panel').forEach(function(b){ b.remove(); }); }catch(e){}
     // 🔍 量尺寸按鈕已收進編輯模式工具列（2026-11-25 孝瓏：不要分開）
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',add); else add();
