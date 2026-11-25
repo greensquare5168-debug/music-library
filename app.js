@@ -1050,7 +1050,79 @@ function openWin(u){
     }catch(err){}
   }, true);
 
-  /* ---------- 鉛筆按鈕 ---------- */
+  /* ---------- 🔍 量尺寸（字距／標題框高度…）：滑鼠移到元素上就顯示，點一下鎖住 ---------- */
+  var MEAS=null, LOCKED=null;
+  function px(v){ var n=parseFloat(v); return isNaN(n)?v:(Math.round(n*10)/10+'px'); }
+  function q(node, sel){ return node.querySelector(sel); }
+  function infoOf(el){
+    var cs=getComputedStyle(el), r=el.getBoundingClientRect();
+    var own=Array.prototype.filter.call(el.childNodes,function(n){return n.nodeType===3&&n.textContent.trim();});
+    var ownTxt=own.map(function(n){return n.textContent.trim();}).join(' ');
+    var lh=cs.lineHeight;
+    if(lh==='normal'){ lh=Math.round(parseFloat(cs.fontSize)*1.2)+'px(normal)'; }
+    var lines=Math.max(1, Math.round((r.height - parseFloat(cs.paddingTop||0) - parseFloat(cs.paddingBottom||0) - parseFloat(cs.borderTopWidth||0) - parseFloat(cs.borderBottomWidth||0)) / (parseFloat(lh)||parseFloat(cs.fontSize)||1)));
+    // 字距：只量「純文字」元素（沒子元素）才可信
+    var lsTxt=own.length? px(cs.letterSpacing)+'（'+(ownTxt.length>1?((parseFloat(cs.letterSpacing)||0)*(ownTxt.length-1)).toFixed(1)+'px 全段':'—')+'）' : '—';
+    return {
+      '元素': (el.tagName.toLowerCase())+(el.className?('.'+String(el.className).split(' ').join('.')):''),
+      '框高': px(r.height),
+      '行數': lines+' 行',
+      '行高': px(lh),
+      '字級': px(cs.fontSize),
+      '字距 letter-spacing': lsTxt,
+      '行距 line-height': px(lh)+' / 字級 '+px(cs.fontSize)+' = '+(parseFloat(lh)/parseFloat(cs.fontSize)).toFixed(2),
+      '內距 padding': px(cs.paddingTop)+' '+px(cs.paddingRight)+' '+px(cs.paddingBottom)+' '+px(cs.paddingLeft),
+      '外距 margin': px(cs.marginTop)+' '+px(cs.marginRight)+' '+px(cs.marginBottom)+' '+px(cs.marginLeft),
+      '邊框': px(cs.borderTopWidth)+' '+cs.borderTopStyle+' '+cs.borderTopColor,
+      '圓角': px(cs.borderRadius),
+      '寬': px(r.width),
+      '文字': (ownTxt||el.textContent||'').trim().slice(0,40)
+    };
+  }
+  function measTip(){
+    if(MEAS) return MEAS;
+    var t=document.createElement('div'); t.id='u4-meas';
+    t.style.cssText='position:fixed;z-index:2147483647;pointer-events:none;background:rgba(17,24,39,.94);color:#fff;font:12px/1.55 ui-monospace,Menlo,Consolas,monospace;padding:8px 10px;border-radius:8px;max-width:340px;white-space:pre-wrap;display:none;box-shadow:0 6px 20px rgba(0,0,0,.35)';
+    document.body.appendChild(t); MEAS=t; return t;
+  }
+  function measShow(el,x,y){
+    var t=measTip(), d=infoOf(el), s='';
+    for(var k in d){ s+='<span style="color:#93c5fd">'+(k+'：')+'</span>'+escT(String(d[k]))+'\n'; }
+    t.innerHTML=s; t.style.display='block';
+    var w=t.offsetWidth,h=t.offsetHeight;
+    t.style.left=Math.min(x+14, innerWidth-w-8)+'px';
+    t.style.top=Math.min(y+14, innerHeight-h-8)+'px';
+  }
+  function measHide(){ if(!LOCKED&&MEAS) MEAS.style.display='none'; }
+  function toggleMeasure(){
+    if(document.getElementById('u4-meas-on')){
+      var b=document.getElementById('u4-meas-on'); b.remove();
+      document.removeEventListener('mousemove', measMove, true);
+      document.removeEventListener('click', measClick, true);
+      measHide(); LOCKED=null; return;
+    }
+    var btn=document.createElement('div'); btn.id='u4-meas-on';
+    btn.textContent='🔍 量尺寸（滑過元素看數據，點一下鎖住，再點🔍結束）';
+    btn.style.cssText='position:fixed;top:10px;left:50%;transform:translateX(-50%);z-index:2147483646;background:#111827;color:#fff;font:13px/1.4 system-ui;padding:7px 14px;border-radius:999px;pointer-events:none;box-shadow:0 6px 20px rgba(0,0,0,.35)';
+    document.body.appendChild(btn);
+    document.addEventListener('mousemove', measMove, true);
+    document.addEventListener('click', measClick, true);
+  }
+  function measMove(e){
+    if(LOCKED) return;
+    var el=e.target;
+    if(!el||el===MEAS||el.id==='u4-meas-on') return;
+    measShow(el, e.clientX, e.clientY);
+  }
+  function measClick(e){
+    var el=e.target;
+    if(!el||el.id==='u4-meas'||el.id==='u4-meas-on') return;
+    if(LOCKED===el){ LOCKED=null; measHide(); return; }
+    LOCKED=el; measShow(el, e.clientX, e.clientY);
+    e.preventDefault(); e.stopPropagation();
+  }
+
+  /* ---------- 铅筆按鈕 ---------- */
   function add(){
     if(!isOwner()) return;
     if(document.querySelector('.pencil-edit')) return;
@@ -1069,6 +1141,15 @@ function openWin(u){
     a.onclick=function(e){ e.preventDefault(); openPanel(); };
     var sp=nav.querySelector('.navsearch');
     if(sp) nav.insertBefore(a,sp); else nav.appendChild(a);
+    // 🔍 量尺寸按鈕（只給站主，不進編輯模式也能用）
+    if(!document.querySelector('.measure-edit')){
+      var mb=document.createElement('a');
+      mb.className='measure-edit'; mb.href='#'; mb.title='🔍 量尺寸（字距／標題框高度）';
+      mb.textContent='🔍';
+      mb.style.cssText='display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:10px;border:1px solid #cfd8e3;background:#fff;text-decoration:none;font-size:15px;line-height:1;margin-left:6px;cursor:pointer';
+      mb.onclick=function(e){ e.preventDefault(); toggleMeasure(); };
+      if(sp && sp.parentNode) sp.parentNode.insertBefore(mb, sp); else nav.appendChild(mb);
+    }
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',add); else add();
 })();
