@@ -1136,16 +1136,36 @@ function openWin(u){
     var fsMinus=document.createElement('button');
     fsMinus.type='button'; fsMinus.textContent='A−';
     fsMinus.title='字級縮小';
-    fsMinus.style.cssText='font:15px/1 system-ui;padding:7px 10px;border:1px solid #cfd8e3;border-radius:8px;background:#fff;color:#334;cursor:pointer';
+    fsMinus.style.cssText='font:700 17px/1 system-ui;width:34px;height:32px;padding:0;border:1px solid #cfd8e3;border-radius:8px;background:#fff;color:#334;cursor:pointer';
     fsMinus.onclick=function(e){ e.preventDefault(); e.stopPropagation(); layoutFont(el,-1); };
-    var fsInfo=document.createElement('span');
+    /* 2026-11-25 18:44 孝瓏：「數字應該要變成可以打的，左右按鈕只要加減號，不要 A」 */
+    var fsInfo=document.createElement('input');
     fsInfo.className='u4-fs';
-    fsInfo.style.cssText='font:15px/1 ui-monospace,Menlo,monospace;color:#27364a;min-width:30px;text-align:center';
-    fsInfo.textContent=(fontPx(el)||'')+'';
+    fsInfo.type='text'; fsInfo.inputMode='numeric';
+    fsInfo.style.cssText='font:15px/1 ui-monospace,Menlo,monospace;color:#27364a;width:44px;height:32px;padding:0 4px;text-align:center;border:1px solid #cfd8e3;border-radius:8px;background:#fff;box-sizing:border-box';
+    fsInfo.value=(fontPx(el)||'')+'';
+    fsInfo.addEventListener('mousedown',function(e){ e.stopPropagation(); });
+    fsInfo.addEventListener('click',function(e){ e.stopPropagation(); });
+    fsInfo.addEventListener('keydown',function(e){
+      e.stopPropagation();
+      if(e.key==='Enter'){ e.preventDefault(); fsInfo.blur(); }
+    });
+    fsInfo.addEventListener('change',function(){
+      var v=parseInt(String(fsInfo.value).replace(/[^0-9]/g,''),10);
+      if(!v || isNaN(v)) { fsInfo.value=(fontPx(el)||'')+''; return; }
+      layoutFontTo(el, v);
+      fsInfo.value=(fontPx(el))+'';
+    });
+    fsInfo.addEventListener('blur',function(){
+      var v=parseInt(String(fsInfo.value).replace(/[^0-9]/g,''),10);
+      if(!v || isNaN(v)) { fsInfo.value=(fontPx(el)||'')+''; return; }
+      layoutFontTo(el, v);
+      fsInfo.value=(fontPx(el))+'';
+    });
     var fsPlus=document.createElement('button');
     fsPlus.type='button'; fsPlus.textContent='A+';
     fsPlus.title='字級放大';
-    fsPlus.style.cssText='font:15px/1 system-ui;padding:7px 10px;border:1px solid #2f6feb;border-radius:8px;background:#eef4ff;color:#2f6feb;cursor:pointer';
+    fsPlus.style.cssText='font:700 17px/1 system-ui;width:34px;height:32px;padding:0;border:1px solid #cfd8e3;border-radius:8px;background:#fff;color:#334;cursor:pointer';
     fsPlus.onclick=function(e){ e.preventDefault(); e.stopPropagation(); layoutFont(el,1); };
     if(kind!=='block') TOOLS.appendChild(del);   // 大框不給刪（避免整份清單被誤刪）
     if(kind!=='row' && kind!=='block'){ TOOLS.appendChild(minus); TOOLS.appendChild(plus); TOOLS.appendChild(wide); }
@@ -1166,7 +1186,12 @@ function openWin(u){
   function layoutFont(el,delta){
     if(!el) return;
     var cur=fontPx(el)||15;
-    var next=Math.min(48, Math.max(10, Math.round(cur+delta*2)));
+    layoutFontTo(el, cur+delta*2);
+  }
+  /* 直接指定字級（輸入框用） */
+  function layoutFontTo(el, px){
+    if(!el) return;
+    var next=Math.min(48, Math.max(10, Math.round(px||15)));
     if(el.tagName==='LI'){ el.setAttribute('data-u4-fs', next); el.style.fontSize=next+'px';
       Array.prototype.forEach.call(el.querySelectorAll('a,.lbl'),function(x){ x.style.fontSize=next+'px'; });
     } else if(el.tagName==='UL'){
@@ -1175,8 +1200,9 @@ function openWin(u){
     } else {
       el.setAttribute('data-u4-fs', next); el.style.fontSize=next+'px';
     }
-    var info=TOOLS&&TOOLS.querySelector('.u4-fs'); if(info) info.textContent=next;
-    setDirty(true); layoutShow(el);
+    var info=TOOLS&&TOOLS.querySelector('.u4-fs'); if(info && info.value!==String(next)) info.value=String(next);
+    setDirty(true);
+    try{ layoutReposition(); }catch(e){}
   }
 
   function layoutResize(el,kind,dx,dy){
