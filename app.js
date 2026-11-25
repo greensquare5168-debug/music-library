@@ -614,6 +614,33 @@ function openWin(u){
     if(/%[0-9A-Fa-f]{2}/.test(p)) return p;          // 已編碼過 → 直接送
     return encodeURI(p);
   }
+
+  /* 2026-11-25 孝瓏：「改了之後刷新又變回改之前，之後才顯示改的狀態」
+     原因：GitHub Pages 要 1-3 分鐘才更新，重新整理會先拿到舊頁。
+     解法：存檔成功後把新 HTML 記在 localStorage，載入時若本機版本比線上 commit 新，就先顯示本機版。 */
+  var LSK='u4_saved_'+location.pathname;
+  function rememberLocal(rel, html){
+    /* 記錄這次存檔的內容＋當時的 commit，Pages 追上後就自動失效 */
+    try{ localStorage.setItem(LSK, JSON.stringify({t:Date.now(), rel:rel, html:html})); }catch(err){}
+  }
+  if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded', function(){ try{ showLocalSaved(); }catch(e){} }); }
+  else { try{ showLocalSaved(); }catch(e){} }
+  function localSaved(){
+    try{ var raw=localStorage.getItem(LSK); if(!raw) return null; var o=JSON.parse(raw); if(!o||!o.html) return null;
+      if(Date.now()-o.t > 30*60*1000) return null;   // 超過 30 分鐘就不採用（改以線上為準）
+      return o; }catch(err){ return null; }
+  }
+  function showLocalSaved(){
+    var o=localSaved(); if(!o) return false;
+    // 用存檔後的內容重建 main 內容（只換 .album-card 所在 main，保留導覽與 script）
+    try{
+      var doc=new DOMParser().parseFromString(o.html,'text/html');
+      var newMain=doc.querySelector('.content'), oldMain=document.querySelector('.content');
+      if(newMain && oldMain){ oldMain.innerHTML=newMain.innerHTML; return true; }
+    }catch(err){}
+    return false;
+  }
+
   function ghGet(path){
     return fetch('https://api.github.com/repos/'+OWNER+'/'+REPO+'/contents/'+ghPath(path)+'?ref='+BRANCH+'&t='+Date.now(),{headers:headers()})
       .then(function(r){
@@ -1452,6 +1479,7 @@ function openWin(u){
             });
           }
           setDirty(false);
+          rememberLocal(CUR.rel, next);   // 立刻把存檔後的內容記在本機，重新整理先用這份顯示
           panelMsg('✅ 已上線（版本 '+(c1||'—')+(c2?'／專輯 ✓ '+c2:'')+'）· 約 2 分鐘後網站更新',true,20000);
         });
       });
