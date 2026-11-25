@@ -975,6 +975,7 @@ function openWin(u){
       /* 2026-11-25 19:09 標題框／橫線 */
       /* 2026-11-25 19:49 孝瓏：「大標題框應該像低年級版的大標題框，灰框白底」
          → 白底 + 2px 灰藍框（#8fa3bd）+ 圓角 9px + 22px 粗體（比照站上低年級版 .unit） */
+      +'.album-card h2.u4-big,.album-card h3.u4-small{width:100%!important;display:block!important}'
       +'.album-card h2.u4-big,.album-card span.u4-big{display:block;font-size:22px;font-weight:700;color:#2b3648;margin:24px 0 4px;padding:8px 14px;min-height:51px;background:#fff;border:2px solid #8fa3bd;border-radius:9px;letter-spacing:1px;line-height:1.5;box-sizing:border-box}'
       +'.album-card h3.u4-small,.album-card span.u4-small{display:block;font-size:16px;font-weight:700;color:#2b3648;margin:18px 0 4px;padding:4px 14px;background:#fff;border:2px solid #8fa3bd;border-radius:9px;line-height:1.5;box-sizing:border-box}'
       +'.album-card span.u4-big,.album-card span.u4-small{display:inline-block;margin:0 2px;padding:0 8px;min-height:0}'
@@ -1348,19 +1349,12 @@ function openWin(u){
       cur.parentNode.replaceChild(p, cur);
       return true;
     }
-    /* 2) 選取範圍「在一個作品列裡」（只有部分文字）→ 包成行內的大/小標題樣式 */
-    var li=e&&e.closest?e.closest('li'):null;
-    var wrapEl=null;
-    if(li && card.contains(li) && !e.closest('h2.u4-big,h3.u4-small')){
-      wrapEl=document.createElement(tag);
-      wrapEl.className=cls;
-      wrapEl.style.display='inline';
-      try{ wrapEl.appendChild(range.extractContents()); range.insertNode(wrapEl); }catch(err){ return false; }
-      var rg=document.createRange(); rg.selectNodeContents(wrapEl); sel.removeAllRanges(); sel.addRange(rg);
-      return true;
-    }
+    /* 2) 2026-11-25 19:57 孝瓏：「大小框要一條，不是只到文字」
+       → 一律以「整行」為單位：把所在的那一行（li / div.unit / div.blankline / div / p）整條換成標題元素，
+         框會撐滿整個版面寬度，不是只有文字那幾個字的寬度 */
     /* 3) 選取整行 → 把整個 li / div.unit 換成標題元素（文字保留） */
-    var lineEl2=e&&e.closest?e.closest('li,div.unit,p'):null;
+    var lineEl2=e&&e.closest?e.closest('li,div.unit,p,div.blankline,div'):null;
+    if(lineEl2 && lineEl2.tagName==='DIV' && lineEl2.closest('.album-card')===lineEl2) lineEl2=null;
     if(lineEl2 && card.contains(lineEl2)){
       var tagEl=document.createElement(tag);
       tagEl.className=cls;
