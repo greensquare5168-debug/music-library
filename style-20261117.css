@@ -1463,9 +1463,10 @@ body[data-show="yoyo童話世界"] .unit.sm:not(.ad){
   margin-top:12px !important;
 }
 
-/* 2026-11-22 孝瓏：小標題框（哥哥姐姐）→ 下面曲目清單 間距回復（原本被 .unit{margin-bottom:-5px} 變成 -5px 疊住） */
+/* 2026-11-22 孝瓏：小標題框（哥哥姐姐）→ 下面曲目清單 間距回復（原本被 .unit{margin-bottom:-5px} 變成 -5px 疊住）
+   2026-11-26 孝瓏：「框下的音樂要緊貼框」→ 小框→清單、大框→清單 都改成貼緊 0px */
 body[data-show="yoyo童話世界"] .unit.sm:not(.ad){
-  margin-bottom:.2cm !important;
+  margin-bottom:0 !important;
 }
 
 /* 2026-11-22 孝瓏：大標題框 → 緊接的小標題框（第一組）間距全站統一 12px（＝大框 top 22.7px、小框 12px 後視覺一致）
@@ -1516,6 +1517,25 @@ html body .album-card > .unit.sm{
   border-radius:9px !important;
   background:#ffffff !important;
   color:#2b3648 !important;
+}
+
+/* 2026-11-26 孝瓏：「框下的音樂要緊貼框」→ 全站：標題框（大／小／橫線）正下方的曲目清單貼緊框，0 間距
+   原本 .unit{margin-bottom:-5px} 會讓清單疊進框內 5px，這裡統一歸零；不動「框→框」「框→空行」的既有間距。 */
+html body .album-card .unit + .entries,
+html body .album-card .unit.sm + .entries,
+html body .album-card .unit.ad + .entries{
+  margin-top:0 !important;
+  padding-top:0 !important;
+}
+html body .album-card .unit:has(+ .entries),
+html body .album-card .unit.sm:has(+ .entries),
+html body .album-card .unit.ad:has(+ .entries){
+  margin-bottom:0 !important;
+}
+html body .album-card .unit + .entries > li:first-child,
+html body .album-card .unit.sm + .entries > li:first-child{
+  padding-top:0 !important;
+  margin-top:0 !important;
 }
 
 /* 2026-11-22 23:50 孝瓏：健康特派員也要像其他大標題框一樣「貼緊」上面的空行（原本 margin-top:20px 比別人多 17.45px）
