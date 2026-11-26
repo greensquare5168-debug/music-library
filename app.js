@@ -55,35 +55,10 @@ function fitWin(){
   }
 }
 // 窗口滾動：滑鼠滾輪 / 拖曳 / 方向鍵 → 在窗口範圍內上下移動 iframe（頁面捲動不受影響
-// 2026-11-26 孝瓏：「取消定點，一旦定點就不能滑動到其他地方」→ 只接受「相對位移」平移
-//   來源頁（dl.music-yamato.jp 等）的滑動圖／回到頂端按鈕會 globalize 成固定位置，縮放後整塊黏在視窗上，
-//   滑到後面就只看到那塊 → 這裡注入 CSS 讓來源頁的 fixed/sticky 一律失效（回到一般文件流）
 (function(){
-  var killCss='*{position:static !important}body{position:static !important}';
-  function unfix(w){
-    var f=w&&w.getElementsByTagName('iframe')[0]; if(!f) return;
-    try{
-      var d=f.contentDocument; if(!d || !d.head) return;
-      if(d.getElementById('u4-unfix')) return;
-      var st=d.createElement('style'); st.id='u4-unfix'; st.textContent=killCss;
-      d.head.appendChild(st);
-    }catch(e){}   // 跨網域 → 交給 overbox 的固定罩處理
-  }
-  function shift(w,dy){
-    var s=parseFloat(w.getAttribute('data-scale'))||1;
-    var off=parseFloat(w.getAttribute('data-off'))||0;
-    var maxOff=parseFloat(w.getAttribute('data-maxoff'))||0;
-    var next=Math.min(maxOff, Math.max(0, off + dy/s));
-    if(next===off) return false;
-    w.setAttribute('data-off', next);
-    var f=w.getElementsByTagName('iframe')[0];
-    if(f) f.style.transform='translateY('+(-next*s)+'px) scale('+s+')';
-    return true;
-  }
   function bind(w){
     if(w.getAttribute('data-wbind')) return;
     w.setAttribute('data-wbind','1');
-    unfix(w);
     // 一次滾輪只移動「滾輪量 × 0.6」（除以縮放比換算成來源頁像素），
     // 並限制單次上限，避免一次滑到底（2026-11-21 實測：deltaY 400 會直接跳到最底）
     w.addEventListener('wheel', function(e){
@@ -121,8 +96,6 @@ function fitWin(){
     for(var i=0;i<ws.length;i++){
       var w=ws[i]; if(w.getAttribute('data-ov')) continue;
       var f=w.getElementsByTagName('iframe')[0]; if(!f) continue;
-      unfix(w);
-      f.addEventListener('load',function(){ unfix(w); });
       var box=document.createElement('div');
       box.className='srcov';   // 一律加罩（跨網域時頁面上的 wheel 攔不到，只有罩子可靠）
       box.style.cssText='position:absolute;left:0;top:0;right:0;bottom:0;z-index:5;background:transparent;cursor:grab';
