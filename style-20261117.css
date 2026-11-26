@@ -1519,3 +1519,18 @@ body[data-show="健康即時通"] .unit[data-label="健康特派員"]{margin-top
    （實測 廣告後片段 底 1413.47 / 清單 頂 1408.47）。改成與一般文字行一致的 10px 視覺間距。 */
 html body .album-card > .unit.ad{margin-bottom:10px !important}
 html body .album-card > .unit.ad + .entries{margin-top:0 !important}
+
+/* 2026-11-26 孝瓏：巧連智可樂球光碟的「可樂球小約定」是小標題框（.unit.sm），要跟其他小標題框一樣 16px 細框，
+   不可被「大標題框統一樣式」規則放大（該規則用 .unit:not(.sm):not(.ad) 排除小框，OK；但其他站別規則可能再蓋）。
+   這裡明確鎖定，不動其他大標題。 */
+body[data-show^="巧連智"] .unit.sm[data-label="可樂球小約定"],
+.unit.sm[data-label="可樂球小約定"]{
+  font-size:16px !important;
+  font-weight:700 !important;
+  line-height:24px !important;
+  padding:4px 14px !important;
+  border:2px solid #8fa3bd !important;
+  border-radius:9px !important;
+  background:#ffffff !important;
+  color:#2b3648 !important;
+}
