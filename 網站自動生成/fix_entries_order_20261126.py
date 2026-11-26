@@ -28,6 +28,15 @@ if '--file' in sys.argv:
 
 ENTRIES_RE = re.compile(r'(<ul class="entries">)(.*?)(</ul>)', re.S)
 LI_RE = re.compile(r'<li[^>]*>.*?</li>', re.S)
+# 品牌（第一層）順序 — 來源：網站「使用公司」選單（tree.json 使用公司節點）
+BRAND_ORDER = {
+    '公視': 0,
+    'yoyotv': 1,
+    'momo親子台': 2,
+    '巧連智': 3,
+    '古古食': 4,
+    '圖書館音樂': 5,
+}
 QLE_BOTTOM = ('哇來看動物大明星', '我是小觀察員', '一起去觀光農場', '博物館大驚奇')
 
 _order_cache = {}
@@ -79,7 +88,7 @@ def locate(absdir):
     rest = t_rel[len(prog) + 1:]
     prog_map = load_order(prog)
     if not rest:
-        return (k1, -1, -1)
+        return (BRAND_ORDER.get(segs[1], 50), k1, -1, -1)
     first = prog + os.sep + rest.split(os.sep)[0]
     if os.path.abspath(first) in prog_map:
         k2 = prog_map[os.path.abspath(first)]
@@ -100,10 +109,12 @@ def locate(absdir):
         # 集直接掛在節目下
         k2 = -1
         k3 = prog_map.get(os.path.abspath(absdir.rstrip('/')), 9999)
+    # 品牌層順序（2026-11-26 孝瓏：網站上 YOYOTV 在 MOMO 上面 → 狗狗週記要在最下面）
+    brand_key = BRAND_ORDER.get(segs[1], 50)
     if '巧連智低年級版cd' in t_rel and any(s in t_rel for s in QLE_BOTTOM):
         k2 = 99999
         k3 = 99999
-    return (k1, k2, k3)
+    return (brand_key, k1, k2, k3)
 
 
 def fix_page(path):
@@ -121,7 +132,7 @@ def fix_page(path):
     for i, li in enumerate(items):
         am = re.search(r'<a href="([^"]+)"', li)
         if not am or am.group(1).startswith('http'):
-            keys.append((10 ** 6, 0, i))
+            keys.append((10 ** 6, 0, 0, i))
             continue
         href = am.group(1)
         total += 1
@@ -132,7 +143,7 @@ def fix_page(path):
         loc = locate(target)
         if loc is None:
             unknown += 1
-            keys.append((10 ** 5, 0, i))
+            keys.append((10 ** 5, 0, 0, i))
         else:
             keys.append(loc)
 
