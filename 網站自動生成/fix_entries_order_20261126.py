@@ -51,7 +51,10 @@ def _load_order(series_rel):
             hrefs = re.findall(r'<a href="([^"]+)"[^>]*><span class="rn">', h)
         n = 0
         for hf in hrefs:
-            t = os.path.normpath(os.path.join(series_rel, urllib.parse.unquote(hf))).rstrip('/')
+            t = os.path.normpath(os.path.join(series_rel, urllib.parse.unquote(hf)))
+            if t.endswith('index.html'):
+                t = os.path.dirname(t)
+            t = t.rstrip('/')
             if t not in order:
                 order[t] = n
                 n += 1
@@ -78,7 +81,7 @@ def fix_page(path):
     for li in items:
         am = re.search(r'<a href="([^"]+)"', li)
         if not am:
-            keys.append((10 ** 6, li))
+            keys.append(((10 ** 6, 0), li))
             continue
         href = am.group(1)
         if href.startswith('/music-library/'):
@@ -90,22 +93,38 @@ def fix_page(path):
         series = find_series(t_rel)
         ordmap = dir_order(series)
         k = ordmap.get(t_rel)
-        if k is None:
-            # 退回：上層節目頁（例 yoyotv/index.html）的條目順序，取「系列」在節目中的位置
-            up = os.path.dirname(series)
-            upmap = dir_order(up) if up and up != series else {}
-            k = upmap.get(series)
+        # 2026-11-26 孝瓏：網站排法＝先節目順序（健康即時通在童話世界之前），再系列內集數
+        up = os.path.dirname(series)
+        upmap = _load_order(up) if up and up != series else {}
+        upk = upmap.get(series)
+        if upk is None:
+            # 作品直接掛在節目層（如 健康即時通/健康即時通-第07集 = 節目/集）
+            # → 用最深一層「自己的目錄」在節目頁清單裡的順序（節目節點本身不在清單內）
+            segs = t_rel.split(os.sep)
+            for cut in range(len(segs), 0, -1):
+                cand = os.sep.join(segs[:cut])
+                if cand in upmap:
+                    upk = upmap[cand]
+                    break
+        if upk is not None:
+            # 同系列分支內：先按系列自己的排序（季→集），找不到的（=直接掛在節目下的子目錄）排在該系列最後
             if k is not None:
-                k = k * 1000  # 同系列內再按集數
-                em = re.search(r'第(\d+)集', t_rel)
-                k += int(em.group(1)) if em else 500
+                k = (upk, 0, k)
+            elif series != up:
+                k = (upk, 1, 0)     # 掛在系列底下但系列清單查不到 → 該系列最後
+            else:
+                k = (upk, 2, 0)     # 屬於節目本身的節點（如 健康即時通 目錄）→ 排在該節目項目之後
         if k is None:
-            k = 10 ** 5 + len(keys)  # 找不到 → 保持相對順序排最後
+            k = (10 ** 5, len(keys))  # 找不到 → 保持相對順序排最後
         keys.append((k, li))
 
-    if [k for k, _ in keys] == sorted([k for k, _ in keys]):
+    def _normk(k):
+        return k if isinstance(k, tuple) else (k, 0)
+
+    kk = [_normk(k) for k, _ in keys]
+    if kk == sorted(kk):
         return 0
-    ordered = [li for _, li in sorted(keys, key=lambda x: x[0])]
+    ordered = [li for _, li in sorted(keys, key=lambda x: _normk(x[0]))]
     new_body = body
     # 逐項替換：把 body 內原本 li 序列換成新序列
     new_body = body
