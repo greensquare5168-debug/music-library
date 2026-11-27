@@ -611,60 +611,23 @@ function openWin(u){
     if(rel===''||rel.slice(-1)==='/') rel+='index.html';
     return rel;
   }
-  // 2026-11-23 改：站主點鉛筆 → 開本機編輯器表單（不進 GitHub 看程式碼）
-  // 編輯器位址（區網／Tailscale 都可連）；?page=<相對路徑>
-  function editorBase(){
-    // 2026-11-27：編輯器改成跟網站一起上線（不用 token、不用開 8899）
-    //   - 線上一律走 /music-library/admin-edit.html
-    //   - 本機／區網測試才用 8899
-    if(/^(127\.0\.0\.1|localhost)$/.test(location.hostname)){
-      return location.protocol+'//'+location.hostname+':8899/admin-edit.html';
-    }
-    // 2026-11-27：舊的「本機 8899 編輯器」設定會蓋掉線上新編輯器 → 一律走線上位址
-    if(window.location.href.indexOf('/music-library/')>=0) return '/music-library/admin-edit.html';
-    return window.origin+'/music-library/admin-edit.html';
-  }
-  function editUrl(){
-    return editorBase()+'?page='+encodeURIComponent(pagePath());
-  }
   function add(){
-    var email=sbEmail();
-    // 2026-11-27 孝瓏：「編輯器不見了」→ 鉛筆一律顯示（編輯器頁自己會擋未登入者）
-    // 原本「沒登入就不畫鉛筆」的判斷會讓 localStorage 讀不到登入態時整個消失
-    if(document.querySelector('.pencil-edit')) return;
-    /* 2026-11-25 孝瓏：「編輯按鈕要放右下角（原本跟U4說的位置）」→ 固定在右下角 */
-    // 2026-11-27 除錯：明明有登入卻沒鉛筆 → 把判斷結果寫在 console
-    try{ console.info('[u4-pencil] email=',email||'(none)','url=',editUrl()); }catch(e){}
-    /* 2026-11-27 孝瓏：「應該要直接在頁上編輯才對」
-     → 站主在曲目頁多一顆綠色 ✏️：不跳頁，當場改文字＋使用作品，存檔走雲端待辦 */
+    /* 2026-11-27 16:06 孝瓏：「還是跳新頁了，應該直接在頁上改」
+       → 黃色鉛筆（會開 admin-edit.html 新頁）整段移除，也不再建立 editorBase/editUrl
+       → 站主只留頁上就地編輯的綠色 ✏️（inline-edit.js） */
     try{
       if(!document.querySelector('.u4ie-btn')){
         var ie=document.createElement('script');
         ie.src=(function(){
           var sc=document.currentScript; var p=(sc&&sc.src)?new URL(sc.src):null;
-          return p?p.href.replace(/app\.js.*$/,'_admin/inline-edit.js?v=20261127a'):'_admin/inline-edit.js';
+          return p?p.href.replace(/app\.js.*$/,'_admin/inline-edit.js?v=20261127b'):'_admin/inline-edit.js';
         })();
         ie.async=true;
         document.head.appendChild(ie);
       }
     }catch(e){}
-    /* 站主（Supabase 已登入）→ 不再開新頁的黃色鉛筆；改用頁上綠色就地編輯 */
-    var a=document.createElement('a');
-    a.className='pencil-edit';
-    a.__u4=1;
-    a.href=editUrl();
-    a.target='_blank';
-    a.rel='noopener';
-    a.title='✏️ 編輯這一頁';
-    a.textContent='✏️';
-    a.style.cssText='position:fixed;right:20px;bottom:20px;z-index:9998;display:flex;'
-      +'align-items:center;justify-content:center;width:56px;height:56px;border-radius:50%;'
-      +'border:0;cursor:pointer;background:linear-gradient(135deg,#f6c667,#eaa63c);color:#5a3d00;'
-      +'font-size:24px;line-height:1;box-shadow:0 8px 24px rgba(20,40,90,.28);'
-      +'text-decoration:none;transition:transform .12s';
-    a.onmouseover=function(){a.style.transform='translateY(-2px)';};
-    a.onmouseout=function(){a.style.transform='';};
-    document.body.appendChild(a);
+    // 保險：舊版黃色鉛筆若還殘留，直接移除
+    try{ document.querySelectorAll('a.pencil-edit').forEach(function(b){ b.remove(); }); }catch(e){}
     try{ document.querySelectorAll('#u4chat-btn,#u4chat-panel').forEach(function(b){ b.remove(); }); }catch(e){}
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',add); else add();
