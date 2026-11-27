@@ -370,9 +370,20 @@
     document.body.appendChild(b);
   }
 
-  var style = document.createElement('style');
-  style.textContent = CSS;
-  document.head.appendChild(style);
+  /* 2026-11-27 17:10 修：腳本可能在 <head> 還沒解析完就執行 → document.head 是 null，
+     appendChild 直接丟錯、整支腳本死掉（這才是 ✏️ 一直不出現的真正原因，前面兩次都不是）
+     → 沒 head 就掛在 documentElement，兩個都沒有就等 DOM 好了再掛 */
+  function injectCSS() {
+    var host = document.head || document.documentElement;
+    if (!host) return false;
+    var style = document.createElement('style');
+    style.textContent = CSS;
+    host.appendChild(style);
+    return true;
+  }
+  if (!injectCSS()) {
+    document.addEventListener('DOMContentLoaded', function () { injectCSS(); boot(); });
+  }
 
   function boot() { addButton(); }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
