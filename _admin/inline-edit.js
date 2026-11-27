@@ -385,7 +385,16 @@
     document.addEventListener('DOMContentLoaded', function () { injectCSS(); boot(); });
   }
 
-  function boot() { addButton(); }
+  /* 2026-11-27 17:25：載入結果做個 console 標記，出問題時一眼看得懂 */
+  function boot() {
+    try {
+      if (window.__u4ieBooted && !document.querySelector('.u4ie-btn') && !document.querySelector('.u4ie-login')) {}
+      window.__u4ieBooted = 1;
+      window.__u4ieState = { email: email() || '(未登入)', isOwner: isOwner(), btn: !!document.querySelector('.u4ie-btn') };
+      console.info('[u4-inline] boot email=', window.__u4ieState.email, 'isOwner=', window.__u4ieState.isOwner);
+    } catch (e) {}
+    addButton();
+  }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
   else boot();
   [400, 1200, 2500].forEach(function (t) { setTimeout(boot, t); });

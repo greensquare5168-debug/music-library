@@ -619,8 +619,20 @@ function openWin(u){
       if(!document.querySelector('.u4ie-btn')){
         var ie=document.createElement('script');
         ie.src=(function(){
-          var sc=document.currentScript; var p=(sc&&sc.src)?new URL(sc.src):null;
-          return p?p.href.replace(/app\.js.*$/,'_admin/inline-edit.js?v=20261127f'):'_admin/inline-edit.js';
+          /* 2026-11-27 17:20 修：原本靠 document.currentScript 推算站台根目錄，
+             但 add() 是 DOMContentLoaded／setTimeout 才呼叫 → currentScript 那時是 null
+             → 退回相對路徑 '_admin/…'，在深層曲目頁會變 曲目/_admin/…（404），
+             ✏️ 當然永遠不出現。改成「從 supabase-config.js／app.js 的 src 推站台根目錄」。 */
+          var root='';
+          var ss=document.querySelectorAll('script[src]');
+          for(var q=0;q<ss.length;q++){
+            var src=ss[q].src||'';
+            if(/\/supabase-config\.js(\?|$)/.test(src)||/\/app\.js(\?|$)/.test(src)){
+              root=src.replace(/[^\/]*$/,'');   /* 去掉檔名，留下結尾帶 / 的目錄 */
+              break;
+            }
+          }
+          return (root||'/music-library/')+'_admin/inline-edit.js?v=20261127g';
         })();
         ie.async=true;
         document.head.appendChild(ie);
