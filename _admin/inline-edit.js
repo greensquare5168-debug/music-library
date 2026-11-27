@@ -422,6 +422,16 @@
 
     /* 作者 */
     var aEl = artistEl();
+    if (!aEl) {
+      /* 這頁沒有作者元素 → 自己補一個（位置：曲名輸入框下方） */
+      var holder = document.createElement('div');
+      holder.style.cssText = 'margin:8px 0 4px;font-size:13px;color:#5c6675';
+      holder.textContent = '作者：';
+      var ref = EDIT.titleInput || null;
+      if (ref && ref.parentNode) ref.parentNode.insertBefore(holder, ref.nextSibling);
+      aEl = holder;
+      EDIT.syntheticArtist = true;
+    }
     EDIT.artistEl = aEl;
     if (aEl) {
       var av = pickArtist();
@@ -441,15 +451,17 @@
     var firstUse = null;
     var probe = document.querySelectorAll('.album-card li a[href], .entries li a[href]');
     if (probe.length) firstUse = probe[0].closest('li') || probe[0];
-    var anchorBox = firstUse ? firstUse.parentNode
-        : (document.querySelector('.album-card') || document.querySelector('.content') || document.querySelector('main') || document.body);
+    /* 一律掛在右欄 .content 裡（不要掛回 <li>／<ul>，否則會每個清單都長一個） */
+    var anchorBox = document.querySelector('.content')
+        || (firstUse && firstUse.closest('.content'))
+        || document.querySelector('main') || document.body;
     var wrap = el('div', 'u4ie-usebox');
+    wrap.id = 'u4ie-usage-editor';
     wrap.style.background = '#fff';
     wrap.innerHTML = '<div style="font-weight:700;font-size:14px;color:#1f2733;margin-bottom:8px">使用作品</div>';
     var ub = el('div');
     wrap.appendChild(ub);
-    if (firstUse && firstUse.parentNode && firstUse.tagName === 'LI') anchorBox.insertBefore(wrap, firstUse);
-    else anchorBox.appendChild(wrap);
+    anchorBox.appendChild(wrap);
     EDIT.usageBox = ub;
     renderUsageEditor();
 
@@ -478,12 +490,13 @@
     if (EDIT.titleInput) { EDIT.titleInput.remove(); }
     if (EDIT.h1) EDIT.h1.style.display = '';
     if (EDIT.artistInput) { EDIT.artistInput.remove(); }
-    if (EDIT.artistEl) EDIT.artistEl.style.display = '';
-    /* 移除使用作品編輯框（找 .u4ie-usebox 內含「使用作品」標題那個） */
-    var boxes = document.querySelectorAll('.u4ie-usebox');
-    for (var i = 0; i < boxes.length; i++) {
-      if (boxes[i].parentNode) boxes[i].parentNode.removeChild(boxes[i]);
+    if (EDIT.artistEl) {
+      if (EDIT.syntheticArtist) { if (EDIT.artistEl.parentNode) EDIT.artistEl.parentNode.removeChild(EDIT.artistEl); }
+      else EDIT.artistEl.style.display = '';
     }
+    /* 移除使用作品編輯框（找 .u4ie-usebox 內含「使用作品」標題那個） */
+    var mine = document.getElementById('u4ie-usage-editor');
+    if (mine && mine.parentNode) mine.parentNode.removeChild(mine);
     if (EDIT.bar) EDIT.bar.remove();
     document.body.classList.remove('u4ie-mode');
     EDIT = null; dirty = false;

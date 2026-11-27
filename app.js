@@ -648,7 +648,7 @@ function openWin(u){
               break;
             }
           }
-          return (root||'/music-library/')+'_admin/inline-edit.js?v=20261127p';
+          return (root||'/music-library/')+'_admin/inline-edit.js?v=20261127q';
         })();
         ie.async=true;
         document.head.appendChild(ie);
