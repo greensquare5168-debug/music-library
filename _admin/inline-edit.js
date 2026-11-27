@@ -14,14 +14,34 @@
   try { SB_URL = (window.SUPABASE_URL || '').trim(); SB_KEY = (window.SUPABASE_ANON_KEY || '').trim(); } catch (e) {}
   if (!SB_URL || SB_KEY.length < 20) return;   // 這頁沒有 supabase-config.js → 不啟用
 
+  /* 2026-11-27 16:25 修：新版 supabase-js 把 session 存在「扁平」結構，
+     舊版包在 currentSession；且過期的 token 不該算登入 → 直接重讀 */
+  function readSessionFrom(raw) {
+    var o = null;
+    try { o = JSON.parse(raw || 'null'); } catch (e) { return null; }
+    if (!o) return null;
+    var cands = [o, o.currentSession, o.session, o.data && o.data.session];
+    for (var j = 0; j < cands.length; j++) {
+      var s = cands[j];
+      if (s && s.access_token) {
+        if (s.expires_at && s.expires_at * 1000 < Date.now() - 60000) return null; // 已過期
+        return s;
+      }
+    }
+    // 有 user 但沒 token（新版偶有）→ 用 user 判斷身分
+    for (var m = 0; m < cands.length; m++) {
+      var c = cands[m];
+      if (c && c.user && c.user.email) return { user: c.user, noToken: 1 };
+    }
+    return null;
+  }
   function sbSession() {
     try {
       for (var i = 0; i < localStorage.length; i++) {
         var k = localStorage.key(i) || '';
-        if (k.indexOf('sb-') === 0 && /-auth-token/.test(k)) {
-          var o = JSON.parse(localStorage.getItem(k) || 'null');
-          var s = o && (o.currentSession || o);
-          if (s && s.access_token) return s;
+        if (k.indexOf('sb-') === 0 && /-auth-token$/.test(k)) {
+          var s = readSessionFrom(localStorage.getItem(k));
+          if (s) return s;
         }
       }
     } catch (e) {}
@@ -32,6 +52,12 @@
     return s && s.user && s.user.email ? String(s.user.email).toLowerCase() : '';
   }
   function isOwner() { return OWNER_EMAILS.indexOf(email()) >= 0; }
+  /* 除錯：把判斷結果印在 console，方便孝瓏回報 */
+  try {
+    var _dbgS = sbSession();
+    console.info('[u4-inline] email=', email() || '(未登入/讀不到)', 'isOwner=', isOwner(),
+                 'hasToken=', !!(_dbgS && _dbgS.access_token), 'path=', PATH.slice(0, 80));
+  } catch (e) {}
 
   /* 只在「曲目頁」啟用（路徑含 /罐頭音樂研究所/圖書館音樂/） */
   var PATH = (function () { try { return decodeURIComponent(location.pathname); } catch (e) { return location.pathname; } })();
@@ -89,6 +115,10 @@
     + '.u4ie-btn{position:fixed;right:20px;bottom:88px;z-index:9999;display:flex;align-items:center;justify-content:center;'
     + 'width:56px;height:56px;border-radius:50%;border:0;cursor:pointer;background:linear-gradient(135deg,#7bd6a6,#37a86e);'
     + 'color:#06371f;font-size:22px;line-height:1;box-shadow:0 8px 24px rgba(20,60,40,.3)}'
+    + '.u4ie-login{position:fixed;right:20px;bottom:88px;z-index:9998;font:12px/1.2 system-ui,sans-serif;'
+    + 'padding:8px 12px;border-radius:999px;background:rgba(255,255,255,.92);border:1px solid #cfd8e3;'
+    + 'color:#33507a;text-decoration:none;box-shadow:0 4px 14px rgba(20,40,70,.15)}'
+    + '.u4ie-login:hover{background:#eef3fb}'
     + '.u4ie-panel{position:fixed;right:16px;bottom:16px;z-index:10000;width:min(520px,calc(100vw - 24px));'
     + 'max-height:88vh;overflow:auto;background:#fff;border:1px solid #dbe4ee;border-radius:16px;'
     + 'box-shadow:0 18px 50px rgba(15,35,70,.28);font:14px/1.6 system-ui,-apple-system,"Noto Sans TC",sans-serif;color:#1f2733}'
@@ -284,8 +314,18 @@
     }
   }
 
+  /* 2026-11-27：站主沒登入時，不再「整個消失」→ 顯示一顆淡色提示，點下去去登入 */
+  function showLoginHint() {
+    if (document.querySelector('.u4ie-login')) return;
+    var a = el('a', 'u4ie-login', '🔑 站主登入後可編輯');
+    a.href = '/music-library/login.html';
+    a.title = '用站主帳號登入後，右上角會出現 ✏️ 就地編輯';
+    document.body.appendChild(a);
+  }
+
   function addButton() {
-    if (document.querySelector('.u4ie-btn') || !isOwner()) return;
+    if (document.querySelector('.u4ie-btn')) return;
+    if (!isOwner()) { showLoginHint(); return; }
     var b = el('button', 'u4ie-btn', '✏️');
     b.type = 'button';
     b.title = '就地編輯這一頁（站主）';
