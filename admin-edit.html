@@ -13,6 +13,7 @@ h2{font-size:15px;margin:0 0 12px;color:#334}
 input[type=text],input[type=search]{font:inherit;padding:9px 12px;border:1px solid #cfd8e3;border-radius:9px;width:100%}
 button{font:inherit;padding:9px 16px;border-radius:9px;border:1px solid #2f6feb;background:#2f6feb;color:#fff;cursor:pointer}
 button.ghost{background:#fff;color:#334;border-color:#cfd8e3}
+select{font:inherit;padding:9px 12px;border:1px solid #cfd8e3;border-radius:9px;background:#fff;width:100%;max-width:100%}
 .row{display:flex;gap:10px;align-items:center;margin-bottom:10px;flex-wrap:wrap}
 label{font-size:13px;color:#5c6675;display:block;margin-bottom:5px}
 .hit{padding:10px 12px;border:1px solid #e3e8ee;border-radius:10px;margin-bottom:8px;cursor:pointer;background:#fff}
@@ -33,14 +34,24 @@ label{font-size:13px;color:#5c6675;display:block;margin-bottom:5px}
 <body>
 <header>
   <h1>✏️ 站主編輯器</h1>
-  <span class="muted">只在這台機器（U4）上跑 · 存檔會自動 commit</span>
+  <span class="muted">存檔會送到雲端待辦，主機 1–3 分鐘內套用並上線</span>
 </header>
 <div class="wrap">
 
   <div class="card">
     <h2>① 找曲目</h2>
+    <p class="muted" style="margin:0 0 12px">也可以直接從曲目頁按右下角 ✏️ 跳進來（會自動帶到那一頁）。</p>
     <div class="row">
-      <input id="q" type="search" placeholder="打曲名（中文／英文都可以，例：Nocturne、小紅帽）">
+      <select id="brand"><option value="">— 先選品牌（或直接搜尋）—</option></select>
+    </div>
+    <div class="row" id="albumRow" style="display:none">
+      <select id="album"><option value="">— 選專輯 —</option></select>
+    </div>
+    <div class="row" id="trackRow" style="display:none">
+      <select id="track"><option value="">— 選曲目 —</option></select>
+    </div>
+    <div class="row" style="margin-top:6px">
+      <input id="q" type="search" placeholder="或直接打曲名（中文／英文都可以，例：Nocturne、小紅帽）">
       <button id="go">搜尋</button>
     </div>
     <div id="hits"></div>
