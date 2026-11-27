@@ -614,11 +614,14 @@ function openWin(u){
   // 2026-11-23 改：站主點鉛筆 → 開本機編輯器表單（不進 GitHub 看程式碼）
   // 編輯器位址（區網／Tailscale 都可連）；?page=<相對路徑>
   function editorBase(){
-    if(/^(127\.0\.0\.1|localhost|192\.168\.|100\.|10\.)/.test(location.hostname)){
+    // 2026-11-27：編輯器改成跟網站一起上線（不用 token、不用開 8899）
+    //   - 線上一律走 /music-library/admin-edit.html
+    //   - 本機／區網測試才用 8899
+    if(/^(127\.0\.0\.1|localhost)$/.test(location.hostname)){
       return location.protocol+'//'+location.hostname+':8899/admin-edit.html';
     }
     try{ if(localStorage.getItem('u4_editor_base')) return localStorage.getItem('u4_editor_base'); }catch(e){}
-    return 'http://192.168.3.41:8899/admin-edit.html';
+    return root+'admin-edit.html';
   }
   function editUrl(){
     return editorBase()+'?page='+encodeURIComponent(pagePath());

@@ -75,59 +75,66 @@ label{font-size:13px;color:#5c6675;display:block;margin-bottom:5px}
     <div class="msg" id="msg"></div>
   </div>
 
+  <div class="card" id="who" style="font-size:13px"></div>
+
   <div class="card muted" style="font-size:12.5px;line-height:1.8">
-    ⓘ 存檔只改這台機器上的檔案並 commit。<b>要上線</b>請在終端機執行：<br>
-    <code>cd ~/clawd/projects/罐頭音樂/網站demo2 &amp;&amp; bin/publish.sh "說明"</code><br>
-    （或跟我說「發佈」，我幫你推上去）
+    ⓘ <b>不用貼 GitHub token。</b>按存檔後，改動會先送到網站的雲端待辦，主機（U4）每 2 分鐘取走、
+    套用、commit 並上線，約 <b>1–3 分鐘</b>官網就會更新。
   </div>
 </div>
 
+<script src="supabase-config.js"></script>
+<script src="_admin/editor-relay.js"></script>
 <script>
 const $ = id => document.getElementById(id);
 let CUR = null;
 
 function msg(t, ok){
   const m = $('msg'); m.textContent = t; m.className = 'msg ' + (ok ? 'ok' : 'err');
-  clearTimeout(msg._t); msg._t = setTimeout(()=>{ m.className='msg'; }, 8000);
+  clearTimeout(msg._t); msg._t = setTimeout(()=>{ m.className='msg'; }, 12000);
 }
 
-async function api(path, body){
-  const r = await fetch(path, body ? {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body)} : {});
-  const d = await r.json();
-  if(!r.ok || d.ok === false) throw new Error(d.error || ('HTTP ' + r.status));
-  return d;
-}
-
-$('go').addEventListener('click', search);
-$('q').addEventListener('keydown', e => { if(e.key === 'Enter') search(); });
-
-// 從網站鉛筆帶過來的 ?page=<相對路徑> → 直接開那一頁
+/* 從網站鉛筆帶過來的 ?page=<相對路徑> → 直接開那一頁 */
 (function(){
   const rel = new URLSearchParams(location.search).get('page');
-  if(rel) openPage(rel);
+  if(rel) openPage(decodeURIComponent(rel));
 })();
 
-async function search(){
-  const q = $('q').value.trim();
-  if(!q) return;
-  $('hits').innerHTML = '<p class="muted">搜尋中…</p>';
-  try{
-    const d = await api('/api/search?q=' + encodeURIComponent(q));
-    if(!d.hits.length){ $('hits').innerHTML = '<p class="muted">找不到曲目（只搜得到「曲目頁」）</p>'; return; }
-    $('hits').innerHTML = d.hits.map(h =>
-      `<div class="hit" data-rel="${h.rel.replace(/"/g,'&quot;')}">
-         <div class="t">${h.title}</div>
-         <div class="m">${h.artist} · 目前 ${h.n_usage} 筆使用作品</div>
-       </div>`).join('');
-    [...document.querySelectorAll('.hit')].forEach(el => {
-      el.addEventListener('click', () => openPage(el.dataset.rel));
-    });
-  }catch(e){ $('hits').innerHTML = '<p class="muted">搜尋失敗：' + e.message + '</p>'; }
+/* 身分檢查：必須站主會員登入 */
+function whoCard(){
+  const box = $('who');
+  const R = window.U4Edit;
+  if(!R){ box.innerHTML = '<b style="color:#b42318">⚠️ 中繼腳本沒載入（_admin/editor-relay.js）</b>'; return false; }
+  const em = R.email();
+  if(!em){
+    box.innerHTML = '<b style="color:#b42318">尚未登入</b> — <a href="login.html?next=' +
+      encodeURIComponent('admin-edit.html' + location.search) + '">先用站主帳號登入</a>，回來就能直接改。';
+    return false;
+  }
+  if(!R.isOwner()){
+    box.innerHTML = '<b style="color:#b42318">這個帳號（' + em + '）沒有編輯權限</b> — 請用站主帳號登入。';
+    return false;
+  }
+  box.innerHTML = '✅ 已用站主帳號登入：<b>' + em + '</b>　·　存檔後約 1–3 分鐘上線';
+  return true;
+}
+
+/* 站上三種動作，一律走雲端待辦 */
+async function submit(kind, payload){
+  const d = await window.U4Edit.submit(kind, CUR.rel, payload);
+  msg('✅ 已送出（# ' + (d.id||'?') + '）— 主機處理中，約 1–3 分鐘上線。重新整理頁面可看到結果。', true);
+  return d;
 }
 
 async function openPage(rel){
   try{
-    const d = await api('/api/info?rel=' + encodeURIComponent(rel));
+    if(!whoCard()){
+      // 沒登入就不能載入（也保護 U4 的 8899 端點）
+      return;
+    }
+    const r = await fetch('/api/info?rel=' + encodeURIComponent(rel));
+    const d = await r.json();
+    if(!r.ok || d.ok === false) throw new Error(d.error || ('HTTP ' + r.status));
     CUR = d;
     $('editor').style.display = 'block';
     $('cur').textContent = rel.split('/').slice(-2)[0];
@@ -138,6 +145,30 @@ async function openPage(rel){
     $('editor').scrollIntoView({behavior:'smooth'});
     try{ history.replaceState(null,'','?page='+encodeURIComponent(rel)); }catch(e){}
   }catch(e){ msg('載入失敗：' + e.message, false); }
+}
+
+$('go').addEventListener('click', search);
+$('q').addEventListener('keydown', e => { if(e.key === 'Enter') search(); });
+
+async function search(){
+  if(!whoCard()) return;
+  const q = $('q').value.trim();
+  if(!q) return;
+  $('hits').innerHTML = '<p class="muted">搜尋中…</p>';
+  try{
+    const r = await fetch('/api/search?q=' + encodeURIComponent(q));
+    const d = await r.json();
+    if(!r.ok || d.ok === false) throw new Error(d.error || ('HTTP ' + r.status));
+    if(!d.hits.length){ $('hits').innerHTML = '<p class="muted">找不到曲目（只搜得到「曲目頁」）</p>'; return; }
+    $('hits').innerHTML = d.hits.map(h =>
+      `<div class="hit" data-rel="${h.rel.replace(/"/g,'&quot;')}">
+         <div class="t">${h.title}</div>
+         <div class="m">${h.artist} · 目前 ${h.n_usage} 筆使用作品</div>
+       </div>`).join('');
+    [...document.querySelectorAll('.hit')].forEach(el => {
+      el.addEventListener('click', () => openPage(el.dataset.rel));
+    });
+  }catch(e){ $('hits').innerHTML = '<p class="muted">搜尋失敗：' + e.message + '</p>'; }
 }
 
 function renderUsage(list){
@@ -151,7 +182,7 @@ function renderUsage(list){
         <label>連結網址（單集網址，/music-library/…）</label>
         <input type="text" data-i="${i}" data-f="href" value="${(u.href||'').replace(/"/g,'&quot;')}">
         <div style="height:6px"></div>
-        <label>括號標記（可留空，例：兔子公主 哥哥姐姐）</label>
+        <label>括號標記（可留空，例：兔子公主 哥哥姐姐；CD/DVD 不寫編號）</label>
         <input type="text" data-i="${i}" data-f="label" value="${(u.label||'').replace(/"/g,'&quot;')}">
       </div>
       <button class="del" data-del="${i}">刪除</button>
@@ -168,32 +199,31 @@ function renderUsage(list){
 }
 
 $('addUsage').addEventListener('click', () => {
+  if(!CUR) return;
   CUR.usage.push({href:'', title:'', label:''});
   renderUsage(CUR.usage);
 });
 
 $('saveTitle').addEventListener('click', async () => {
-  try{
-    const d = await api('/api/save_title', {rel:CUR.rel, title:$('title').value.trim(), artist:$('artist').value.trim()});
-    msg('✅ 已儲存曲名／作者（commit ' + (d.commit||'—') + '）', true);
-  }catch(e){ msg('儲存失敗：' + e.message, false); }
+  if(!CUR) return;
+  try{ await submit('save_title', {title:$('title').value.trim(), artist:$('artist').value.trim()}); }
+  catch(e){ msg('送出失敗：' + e.message, false); }
 });
 
 $('saveUsage').addEventListener('click', async () => {
+  if(!CUR) return;
   const items = CUR.usage.filter(u => u.href.trim() && u.title.trim());
   if(items.length !== CUR.usage.length && !confirm('有 ' + (CUR.usage.length-items.length) + ' 筆沒填連結或標題，會被略過。要繼續嗎？')) return;
-  try{
-    const d = await api('/api/save_usage', {rel:CUR.rel, items});
-    msg('✅ 已儲存使用作品（' + items.length + ' 筆，commit ' + (d.commit||'—') + '）', true);
-    openPage(CUR.rel);
-  }catch(e){ msg('儲存失敗：' + e.message, false); }
+  try{ await submit('save_usage', {items}); }
+  catch(e){ msg('送出失敗：' + e.message, false); }
 });
 
 $('saveMark').addEventListener('click', async () => {
-  try{
-    const d = await api('/api/save_mark', {rel:CUR.rel, checked:$('mark').checked});
-    msg('✅ ' + (d.note || ('已更新 ✓ 狀態（commit ' + (d.commit||'—') + '）')), true);
-  }catch(e){ msg('存檔失敗：' + e.message, false); }
+  if(!CUR) return;
+  try{ await submit('save_mark', {checked:$('mark').checked}); }
+  catch(e){ msg('送出失敗：' + e.message, false); }
 });
+
+whoCard();
 </script>
 </body></html>
