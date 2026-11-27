@@ -85,7 +85,9 @@
                  'hasToken=', !!(_dbgS && _dbgS.access_token), 'path=', PATH.slice(0, 80));
   } catch (e) {}
 
-  /* 只在「曲目頁」啟用（路徑含 /罐頭音樂研究所/圖書館音樂/） */
+  /* 只在「曲目頁」啟用（路徑含 /罐頭音樂研究所/圖書館音樂/）
+     2026-11-27 16:50 修：PATH 原本宣告在這行之後 → 上面 debug 那行會 ReferenceError，
+     整支腳本直接掛掉（✏️ 永遠不出現）。改成先宣告、且 debug 不依賴它。 */
   var PATH = (function () { try { return decodeURIComponent(location.pathname); } catch (e) { return location.pathname; } })();
   if (PATH.indexOf('/罐頭音樂研究所/圖書館音樂/') < 0) return;
 

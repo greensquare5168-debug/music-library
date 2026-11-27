@@ -620,7 +620,7 @@ function openWin(u){
         var ie=document.createElement('script');
         ie.src=(function(){
           var sc=document.currentScript; var p=(sc&&sc.src)?new URL(sc.src):null;
-          return p?p.href.replace(/app\.js.*$/,'_admin/inline-edit.js?v=20261127d'):'_admin/inline-edit.js';
+          return p?p.href.replace(/app\.js.*$/,'_admin/inline-edit.js?v=20261127e'):'_admin/inline-edit.js';
         })();
         ie.async=true;
         document.head.appendChild(ie);
