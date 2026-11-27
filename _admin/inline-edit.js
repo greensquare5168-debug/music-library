@@ -335,20 +335,20 @@
       box.appendChild(none);
     }
     usage.forEach(function (u, i) {
-      var w = el('div', 'u4ie-uitem');
-      var t = el('div', 'u4ie-useitem');
+      var row = document.createElement('div');
+      row.className = 'u4ie-urow';
+      row.style.cssText = 'display:flex;gap:6px;align-items:center;margin-bottom:6px';
       var inpTitle = document.createElement('input'); inpTitle.type = 'text';
       inpTitle.value = u.title || ''; inpTitle.placeholder = '作品標題';
+      inpTitle.style.flex = '2 1 0';
       var inpHref = document.createElement('input'); inpHref.type = 'text';
-      inpHref.value = u.href || ''; inpHref.placeholder = '連結網址（單集網址）';
+      inpHref.value = u.href || ''; inpHref.placeholder = '連結網址';
+      inpHref.style.flex = '3 1 0';
       var inpLabel = document.createElement('input'); inpLabel.type = 'text';
-      inpLabel.value = u.label || ''; inpLabel.placeholder = '括號標記（可留空）';
-      inpLabel.style.maxWidth = '140px';
+      inpLabel.value = u.label || ''; inpLabel.placeholder = '標記';
+      inpLabel.style.flex = '0 0 90px';
       var del = el('button', 'u4ie-del', '刪除');
       del.type = 'button';
-      [inpTitle, inpHref, inpLabel].forEach(function (inp) {
-        inp.addEventListener('input', function () { dirty = true; markEdited(inp); });
-      });
       inpTitle.oninput = function () { usage[i].title = inpTitle.value; dirty = true; };
       inpHref.oninput = function () { usage[i].href = inpHref.value; dirty = true; };
       inpLabel.oninput = function () { usage[i].label = inpLabel.value; dirty = true; };
@@ -356,13 +356,8 @@
         if (!confirm('刪掉這一筆使用作品？')) return;
         usage.splice(i, 1); dirty = true; renderUsageEditor();
       };
-      t.appendChild(inpTitle); t.appendChild(del);
-      var t2 = el('div', 'u4ie-useitem');
-      t2.appendChild(inpHref);
-      var t3 = el('div', 'u4ie-useitem');
-      t3.appendChild(inpLabel);
-      w.appendChild(t); w.appendChild(t2); w.appendChild(t3);
-      box.appendChild(w);
+      row.appendChild(inpTitle); row.appendChild(inpHref); row.appendChild(inpLabel); row.appendChild(del);
+      box.appendChild(row);
     });
     var add = el('button', 'u4ie-adduse', '＋ 加一筆使用作品');
     add.type = 'button';
