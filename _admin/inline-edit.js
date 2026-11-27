@@ -263,15 +263,13 @@
     + '.u4ie-mode body{padding-top:0}'
     + 'body.u4ie-mode{padding-top:52px}'
     + '.u4ie-edited{background:#fffdf0;box-shadow:inset 0 0 0 1px #f0d98a;border-radius:4px}'
-    + '.u4ie-usebox{border:1px dashed rgba(47,111,235,.5);border-radius:10px;padding:8px 10px;margin-top:8px;background:rgba(255,255,255,.7)}'
-    + '.u4ie-usebox .u4ie-useitem{display:flex;gap:6px;align-items:center;margin-bottom:6px;font-size:14px}'
-    + '.u4ie-usebox input{font:inherit;font-size:13.5px;border:1px solid #cfd8e3;border-radius:8px;padding:6px 9px;width:100%;max-width:100%;box-sizing:border-box}'
-    + '.u4ie-usebox{}'
-    + '.u4ie-usebox{max-width:100%;overflow-wrap:anywhere}'
+    + '.u4ie-ubox{border:1px dashed rgba(47,111,235,.5);border-radius:10px;padding:8px 10px;margin-top:8px;background:rgba(255,255,255,.7);max-width:100%;overflow-wrap:anywhere}'
+    + '.u4ie-ubox .u4ie-useitem{display:flex;gap:6px;align-items:center;margin-bottom:6px;font-size:14px}'
+    + '.u4ie-ubox input{font:inherit;font-size:13.5px;border:1px solid #cfd8e3;border-radius:8px;padding:6px 9px;width:100%;max-width:100%;box-sizing:border-box}'
     + '.u4ie-mode .layout{grid-template-columns:minmax(0,1fr) !important;display:block !important}'
     + '.u4ie-mode aside.treebox{display:none !important}'
     + '.u4ie-mode .content{max-width:100% !important;grid-column:1/-1 !important}'
-    + '.u4ie-usebox .u4ie-del{border:1px solid #f3c0bb;background:#fff;color:#b42318;border-radius:8px;padding:5px 9px;font-size:12.5px;cursor:pointer;white-space:nowrap}'
+    + '.u4ie-ubox .u4ie-del{border:1px solid #f3c0bb;background:#fff;color:#b42318;border-radius:8px;padding:5px 9px;font-size:12.5px;cursor:pointer;white-space:nowrap}'
     + '.u4ie-adduse{border:1px dashed #2f6feb;background:#fff;color:#2f6feb;border-radius:8px;padding:6px 12px;font:inherit;font-size:13px;cursor:pointer}';
 
   function el(tag, cls, txt) {
@@ -337,7 +335,7 @@
       box.appendChild(none);
     }
     usage.forEach(function (u, i) {
-      var w = el('div', 'u4ie-usebox');
+      var w = el('div', 'u4ie-uitem');
       var t = el('div', 'u4ie-useitem');
       var inpTitle = document.createElement('input'); inpTitle.type = 'text';
       inpTitle.value = u.title || ''; inpTitle.placeholder = '作品標題';
@@ -455,7 +453,7 @@
     var anchorBox = document.querySelector('.content')
         || (firstUse && firstUse.closest('.content'))
         || document.querySelector('main') || document.body;
-    var wrap = el('div', 'u4ie-usebox');
+    var wrap = el('div', 'u4ie-ubox');
     wrap.id = 'u4ie-usage-editor';
     wrap.style.background = '#fff';
     wrap.innerHTML = '<div style="font-weight:700;font-size:14px;color:#1f2733;margin-bottom:8px">使用作品</div>';
