@@ -105,11 +105,48 @@ function msg(t, ok){
   clearTimeout(msg._t); msg._t = setTimeout(()=>{ m.className='msg'; }, 12000);
 }
 
-/* 從網站鉛筆帶過來的 ?page=<相對路徑> → 直接開那一頁 */
-(function(){
+/* ── 2026-11-27 改：不再需要主機端 /api/…；先用站內索引挑選，再直接解析該頁 HTML ── */
+const LIB_URL = 'lib-index.json?v=20261127h';
+let LIB = null, PAGE_DOC = null;
+
+function loadLib(){
+  if(LIB) return Promise.resolve(LIB);
+  return fetch(LIB_URL).then(r => r.json()).then(d => { LIB = d; return d; });
+}
+function opts(sel, list, ph){
+  sel.innerHTML = '<option value="">' + ph + '</option>' +
+    list.map((x,i) => `<option value="${i}">${x.n}</option>`).join('');
+}
+
+async function initPickers(){
+  let lib;
+  try{ lib = await loadLib(); }
+  catch(e){ $('brand').innerHTML = '<option value="">索引載入失敗：' + e.message + '</option>'; return; }
+  opts($('brand'), lib, '— 先選品牌（或直接搜尋）—');
+  $('brand').onchange = () => {
+    const b = lib[+$('brand').value];
+    $('hits').innerHTML = '';
+    if(!b){ $('albumRow').style.display='none'; $('trackRow').style.display='none'; return; }
+    opts($('album'), b.albums, '— 選專輯 —');
+    $('albumRow').style.display = 'flex'; $('trackRow').style.display='none';
+  };
+  $('album').onchange = () => {
+    const b = lib[+$('brand').value], a = b && b.albums[+$('album').value];
+    if(!a){ $('trackRow').style.display='none'; return; }
+    opts($('track'), a.t, '— 選曲目 —');
+    $('trackRow').style.display = 'flex';
+  };
+  $('track').onchange = () => {
+    const b = lib[+$('brand').value], a = b && b.albums[+$('album').value], t = a && a.t[+$('track').value];
+    if(t) openPage('罐頭音樂研究所/圖書館音樂/' + t.h + 'index.html');
+  };
+}
+
+/* 同一頁若有 ?page= 就直接開 */
+function initFromQuery(){
   const rel = new URLSearchParams(location.search).get('page');
   if(rel) openPage(decodeURIComponent(rel));
-})();
+}
 
 /* 身分檢查：必須站主會員登入 */
 function whoCard(){
@@ -139,47 +176,94 @@ async function submit(kind, payload){
 
 async function openPage(rel){
   try{
-    if(!whoCard()){
-      // 沒登入就不能載入（也保護 U4 的 8899 端點）
-      return;
-    }
-    const r = await fetch('/api/info?rel=' + encodeURIComponent(rel));
-    const d = await r.json();
-    if(!r.ok || d.ok === false) throw new Error(d.error || ('HTTP ' + r.status));
-    CUR = d;
+    if(!whoCard()) return;              // 沒登入就不載入（也擋掉亂用）
+    $('editor').style.display='none';
+    const url = rel.replace(/^\/+/, '').replace(/^music-library\//,'')
+                   .replace('罐頭音樂研究所/圖書館音樂/','');
+    const r = await fetch(encodeURI('罐頭音樂研究所/圖書館音樂/' + url) + '?v=' + Date.now(), {cache:'no-store'});
+    if(!r.ok) throw new Error('開不了這一頁（HTTP ' + r.status + '）');
+    const html = await r.text();
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+    const title = pickText(doc, ['h1','.song-title','.track-title','h2']);
+    const artist = pickArtist(doc);
+    const usage = pickUsage(doc);
+    PAGE_DOC = {rel: rel, doc: doc, html: html};
+    CUR = {rel: rel, title: title, artist: artist, usage: usage, doc: doc};
     $('editor').style.display = 'block';
-    $('cur').textContent = rel.split('/').slice(-2)[0];
-    $('title').value = d.title;
-    $('artist').value = d.artist;
-    renderUsage(d.usage);
-    $('mark').checked = d.usage.length > 0;
+    $('cur').textContent = rel.split('/').filter(Boolean).slice(-2)[0] || rel;
+    $('title').value = title;
+    $('artist').value = artist;
+    renderUsage(usage);
+    $('mark').checked = usage.length > 0;
     $('editor').scrollIntoView({behavior:'smooth'});
     try{ history.replaceState(null,'','?page='+encodeURIComponent(rel)); }catch(e){}
   }catch(e){ msg('載入失敗：' + e.message, false); }
 }
 
+/* ── 從曲目頁 HTML 讀出曲名／作者／使用作品（不再依賴主機端 API）── */
+function q1(doc, sels){
+  for(const s of sels){ const el = doc.querySelector(s); if(el && el.textContent.trim()) return el.textContent.trim(); }
+  return '';
+}
+function pickText(doc, sels){ return q1(doc, sels).replace(/\s*[|｜].*$/, '').trim(); }
+function pickArtist(doc){
+  const el = doc.querySelector('.albumartist,.artist,.creator,.composer,[data-artist]');
+  if(el && el.textContent.trim()) return el.textContent.trim().replace(/^(作者|作曲|作曲者)[:：]\s*/, '');
+  const t = doc.body ? doc.body.textContent : '';
+  const m = t.match(/(?:作者|作曲(?:者)?)[:：]\s*([^\n<]{1,80})/);
+  return m ? m[1].trim() : '';
+}
+function pickUsage(doc){
+  const out = [];
+  const seen = new Set();
+  [...doc.querySelectorAll('.album-card li a[href], .entries li a[href], #usages a[href]')].forEach(a => {
+    const href = a.getAttribute('href') || '';
+    const title = (a.textContent || '').trim();
+    if(!title || !href || /^(#|javascript:)/.test(href)) return;
+    let h = href;
+    try{ h = decodeURIComponent(href); }catch(e){}
+    if(h.indexOf('罐頭音樂研究所') < 0) return;      // 只收「作品／節目頁」連結，排除站內導覽
+    if(/\.(jpg|png|mp3|pdf)$/i.test(h)) return;
+    if(seen.has(href + '|' + title)) return;
+    seen.add(href + '|' + title);
+    const sib = a.nextElementSibling;
+    const label = (sib && /lbl/.test(sib.className)) ? sib.textContent.replace(/^[（(]|[）)]$/g,'').trim() : '';
+    out.push({href: href, title: title, label: label});
+  });
+  return out;
+}
+
 $('go').addEventListener('click', search);
 $('q').addEventListener('keydown', e => { if(e.key === 'Enter') search(); });
 
+function esc(s){ return String(s||'').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
 async function search(){
   if(!whoCard()) return;
-  const q = $('q').value.trim();
+  const q = $('q').value.trim().toLowerCase().replace(/\s+/g,'');
   if(!q) return;
   $('hits').innerHTML = '<p class="muted">搜尋中…</p>';
   try{
-    const r = await fetch('/api/search?q=' + encodeURIComponent(q));
-    const d = await r.json();
-    if(!r.ok || d.ok === false) throw new Error(d.error || ('HTTP ' + r.status));
-    if(!d.hits.length){ $('hits').innerHTML = '<p class="muted">找不到曲目（只搜得到「曲目頁」）</p>'; return; }
-    $('hits').innerHTML = d.hits.map(h =>
-      `<div class="hit" data-rel="${h.rel.replace(/"/g,'&quot;')}">
-         <div class="t">${h.title}</div>
-         <div class="m">${h.artist} · 目前 ${h.n_usage} 筆使用作品</div>
-       </div>`).join('');
+    const lib = await loadLib();
+    const hits = [];
+    for(const b of lib){
+      for(const a of b.albums){
+        for(const t of a.t){
+          const hay = (t.n + ' ' + a.n + ' ' + b.n).toLowerCase().replace(/\s+/g,'');
+          if(hay.includes(q)) hits.push({rel:'罐頭音樂研究所/圖書館音樂/' + t.h + 'index.html', title:t.n, sub:b.n + ' · ' + a.n});
+          if(hits.length >= 40) break;
+        }
+        if(hits.length >= 40) break;
+      }
+      if(hits.length >= 40) break;
+    }
+    if(!hits.length){ $('hits').innerHTML = '<p class="muted">找不到曲目，換個關鍵字或改用上面的下拉選單。</p>'; return; }
+    $('hits').innerHTML = hits.map(h =>
+      `<div class="hit" data-rel="${esc(h.rel)}"><div class="t">${esc(h.title)}</div><div class="m">${esc(h.sub)}</div></div>`).join('');
     [...document.querySelectorAll('.hit')].forEach(el => {
       el.addEventListener('click', () => openPage(el.dataset.rel));
     });
-  }catch(e){ $('hits').innerHTML = '<p class="muted">搜尋失敗：' + e.message + '</p>'; }
+  }catch(e){ $('hits').innerHTML = '<p class="muted">搜尋失敗：' + esc(e.message) + '</p>'; }
 }
 
 function renderUsage(list){
@@ -236,5 +320,7 @@ $('saveMark').addEventListener('click', async () => {
 });
 
 whoCard();
+initPickers();
+initFromQuery();
 </script>
 </body></html>
