@@ -15,10 +15,14 @@
   if (!SB_URL || SB_KEY.length < 20) return;   // 這頁沒有 supabase-config.js → 不啟用
 
   /* 2026-11-27 16:25 修：新版 supabase-js 把 session 存在「扁平」結構，
-     舊版包在 currentSession；且過期的 token 不該算登入 → 直接重讀 */
+     舊版包在 currentSession；且過期的 token 不該算登入 → 直接重讀
+     2026-11-27 16:45 再修：新版 key 可能是 sb-<ref>-auth-token（單一值）或
+     sb-<ref>-auth-token.<分段序號>（大 token 被切成多段存在多個 key），
+     要先把同前綴的分段組回來再 parse，否則一律 parse 失敗 → 誤判沒登入 */
   function readSessionFrom(raw) {
     var o = null;
     try { o = JSON.parse(raw || 'null'); } catch (e) { return null; }
+    if (typeof o === 'string') { try { o = JSON.parse(o); } catch (e) { return null; } }
     if (!o) return null;
     var cands = [o, o.currentSession, o.session, o.data && o.data.session];
     for (var j = 0; j < cands.length; j++) {
@@ -37,11 +41,33 @@
   }
   function sbSession() {
     try {
+      var joins = [];   // 先試「分段合併」，再試單一 key
       for (var i = 0; i < localStorage.length; i++) {
         var k = localStorage.key(i) || '';
-        if (k.indexOf('sb-') === 0 && /-auth-token$/.test(k)) {
-          var s = readSessionFrom(localStorage.getItem(k));
-          if (s) return s;
+        if (k.indexOf('sb-') === 0 && /-auth-token(\.[0-9a-fA-F]+)*$/.test(k)) {
+          var base = k.replace(/\.[0-9a-fA-F]+$/, '');
+          if (joins.indexOf(base) < 0) joins.push(base);
+        }
+      }
+      for (var b = 0; b < joins.length; b++) {
+        var acc = '', okj = true;
+        for (var j = 0; j < localStorage.length; j++) {
+          var kk = localStorage.key(j) || '';
+          if (kk === joins[b] || kk.indexOf(joins[b] + '.') === 0) {
+            var piece = localStorage.getItem(kk);
+            if (piece == null) { okj = false; break; }
+            acc += piece;
+          }
+        }
+        if (!okj) continue;
+        var s2 = readSessionFrom(acc);
+        if (s2) return s2;
+      }
+      for (var m2 = 0; m2 < localStorage.length; m2++) {
+        var k2 = localStorage.key(m2) || '';
+        if (k2.indexOf('sb-') === 0 && /-auth-token$/.test(k2)) {
+          var s3 = readSessionFrom(localStorage.getItem(k2));
+          if (s3) return s3;
         }
       }
     } catch (e) {}
