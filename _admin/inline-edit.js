@@ -432,13 +432,19 @@
 
     /* 使用作品：找原清單容器，改成可編輯（保留原本連結顯示讓孝瓏對照） */
     usage = pickUsage();
-    var anchorBox = document.querySelector('.album-card') || document.querySelector('.content') || document.querySelector('main') || document.body;
+    /* 放在「第一個使用作品區塊」之前（表格後面），避免每列都出現一個編輯框 */
+    var firstUse = null;
+    var probe = document.querySelectorAll('.album-card li a[href], .entries li a[href]');
+    if (probe.length) firstUse = probe[0].closest('li') || probe[0];
+    var anchorBox = firstUse ? firstUse.parentNode
+        : (document.querySelector('.album-card') || document.querySelector('.content') || document.querySelector('main') || document.body);
     var wrap = el('div', 'u4ie-usebox');
     wrap.style.background = '#fff';
     wrap.innerHTML = '<div style="font-weight:700;font-size:14px;color:#1f2733;margin-bottom:8px">使用作品</div>';
     var ub = el('div');
     wrap.appendChild(ub);
-    anchorBox.appendChild(wrap);
+    if (firstUse && firstUse.parentNode && firstUse.tagName === 'LI') anchorBox.insertBefore(wrap, firstUse);
+    else anchorBox.appendChild(wrap);
     EDIT.usageBox = ub;
     renderUsageEditor();
 
