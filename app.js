@@ -620,15 +620,17 @@ function openWin(u){
     if(/^(127\.0\.0\.1|localhost)$/.test(location.hostname)){
       return location.protocol+'//'+location.hostname+':8899/admin-edit.html';
     }
-    try{ if(localStorage.getItem('u4_editor_base')) return localStorage.getItem('u4_editor_base'); }catch(e){}
-    return root+'admin-edit.html';
+    // 2026-11-27：舊的「本機 8899 編輯器」設定會蓋掉線上新編輯器 → 一律走線上位址
+    if(window.location.href.indexOf('/music-library/')>=0) return '/music-library/admin-edit.html';
+    return window.origin+'/music-library/admin-edit.html';
   }
   function editUrl(){
     return editorBase()+'?page='+encodeURIComponent(pagePath());
   }
   function add(){
     var email=sbEmail();
-    if(!email) return;                       // 訪客：不加
+    // 2026-11-27 孝瓏：「編輯器不見了」→ 鉛筆一律顯示（編輯器頁自己會擋未登入者）
+    // 原本「沒登入就不畫鉛筆」的判斷會讓 localStorage 讀不到登入態時整個消失
     if(document.querySelector('.pencil-edit')) return;
     /* 2026-11-25 孝瓏：「編輯按鈕要放右下角（原本跟U4說的位置）」→ 固定在右下角 */
     var a=document.createElement('a');
