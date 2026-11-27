@@ -580,6 +580,21 @@ function openWin(u){
   } catch (e) {}
 })();
 
+/* ---------- 2026-11-27 17:58：把「目前登入帳號」寫進 window.__U4_ME ----------
+   讓就地編輯（inline-edit.js）判斷身分時有確定的答案，不必再猜 localStorage 格式。 */
+(function(){
+  try{
+    if(!window.__U4_ME && /^https:\/\/.+\.supabase\.co$/.test(String(window.SUPABASE_URL||''))){
+      import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm').then(function(M){
+        var sb=M.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY, {auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+        window.__U4_SB=sb;
+        sb.auth.getSession().then(function(r){ var ss=r&&r.data&&r.data.session; window.__U4_ME = ss&&ss.user?{email:ss.user.email,id:ss.user.id}:null; });
+        sb.auth.onAuthStateChange(function(ev,ss){ window.__U4_ME = ss&&ss.user?{email:ss.user.email,id:ss.user.id}:null; });
+      }).catch(function(){});
+    }
+  }catch(e){}
+})();
+
 /* ---------- 站主鉛筆：只有「站主本人」看得到（2026-11-23 孝瓏要求） ----------
    目的：每一頁右上角加一個 ✏️，點下去直接跳到 GitHub 該頁 index.html 的編輯畫面。
    - 判斷依據：瀏覽器裡有 Supabase 登入態（login.html 登入後會留下 sb-*-auth-token）
@@ -589,6 +604,7 @@ function openWin(u){
 (function(){
   var PENCIL_KEY='u4_pencil_v1';
   function sbEmail(){
+    try{ if(window.__U4_ME && window.__U4_ME.email) return String(window.__U4_ME.email).toLowerCase(); }catch(e){}
     try{
       for(var i=0;i<localStorage.length;i++){
         var k=localStorage.key(i)||'';
@@ -632,7 +648,7 @@ function openWin(u){
               break;
             }
           }
-          return (root||'/music-library/')+'_admin/inline-edit.js?v=20261127h';
+          return (root||'/music-library/')+'_admin/inline-edit.js?v=20261127k';
         })();
         ie.async=true;
         document.head.appendChild(ie);
