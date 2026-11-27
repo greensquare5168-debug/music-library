@@ -649,7 +649,6 @@ function openWin(u){
       }
     }catch(e){}
     /* 站主（Supabase 已登入）→ 不再開新頁的黃色鉛筆；改用頁上綠色就地編輯 */
-    if(sbEmail()) return;
     var a=document.createElement('a');
     a.className='pencil-edit';
     a.__u4=1;
