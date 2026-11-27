@@ -1567,3 +1567,9 @@ body[data-show="yoyo童話世界"] .unit:not(.sm):not(.ad) + .unit.sm{
   margin-top:.2cm !important;
   margin-bottom:0 !important;
 }
+
+/* 孝瓏 2026-11-27：全站「（尚未發現使用作品）」字級與顏色統一
+   只作用於帶「尚未發現使用作品」的 <p class="muted">，不影響其他 .muted（麵包屑／統計／頁尾等） */
+p.muted.has-no-use{color:#8a94a3;font-size:13px;font-weight:400;font-style:normal;line-height:1.6}
+.album-card>p.muted.has-no-use{margin-top:26px}
+ul.entries>li.has-no-use{list-style:none;margin:8px 0 0;padding:0}

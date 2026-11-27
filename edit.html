@@ -255,7 +255,7 @@ function sortUsage(items){
 
 /* ---------------- 解析／組裝頁面 ---------------- */
 const RE_UL = /<ul class="entries">([\s\S]*?)<\/ul>/g;
-const EMPTY_TIP = '<p class="muted">（尚未發現使用作品）</p>';
+const EMPTY_TIP = '<p class="muted has-no-use">（尚未發現使用作品）</p>';
 
 const USAGE_LI = /<li>\s*(?:(?!<div class="(?:srcframe|srcwin|ytframe|blankline)")[\s\S])*?<\/li>/g;
 
