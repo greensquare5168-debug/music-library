@@ -11,7 +11,7 @@
   var SB_URL = (window.SUPABASE_URL || '').trim();
   var SB_KEY = (window.SUPABASE_ANON_KEY || '').trim();
   var TABLE = 'site_edits';
-  var OWNER_EMAILS = ['linxiaolong0395@gmail.com'];
+  var OWNER_EMAILS = ['greensquare5168@gmail.com','linxiaolong0395@gmail.com'];
 
   function sbSession() {
     try {

@@ -632,7 +632,7 @@ function openWin(u){
               break;
             }
           }
-          return (root||'/music-library/')+'_admin/inline-edit.js?v=20261127g';
+          return (root||'/music-library/')+'_admin/inline-edit.js?v=20261127h';
         })();
         ie.async=true;
         document.head.appendChild(ie);

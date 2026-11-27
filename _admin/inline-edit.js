@@ -9,7 +9,7 @@
      - 不 import 任何套件：直接讀 Supabase 存在 localStorage 的登入 session
 */
 (function () {
-  var OWNER_EMAILS = ['linxiaolong0395@gmail.com'];
+  var OWNER_EMAILS = ['greensquare5168@gmail.com','linxiaolong0395@gmail.com'];
   var SB_URL = '', SB_KEY = '';
   try { SB_URL = (window.SUPABASE_URL || '').trim(); SB_KEY = (window.SUPABASE_ANON_KEY || '').trim(); } catch (e) {}
   if (!SB_URL || SB_KEY.length < 20) return;   // 這頁沒有 supabase-config.js → 不啟用
