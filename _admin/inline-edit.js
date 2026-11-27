@@ -549,7 +549,17 @@
       showLoginHint(em);
       /* 已登入但不是站主 → 標明是哪個帳號，方便一眼看出問題 */
       var a = document.querySelector('.u4ie-login');
-      if (a) a.title = '目前登入帳號：' + em;
+      if (a) {
+        a.title = '目前登入帳號：' + em;
+        /* 2026-11-27 17:57（孝瓏：我明明登入了還寫站主登入後可編輯）
+           身分確認還在路上時，先別下結論 → 文字改成「登入檢查中…」
+           確認完若不是站主，再改成正確說法；若確認仍是讀不到，就叫她去重新登入 */
+        if (em === '(未登入/讀不到)' || !em) {
+          a.textContent = '🔑 登入檢查中…';
+        } else {
+          a.textContent = '🔑 已登入（' + em + '）但沒有編輯權限';
+        }
+      }
       return;
     }
     var b = el('button', 'u4ie-btn', '✏️');
@@ -595,6 +605,13 @@
       else if (!document.querySelector('.u4ie-btn')) {
         if (hint) hint.remove();
         showLoginHint(who.email);
+        /* 2026-11-27 17:57：確認完仍讀不到登入 → 明確叫她「重新登入」
+           （token 過期／換瀏覽器／清過 cookie 都會這樣，光重整不會好） */
+        var h2 = document.querySelector('.u4ie-login');
+        if (h2 && (!who.email || who.email === '(未登入/讀不到)')) {
+          h2.textContent = '🔑 沒讀到登入（請重新登入）';
+          h2.title = '這台瀏覽器目前沒有有效的站主登入，點這裡重新登入一次；登入後回到原頁就會出現 ✏️';
+        }
       }
     });
   }
