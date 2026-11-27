@@ -633,8 +633,11 @@ function openWin(u){
     // 原本「沒登入就不畫鉛筆」的判斷會讓 localStorage 讀不到登入態時整個消失
     if(document.querySelector('.pencil-edit')) return;
     /* 2026-11-25 孝瓏：「編輯按鈕要放右下角（原本跟U4說的位置）」→ 固定在右下角 */
+    // 2026-11-27 除錯：明明有登入卻沒鉛筆 → 把判斷結果寫在 console
+    try{ console.info('[u4-pencil] email=',email||'(none)','url=',editUrl()); }catch(e){}
     var a=document.createElement('a');
     a.className='pencil-edit';
+    a.__u4=1;
     a.href=editUrl();
     a.target='_blank';
     a.rel='noopener';
