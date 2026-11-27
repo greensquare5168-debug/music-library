@@ -1561,3 +1561,9 @@ body[data-show^="巧連智"] .unit.sm[data-label="可樂球小約定"],
   background:#ffffff !important;
   color:#2b3648 !important;
 }
+
+/* 2026-11-27 孝瓏：YOYO童話世界 第09集「故事大標題框 → 哥哥姐姐小框」中間不加空行（框緊接，間距歸零） */
+body[data-show="yoyo童話世界"] .unit:not(.sm):not(.ad) + .unit.sm{
+  margin-top:0 !important;
+  margin-bottom:0 !important;
+}
