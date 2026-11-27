@@ -635,6 +635,21 @@ function openWin(u){
     /* 2026-11-25 孝瓏：「編輯按鈕要放右下角（原本跟U4說的位置）」→ 固定在右下角 */
     // 2026-11-27 除錯：明明有登入卻沒鉛筆 → 把判斷結果寫在 console
     try{ console.info('[u4-pencil] email=',email||'(none)','url=',editUrl()); }catch(e){}
+    /* 2026-11-27 孝瓏：「應該要直接在頁上編輯才對」
+     → 站主在曲目頁多一顆綠色 ✏️：不跳頁，當場改文字＋使用作品，存檔走雲端待辦 */
+    try{
+      if(!document.querySelector('.u4ie-btn')){
+        var ie=document.createElement('script');
+        ie.src=(function(){
+          var sc=document.currentScript; var p=(sc&&sc.src)?new URL(sc.src):null;
+          return p?p.href.replace(/app\.js.*$/,'_admin/inline-edit.js?v=20261127a'):'_admin/inline-edit.js';
+        })();
+        ie.async=true;
+        document.head.appendChild(ie);
+      }
+    }catch(e){}
+    /* 站主（Supabase 已登入）→ 不再開新頁的黃色鉛筆；改用頁上綠色就地編輯 */
+    if(sbEmail()) return;
     var a=document.createElement('a');
     a.className='pencil-edit';
     a.__u4=1;

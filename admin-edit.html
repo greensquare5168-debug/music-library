@@ -38,6 +38,11 @@ label{font-size:13px;color:#5c6675;display:block;margin-bottom:5px}
 </header>
 <div class="wrap">
 
+  <div class="card" style="background:#eaf7ef;border-color:#bfe6cd">
+    <b>✅ 現在可以直接在頁面上改</b> — 這裡只是備援入口。
+    到任一個曲目頁，按右下角的綠色 <b>✏️</b>，文字與「使用作品」會當場變成可修改，按儲存就送出。
+  </div>
+
   <div class="card">
     <h2>① 找曲目</h2>
     <p class="muted" style="margin:0 0 12px">也可以直接從曲目頁按右下角 ✏️ 跳進來（會自動帶到那一頁）。</p>
@@ -95,6 +100,7 @@ label{font-size:13px;color:#5c6675;display:block;margin-bottom:5px}
 </div>
 
 <script src="supabase-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm" type="module"></script>
 <script src="_admin/editor-relay.js"></script>
 <script>
 const $ = id => document.getElementById(id);
@@ -169,9 +175,20 @@ function whoCard(){
 
 /* 站上三種動作，一律走雲端待辦 */
 async function submit(kind, payload){
-  const d = await window.U4Edit.submit(kind, CUR.rel, payload);
-  msg('✅ 已送出（# ' + (d.id||'?') + '）— 主機處理中，約 1–3 分鐘上線。重新整理頁面可看到結果。', true);
-  return d;
+  try{
+    const d = await window.U4Edit.submit(kind, CUR.rel, payload);
+    msg('✅ 已送出（# ' + (d.id||'?') + '）— 主機處理中，約 1–3 分鐘上線。重新整理頁面可看到結果。', true);
+    return d;
+  }catch(e){
+    const m = String(e.message||e);
+    if(/PGRST205|Could not find the table/i.test(m))
+      msg('⚠️ 雲端待辦表還沒建立：請先到 admin.html 的「一次性設定」把 SQL 貼進 Supabase 執行。', false);
+    else if(/404|Not Found/i.test(m))
+      msg('⚠️ 伺服器還沒建好資料表或尚未開放（' + m + '）。', false);
+    else
+      msg('送出失敗：' + m, false);
+    throw e;
+  }
 }
 
 async function openPage(rel){
