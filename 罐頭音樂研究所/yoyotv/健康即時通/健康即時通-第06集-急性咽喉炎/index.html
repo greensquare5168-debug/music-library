@@ -17,6 +17,8 @@ body[data-show="健康即時通"] .adsec.pre:has(+ .adsec) > ul.entries{margin-t
    ② 這幾頁的內容被包在 .adsec.pre 裡，框的分界把「空行→廣告後片段」多撐出 3px */
 body[data-show="健康即時通"] .adsec{border:none !important;border-radius:0 !important}
 /* 2026-11-28 孝瓏：同一區段內相鄰的兩組曲目清單，接縫處照「一般文字行距」（與同清單相鄰曲目同距），不加空行 */
+/* 全站 997 行 `.entries + .entries{margin-top:16px}` 會在清單交界多撐 16px → 這頁關掉，改用正常行距 */
+body[data-show="健康即時通"] ul.entries + ul.entries{margin-top:0 !important}
 body[data-show="健康即時通"] .adsec > ul.entries + ul.entries{margin-top:0 !important}
 body[data-show="健康即時通"] .adsec > ul.entries + ul.entries > li:first-child{padding-top:0 !important}
 body[data-show="健康即時通"] .adsec > ul.entries + ul.entries::before{display:none}
