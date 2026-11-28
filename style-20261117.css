@@ -1649,3 +1649,11 @@ html body[data-show="大頭小狀元"] .adsec > .unit:not(.ad) + .entries{
 html body[data-show="大頭小狀元"] .adsec > .unit:not(.ad) + .entries > li:first-child{
   margin-top:0 !important;padding-top:0 !important;
 }
+
+/* 2026-11-28 20:00 孝瓏：大頭小狀元「廣告後片段（橫線標題）→ 下方第一個單元框」不可壓線
+   問題：全站 .unit{margin-bottom:-5px} 讓橫線標題底部壓到下方單元框（實測 gap -5px，框頂比線高 5px）。
+   對照組 YOYO童話世界 同位置＝10px → 這裡改成一致 10px。 */
+html body[data-show="大頭小狀元"] .album-card .unit.ad{margin-bottom:10px !important}
+html body[data-show="大頭小狀元"] .album-card .unit.ad + .entries{margin-top:0 !important}
+/* 同頁 .adsec 若被加框（框高 3px），框底也把間距吃掉 → 一併清除上框線 */
+html body[data-show="大頭小狀元"] .album-card .adsec:has(> .unit.ad){border:none !important}
