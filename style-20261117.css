@@ -1573,9 +1573,9 @@ body[data-show="yoyo童話世界"] .unit:not(.sm):not(.ad) + .unit.sm{
 p.muted.has-no-use{color:#8a94a3;font-size:13px;font-weight:400;font-style:normal;line-height:1.6}
 .album-card>p.muted.has-no-use{margin-top:26px}
 ul.entries>li.has-no-use{list-style:none;margin:8px 0 0;padding:0}/* 2026-11-28 孝瓏：「強哥小叮嚀 → Twilight Waltz 的空行，到上下兩首距離要相同，跟文字與文字間距一樣」
-   實測（第03集，渲染後量文字墨跡）：一般文字↔文字看得見的空白＝25px；
-   空行原本上 19px／下 24px（偏上）→ 把空行上緣補 7px（外距 7px、下緣 −8.6px），
-   結果 上 25px／下 25px，與一般行距完全一致。像素實測＋截圖目視雙重確認。 */
+   實測（第03集，渲染後量文字墨跡）：一般文字↔文字看得見的空白＝25px → 空行上下也調成 25px。
+   2026-11-28 追加（第04集）：整段反白時空行會露出「一條細藍色直線」（那是 li 裡的 &nbsp; 被選取），
+   故空行不留任何文字（font-size:0 + 空白字元靠 CSS 撐高），高度/間距維持不變。 */
 body[data-show="健康即時通"] .blankline,
 body[data-show="健康即時通"] .entries li.blankline{
   margin-top:7px !important;
@@ -1586,4 +1586,6 @@ body[data-show="健康即時通"] .entries li.blankline{
   min-height:40.4px !important;
   max-height:40.4px !important;
   line-height:40.4px !important;
+  font-size:0 !important;
+  color:transparent !important;
 }
