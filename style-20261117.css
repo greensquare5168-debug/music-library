@@ -1598,7 +1598,7 @@ html body[data-show="大頭小狀元"] .adsec > .blankline:has(+ .unit:not(.ad))
 html body[data-show="大頭小狀元"] .adsec > .blankline:has(+ .unit:not(.ad)) + .unit:not(.ad){margin-top:7.56px !important}
 html body[data-show="大頭小狀元"] .adsec > .unit:not(.ad) + .entries > li:first-child{padding-top:7.56px !important}
 /* ===== 2026-11-28 孝瓏（第一版）：YOYO嘻遊記 第05季 單元標題框 → 大標題框
-   樣式取自節目字卡畫面：背景藍 #2b88d8（上下略帶漸層）、文字橘 #ff9f1c、文字外描邊白 #ffffff、字級 22px、圓角 9px。
+   樣式取自節目字卡畫面：背景純藍 #2b88d8（2026-11-28 19:05 孝瓏：不要漸層，全藍）、文字橘 #ff9f1c、文字外描邊白 #ffffff、字級 22px、圓角 9px。
    只套 S5（data-season="yoyo嘻遊記-第05季"），不動其他季與其他節目。 */
 body[data-show="yoyo嘻遊記"][data-season="yoyo嘻遊記-第05季"] .unit:not(.sm):not(.ad){
   padding:8px 14px !important;
@@ -1611,7 +1611,7 @@ body[data-show="yoyo嘻遊記"][data-season="yoyo嘻遊記-第05季"] .unit:not(
   paint-order:stroke fill !important;
   text-shadow:none !important;
   background-color:#2b88d8 !important;
-  background-image:linear-gradient(180deg,#1f78c8 0%,#2b88d8 22%,#3a95e4 50%,#2b88d8 78%,#1f78c8 100%) !important;
+  background-image:none !important;
 }
 
 /* ===== 2026-11-28 孝瓏（第五版）：大頭小狀元 職業介紹框上下留白歸位
