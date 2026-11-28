@@ -22,6 +22,9 @@ body[data-show="健康即時通"] .adsec{border:none !important;border-radius:0 
 body[data-show="健康即時通"] ul.entries + ul.entries{margin-top:0 !important}
 body[data-show="健康即時通"] ul.entries + ul.entries > li:first-child{padding-top:5px !important}
 body[data-show="健康即時通"] ul.entries + ul.entries::before{display:none}
+/* 2026-11-28 孝瓏：本頁指定要空行的地方（Jogging in F→Downside Up、Jogging in F→Tomfoolery）
+   li.blankline 被其他規則壓扁 → 這裡明確給行高（與全站標準空行同高 1.9 行距 + 上下 5px） */
+body[data-show="健康即時通"] li.blankline{display:block !important;height:auto !important;min-height:1.9em !important;line-height:1.9 !important;padding:5px 2px !important;margin:0 !important;font-size:inherit !important;overflow:visible !important}
 </style>
 <script>window.goatcounter=window.goatcounter||{};window.goatcounter.path=function(p){return p;};</script>
 <script data-goatcounter="https://bob51688.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
