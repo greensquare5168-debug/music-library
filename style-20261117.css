@@ -1572,4 +1572,18 @@ body[data-show="yoyo童話世界"] .unit:not(.sm):not(.ad) + .unit.sm{
    只作用於帶「尚未發現使用作品」的 <p class="muted">，不影響其他 .muted（麵包屑／統計／頁尾等） */
 p.muted.has-no-use{color:#8a94a3;font-size:13px;font-weight:400;font-style:normal;line-height:1.6}
 .album-card>p.muted.has-no-use{margin-top:26px}
-ul.entries>li.has-no-use{list-style:none;margin:8px 0 0;padding:0}
+ul.entries>li.has-no-use{list-style:none;margin:8px 0 0;padding:0}/* 2026-11-28 孝瓏：「強哥小叮嚀 → Twilight Waltz 的空行，到上下兩首距離要相同，跟文字與文字間距一樣」
+   實測（第03集，渲染後量文字墨跡）：一般文字↔文字看得見的空白＝25px；
+   空行原本上 19px／下 24px（偏上）→ 把空行上緣補 7px（外距 7px、下緣 −8.6px），
+   結果 上 25px／下 25px，與一般行距完全一致。像素實測＋截圖目視雙重確認。 */
+body[data-show="健康即時通"] .blankline,
+body[data-show="健康即時通"] .entries li.blankline{
+  margin-top:7px !important;
+  margin-bottom:-10.5px !important;
+  padding-top:0 !important;
+  padding-bottom:0 !important;
+  height:40.4px !important;
+  min-height:40.4px !important;
+  max-height:40.4px !important;
+  line-height:40.4px !important;
+}
