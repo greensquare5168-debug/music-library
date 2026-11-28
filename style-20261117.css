@@ -1620,11 +1620,28 @@ body[data-show="yoyo嘻遊記"][data-season="yoyo嘻遊記-第05季"] .unit:not(
      ②框「下面」第一首（Jay Bee…）直接貼框、不留空行
      ③Jay Bee 之後那一列空行「要保留」＝空行屬於音樂段落中間，不是框的留白
    只動大頭小狀元且職業框（.unit:not(.ad)）前面那一個 .blankline。 */
+/* 2026-11-28 19:35 孝瓏：「職業框上面要空行、Jay Bee 下面也要空行，每集 Crazy Party 下面都要空行」
+   → 一律用 HTML 的 <li class="blankline">（0.2cm＝7.56px）呈現，CSS 只負責不把它壓掉。
+   ① 框前空行：保留 .blankline（上一版 display:none 已撤回）
+   ② 框下 Jay Bee 之後的空行：同樣保留
+   ③ 框與緊接的第一首（Jay Bee）之間：貼齊，不多留白（原本 .unit{margin-bottom:-5px} 要歸零） */
+/* ⚠️ 2026-11-28 19:45 修正：舊的 `:has(+ .unit:not(.ad)){height:0 !important;padding:0 !important…}` 規則還留著
+   （19:30 只改了註解、沒刪規則）→ 職業框前空行仍被壓成 0px。
+   這裡用同等特異性但在後面覆寫回正常空行高度（40.4px＝line-height 1.9em＋上下 padding 5px），margin 與全站一致 calc(.2cm - 5px）。
+   不改 :has 原規則（怕影響別處），只追加覆寫。 */
+/* 覆寫舊的 height:0 規則（特異性：兩者相同，靠書寫順序在後者勝出；再加 html body 前綴提高特異性保險） */
 html body[data-show="大頭小狀元"] .adsec > .blankline:has(+ .unit:not(.ad)){
-  display:none !important;
-  height:0 !important;min-height:0 !important;max-height:0 !important;
-  margin:0 !important;padding:0 !important;border:0 !important;
+  display:block !important;
+  height:auto !important; min-height:0 !important; max-height:none !important;
+  line-height:1.9 !important; font-size:inherit !important;
+  padding:5px 0 !important; border:0 !important;
+  margin-top:.2cm !important; margin-bottom:calc(.2cm - 5px) !important;
 }
+html body[data-show="大頭小狀元"] .adsec > .blankline:has(+ .unit:not(.ad)) + .unit:not(.ad){
+  margin-top:0 !important;
+}
+/* 2026-11-28 19:30 孝瓏更正：「職業框上面要空行、Jay Bee 下面也要空行」→ 撤回上一版把框上空行移除的做法
+   （框前空行與框下 Jay Bee 後空行都由 HTML 的 li.blankline 決定，CSS 不再隱藏） */
 /* 框下第一首貼齊框底（0 間距） */
 html body[data-show="大頭小狀元"] .adsec > .unit:not(.ad) + .entries{
   margin-top:0 !important;padding-top:0 !important;
